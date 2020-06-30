@@ -1,4 +1,5 @@
 dist/*.js
+build/*.js
 src/assets
 tests/unit/coverage
 node_modules

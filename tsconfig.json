@@ -15,7 +15,7 @@
     "paths": {
       "@/*": ["examples/*"],
       "~/*": ["packages/*"],
-      "src/*": ["src/*"]
+      "fnb-element-ui/*": ["./*"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },

@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import FnbElementUi from '../lib/fnb-element-ui.common.js'
-import '../lib/fnb-element-ui.css'
-console.log(FnbElementUi)
+import FnbElementUi from 'fnb-element-ui/lib/fnb-element-ui.common'
+import 'fnb-element-ui/lib/index.css'
 Vue.use(FnbElementUi)
 
 Vue.config.productionTip = false

@@ -1,9 +1,9 @@
 .DS_Store
 node_modules
+build
 dist
 examples
 src
-packages
 public
 
 # local env files
