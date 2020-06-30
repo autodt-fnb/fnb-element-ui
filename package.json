@@ -1,17 +1,33 @@
 {
-  "name": "fnb-element-ui",
+  "name": "@autodt/fnb-element-ui",
   "version": "0.1.0",
-  "private": true,
+  "main": "lib/fnb-element-ui.common.js",
+  "style": "lib/fnb-element-ui.css",
+  "typings": "types/index.d.ts",
+  "files": [
+    "lib",
+    "lib/*.js",
+    "types/*.d.ts"
+  ],
+  "unpkg": "lib/fnb-element-ui.umd.min.js",
+  "author": {
+    "name": "Jonny",
+    "email": "c1043870470@gmail.com"
+  },
+  "description": "基于Element UI 组件封装的适用于本公司业务逻辑通用组件",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "lib": "vue-cli-service build --target lib --name fnb-element-ui --dest lib src/index.ts",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "element-ui": "^2.13.2",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
-    "vue-property-decorator": "^8.4.2"
+    "vue-property-decorator": "8.4.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.33.0",
@@ -22,6 +38,7 @@
     "@vue/cli-service": "~4.4.0",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^5.0.2",
+    "babel-plugin-component": "^1.1.1",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-vue": "^6.2.2",
