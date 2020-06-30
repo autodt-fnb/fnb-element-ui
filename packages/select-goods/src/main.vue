@@ -15,6 +15,7 @@
           :data="categoryList"
           :props="treeProps"
           @node-click="categoryTreeClick"
+          ref="tree"
         />
       </Scrollbar>
       <div class="line" v-show="!value" />
@@ -27,23 +28,29 @@
             :max-height="popoverHeight - 38"
             :row-key="rowKey"
             :data="tableData"
+            @row-click="handleRowClick"
             @selection-change="handleSelectionChange"
           >
-            <TableColumn
-              type="selection"
-              reserve-selection
-              align="center"
-              width="45"
-            />
-            <TableColumn
-              v-for="(item, index) in table"
-              :key="index"
-              show-overflow-tooltip
-              align="center"
-              :formatter="item.formatter"
-              :prop="item.prop"
-              :label="item.label"
-            />
+            <template v-for="(item, index) in table">
+              <TableColumn
+                v-if="item.type"
+                :key="index"
+                :type="item.type"
+                reserve-selection
+                :align="item.align || 'center'"
+                :width="item.width"
+              />
+              <TableColumn
+                :key="index"
+                v-else
+                show-overflow-tooltip
+                :formatter="item.formatter"
+                :prop="item.prop"
+                :label="item.label"
+                :width="item.width"
+                :align="item.align || 'center'"
+              />
+            </template>
             <slot slot="append" name="append" />
           </Table>
         </div>
@@ -137,6 +144,12 @@ export default class FnbSelectGoods extends Vue {
 
   /** 选中数据列表 */
   selectionList: object[] = []
+
+  /** 表格单行点击事件 */
+  @Emit('row-click')
+  handleRowClick(e: unknown) {
+    return e
+  }
 
   /**
    * 处理可选择项选择变化事件

@@ -1,6 +1,6 @@
 {
   "name": "@autodt/fnb-element-ui",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "lib/fnb-element-ui.common.js",
   "style": "lib/index.css",
   "typings": "types/index.d.ts",
