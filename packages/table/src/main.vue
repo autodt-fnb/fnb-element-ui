@@ -153,7 +153,7 @@ const tableEventsList: string[] = [
   'header-contextmenu',
   'sort-change',
   'filter-change',
-  'current-change',
+  'current-row-change',
   'header-dragend',
   'expand-change'
 ]
@@ -241,7 +241,12 @@ export default class FnbTable extends Vue implements ElementUIComponent {
     for (const key in this.$listeners) {
       const name = camel2kebab(key)
       if (tableEventsList.includes(name)) {
-        events[name] = this.$listeners[key]
+        // 为了兼容 分页的current-change
+        if (name === 'current-row-change') {
+          events['current-change'] = this.$listeners[key]
+        } else {
+          events[name] = this.$listeners[key]
+        }
       }
     }
     return events
