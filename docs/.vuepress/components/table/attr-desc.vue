@@ -12,7 +12,7 @@
     <common-attribute
       title="Table Events"
       :description="
-        `element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-events' target='_blank' rel='noopener noreferrer'>Table Events</a> 全部可用，这里列举新添加的事件`
+        `element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-events' target='_blank' rel='noopener noreferrer'>Table Events</a> 全部可用（ <code>current-change</code>改名为 <code>current-row-change</code>，为兼容分页的 <code>current-change</code> ），这里列举新添加的事件`
       "
       type="event"
       :data="eventsDate"
@@ -87,6 +87,12 @@ const attrData = [
 ]
 
 const eventsDate = [
+  {
+    name: 'current-row-change',
+    desc:
+      '与 element-ui 的 Table <code>current-change</code> 事件效果完全一致，为了与分页的 current-change 事件名不冲突，名称改变',
+    params: 'currentRow, oldCurrentRow'
+  },
   {
     name: 'size-change',
     desc: 'pageSize 改变时会触发',
