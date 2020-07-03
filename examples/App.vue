@@ -10,7 +10,7 @@
     <fnb-table
       ref="table"
       :table="table"
-      :row-key="'date'"
+      row-key="date"
       no-card
       :data="tableData"
       @cell-click="cellClick"

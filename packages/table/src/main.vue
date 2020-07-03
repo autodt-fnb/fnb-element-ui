@@ -123,6 +123,24 @@ const tableProps: { [k: string]: any } = {
   load: undefined
 }
 
+const hyphenateRE = /([^-])([A-Z])/g
+/** 驼峰转短横线方法 */
+function camel2kebab(str: string) {
+  return str
+    .replace(hyphenateRE, '$1-$2')
+    .replace(hyphenateRE, '$1-$2')
+    .toLowerCase()
+}
+/** 短横线转驼峰方法 */
+function kebab2camel(str: string) {
+  return str
+    .split('-')
+    .map((v, i) =>
+      i ? v.toLowerCase().replace(/( |^)[a-z]/g, L => L.toUpperCase()) : v
+    )
+    .join('')
+}
+
 /** table 默认事件 */
 const tableEventsList: string[] = [
   'select',
@@ -214,8 +232,9 @@ export default class FnbTable extends Vue implements ElementUIComponent {
   get tableProps() {
     const props = { ...tableProps }
     for (const key in this.$attrs) {
-      if (Reflect.has(props, key)) {
-        props[key] = this.$attrs[key]
+      const name = kebab2camel(key)
+      if (Reflect.has(props, name)) {
+        props[name] = this.$attrs[key]
       }
     }
     props.cellClassName = props.cellClassName ?? 'cell-class-name'
@@ -226,8 +245,9 @@ export default class FnbTable extends Vue implements ElementUIComponent {
   get tableEvents() {
     const events: Record<string, Function | Function[]> = {}
     for (const key in this.$listeners) {
-      if (tableEventsList.includes(key)) {
-        events[key] = this.$listeners[key]
+      const name = camel2kebab(key)
+      if (tableEventsList.includes(name)) {
+        events[name] = this.$listeners[key]
       }
     }
     return events
