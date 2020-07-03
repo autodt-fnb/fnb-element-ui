@@ -13,11 +13,11 @@ const config = require('./config')
 module.exports = {
   mode: 'production',
   entry: {
-    app: [path.resolve(process.cwd(), './src/index.ts')]
+    index: [path.resolve(process.cwd(), './src/index.ts')]
   },
   output: {
     path: path.resolve(process.cwd(), './lib'),
-    filename: 'fnb-element-ui.common.js',
+    filename: 'index.js',
     chunkFilename: '[id].js',
     libraryExport: 'default',
     library: 'FNB_ELEMENT',

@@ -1,10 +1,15 @@
 import Vue from 'vue'
 import App from './App.vue'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
-import FnbElementUi from 'fnb-element-ui/lib/fnb-element-ui.common'
-import 'fnb-element-ui/lib/index.css'
-Vue.use(FnbElementUi)
+// import FnbElementUI from 'fnb-element-ui/lib'
+// import 'fnb-element-ui/lib/index.css'
+import FnbElementUI from '../src/index'
 
+Vue.use(FnbElementUI)
+
+Vue.use(ElementUI)
 Vue.config.productionTip = false
 
 new Vue({

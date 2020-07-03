@@ -1,14 +1,19 @@
 <template>
-  <Popover
+  <ElPopover
     placement="bottom-start"
     trigger="manual"
     popper-class="select-goods__wrap"
     :width="popoverWidth"
     v-model="showDialog"
+    ref="elPopover"
   >
     <div class="flex" :style="{ height: `${popoverHeight}px` }">
-      <Scrollbar v-show="!value" class="scrollbar-height tree">
-        <Tree
+      <ElScrollbar
+        v-loading="treeLoading"
+        v-show="!value"
+        class="scrollbar-height tree"
+      >
+        <ElTree
           highlight-current
           :expand-on-click-node="false"
           :node-key="nodeKey"
@@ -17,81 +22,75 @@
           @node-click="categoryTreeClick"
           ref="tree"
         />
-      </Scrollbar>
+      </ElScrollbar>
       <div class="line" v-show="!value" />
       <div class="right-content">
-        <div class="table-wrap">
-          <Table
+        <div class="table-wrap" v-loading="tableLoading">
+          <ElTable
             class="table"
             header-cell-class-name="table-header"
             cell-class-name="table-cell"
-            :max-height="popoverHeight - 38"
+            :max-height="tableMaxHeight"
             :row-key="rowKey"
             :data="tableData"
             @row-click="handleRowClick"
             @selection-change="handleSelectionChange"
           >
-            <template v-for="(item, index) in table">
-              <TableColumn
-                v-if="item.type"
-                :key="index"
-                :type="item.type"
-                reserve-selection
-                :align="item.align || 'center'"
-                :width="item.width"
-              />
-              <TableColumn
-                :key="index"
-                v-else
-                show-overflow-tooltip
-                :formatter="item.formatter"
-                :prop="item.prop"
-                :label="item.label"
-                :width="item.width"
-                :align="item.align || 'center'"
-              />
+            <template v-for="(item, tableIndex) in tableColumn">
+              <ElTableColumn
+                v-if="item.slotName"
+                :key="tableIndex"
+                v-bind="item"
+              >
+                <template v-slot="{ row, column, $index }">
+                  <slot
+                    :index="$index"
+                    :row="row"
+                    :column="column"
+                    :name="item.slotName"
+                  />
+                </template>
+              </ElTableColumn>
+              <ElTableColumn v-else :key="tableIndex" v-bind="item" />
             </template>
             <slot slot="append" name="append" />
-          </Table>
+          </ElTable>
         </div>
         <div class="footer-btn">
-          <Button size="mini" @click="handleCancle">取 消</Button>
-          <Button type="primary" size="mini" @click="handleConfirm">
+          <ElButton size="mini" v-if="showCancle" @click="handleCancle"
+            >取 消</ElButton
+          >
+          <ElButton
+            type="primary"
+            v-if="showConfirm"
+            size="mini"
+            @click="handleConfirm"
+          >
             确 认
-          </Button>
+          </ElButton>
         </div>
       </div>
     </div>
     <template slot="reference">
-      <Input
-        @click.native="showDialog = true"
+      <ElInput
+        @click.native="handleClickInput"
         :value="value"
         @input="$emit('input', $event)"
-        @clear="$emit('inputClear')"
+        @clear="$emit('input-clear')"
         clearable
         :placeholder="placeholder"
       />
     </template>
-  </Popover>
+  </ElPopover>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from 'vue-property-decorator'
-import {
-  Popover,
-  Input,
-  Scrollbar,
-  Table,
-  TableColumn,
-  Tree,
-  Button
-} from 'element-ui'
 
 /**
  * 选择商品组件
  */
 @Component({
-  components: { Popover, Input, Scrollbar, Table, TableColumn, Tree, Button },
   name: 'FnbSelectGoods'
 })
 export default class FnbSelectGoods extends Vue {
@@ -101,7 +100,7 @@ export default class FnbSelectGoods extends Vue {
   /**
    * 表格字段
    */
-  @Prop({ default: () => [], required: true }) readonly table!: object[]
+  @Prop({ default: () => [], required: true }) readonly table!: unknown[]
 
   /**
    * 表格数据
@@ -121,12 +120,26 @@ export default class FnbSelectGoods extends Vue {
   @Prop({ default: '请输入' }) placeholder!: string
 
   /**
+   * 分类数据加载中
+   */
+  @Prop({ default: false, type: Boolean }) treeLoading!: string
+
+  /**
+   * table数据加载中
+   */
+  @Prop({ default: false, type: Boolean }) tableLoading!: string
+
+  /**
    * 商品分类列表
    */
   @Prop({ default: () => [] }) readonly categoryList!: object[]
 
   /** 树形控件 配置选项 */
-  @Prop() readonly treeProps!: { label: string; children: string }
+  @Prop() readonly treeProps!: {
+    label: string
+    children: string
+    disabled: boolean
+  }
 
   /** 树形控件key值 */
   @Prop() readonly nodeKey!: string
@@ -137,6 +150,12 @@ export default class FnbSelectGoods extends Vue {
   /** 弹窗高度 */
   @Prop({ default: 300, type: Number }) readonly popoverHeight!: number
 
+  /** 是否显示取消按钮 */
+  @Prop({ default: true, type: Boolean }) readonly showCancle!: boolean
+
+  /** 是否显示确认按钮 */
+  @Prop({ default: true, type: Boolean }) readonly showConfirm!: boolean
+
   /**
    * 显示选择商品弹窗
    */
@@ -144,6 +163,82 @@ export default class FnbSelectGoods extends Vue {
 
   /** 选中数据列表 */
   selectionList: object[] = []
+
+  isCreated = false
+
+  /** 表格最大高度 */
+  get tableMaxHeight() {
+    if (!this.showCancle && !this.showConfirm) {
+      return this.popoverHeight
+    }
+    return parseInt(`${this.popoverHeight - 38}`)
+  }
+
+  get tableColumn() {
+    if (!Array.isArray(this.table)) {
+      return []
+    }
+    return (
+      this.table?.map(v => {
+        v.align = v.align || 'center' // 默认居中
+        if (v.slot) {
+          // 如slot是boolean值。则slot名称为prop，否则就是slot值
+          if (v.slot === true) {
+            v.slotName = v.prop
+          } else {
+            v.slotName = v.slot
+          }
+        }
+        delete v.slot
+        return v
+      }) ?? []
+    )
+  }
+
+  // 组件销毁的时候移除监听
+  destroyed() {
+    document.removeEventListener('click', this.clickListener)
+  }
+
+  /** 处理点击input框 */
+  handleClickInput() {
+    if (!this.showDialog) {
+      document.addEventListener('click', this.clickListener)
+    }
+    this.showDialog = true
+  }
+
+  /** 点击关闭弹窗事件监听 */
+  clickListener(e: any) {
+    if (!this.showDialog) {
+      return
+    }
+    const { target, path }: { path?: HTMLElement[]; target: HTMLElement } = e
+    // 点击输入框不关闭弹窗
+
+    let nodeId: string | undefined = undefined
+    let referenceNode: HTMLElement | undefined = undefined
+
+    if (path) {
+      referenceNode = path.find(v =>
+        v.className?.includes('el-popover__reference')
+      )
+    } else if (
+      target?.className.includes('el-input__inner') &&
+      target?.parentElement?.className.includes('el-popover__reference')
+    ) {
+      referenceNode = target.parentElement
+    }
+
+    nodeId = referenceNode?.attributes.getNamedItem('aria-describedby')?.value
+
+    if (this.$refs.elPopover) {
+      this.showDialog = nodeId === (this.$refs.elPopover as any).tooltipId
+      if (!this.showDialog) {
+        document.removeEventListener('click', this.clickListener)
+      }
+    }
+  }
 
   /** 表格单行点击事件 */
   @Emit('row-click')

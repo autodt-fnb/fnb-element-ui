@@ -1,10 +1,4 @@
-# fnb-element-ui
-
-## 基于 Element UI 组件封装的适用于本公司业务逻辑通用组件
-
-### 文档
-
-文档地址 [fnb-element-ui](http://docs.yangchebyd.com/fnb-element-ui/)
+# 快速开始
 
 ### 安装
 
@@ -40,3 +34,5 @@ new Vue({
 ```
 
 以上代码便完成了 Element 的引入。需要注意的是，样式文件需要单独引入，**且必须在 element-ui 组件样式引入之后**（否则 fnb-element-ui 组件中部分样式覆盖不了 element-ui 中组件样式）。
+
+<common-theme-default></common-theme-default>
