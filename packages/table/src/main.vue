@@ -1,5 +1,5 @@
 <template>
-  <ElCard ref="tableCard">
+  <div :class="{ 'el-card is-always-shadow': !noCard }">
     <ElTable ref="table" v-bind="tableProps" v-on="tableEvents">
       <template v-for="(item, tableIndex) in tableColumn">
         <ElTableColumn v-if="item.slotName" :key="tableIndex" v-bind="item">
@@ -62,24 +62,20 @@
         :total="total"
       />
     </div>
-  </ElCard>
+  </div>
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/no-empty-function */ // 兼容 @Emit
-/* eslint-disable @typescript-eslint/no-unused-vars */ // 兼容 @Emit
 import {
   Vue,
   Component,
   Prop,
   Emit,
   Ref,
-  PropSync,
-  Mixins
+  PropSync
 } from 'vue-property-decorator'
 import { ElTable } from 'element-ui/types/table'
 import { ElementUIComponent } from 'element-ui/types/component'
-import { ElCard } from 'element-ui/types/card'
 
 /** table 默认 props */
 const tableProps: { [k: string]: any } = {
@@ -163,7 +159,8 @@ const tableEventsList: string[] = [
 ]
 
 @Component({
-  name: 'FnbTable'
+  name: 'FnbTable',
+  inheritAttrs: false
 })
 export default class FnbTable extends Vue implements ElementUIComponent {
   /**
@@ -196,9 +193,6 @@ export default class FnbTable extends Vue implements ElementUIComponent {
    * 是否显示外层的card组件
    */
   @Prop({ default: false, type: Boolean }) readonly noCard!: boolean
-
-  /** 最外层card组件ref */
-  @Ref('tableCard') readonly tableCardRef!: ElCard
 
   /** table组件ref */
   @Ref('table') readonly tableRef!: ElTable
@@ -253,19 +247,6 @@ export default class FnbTable extends Vue implements ElementUIComponent {
     return events
   }
 
-  private mounted() {
-    this.noCard && this.noCardAction()
-  }
-
-  /**
-   * 不要外层card 样式
-   */
-  private noCardAction() {
-    const node = this.tableCardRef.$el
-    node.className = ''
-    node.children[0].className = ''
-  }
-
   /** 处理显示 popover */
   handlePopover(e: MouseEvent, type: string) {
     const el = e.target as Element
@@ -283,16 +264,14 @@ export default class FnbTable extends Vue implements ElementUIComponent {
   }
 
   @Emit('current-change')
-  handleCurrentChange(page: number) {}
+  handleCurrentChange(page: number) {
+    return page
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 ::v-deep {
-  .el-card__body {
-    padding: 0;
-  }
-
   .el-table {
     .cell {
       line-height: 22px;
