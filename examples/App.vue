@@ -14,6 +14,11 @@
       no-card
       :data="tableData"
       @cell-click="cellClick"
+      :current-page.sync="pageNum"
+      :page-size.sync="pageSize"
+      :total="total"
+      @size-change="getList"
+      @current-change="getList"
     >
       <template v-slot:date="{ row }">
         <el-input v-model="row.date" />
@@ -35,6 +40,12 @@ import HelloWorld from './components/HelloWorld.vue'
   }
 })
 export default class App extends Vue {
+  pageNum = 1
+  pageSize = 10
+  total = 105
+  getList() {
+    console.log(23423432)
+  }
   name = ''
   table = [
     {
