@@ -74,8 +74,7 @@ import {
   Ref,
   PropSync
 } from 'vue-property-decorator'
-import { ElTable } from 'element-ui/types/table'
-import { ElementUIComponent } from 'element-ui/types/component'
+import { FnbTable } from '../../../types/table'
 
 /** table 默认 props */
 const tableProps: { [k: string]: any } = {
@@ -162,7 +161,7 @@ const tableEventsList: string[] = [
   name: 'FnbTable',
   inheritAttrs: false
 })
-export default class FnbTable extends Vue implements ElementUIComponent {
+export default class Table extends Vue {
   /**
    * 表格字段
    */
@@ -195,7 +194,7 @@ export default class FnbTable extends Vue implements ElementUIComponent {
   @Prop({ default: false, type: Boolean }) readonly noCard!: boolean
 
   /** table组件ref */
-  @Ref('table') readonly tableRef!: ElTable
+  @Ref('table') readonly tableRef!: FnbTable
 
   /** 禁止显示tooltip */
   popoverDisabled: { [i: string]: boolean } = {}
@@ -216,7 +215,8 @@ export default class FnbTable extends Vue implements ElementUIComponent {
             v.slotName = v.slot
           }
         }
-        delete v.slot
+        // 防止将slot绑定到 tableColumn上
+        Reflect.deleteProperty(v, 'slot')
         return v
       }) ?? []
     )
@@ -260,6 +260,51 @@ export default class FnbTable extends Vue implements ElementUIComponent {
     } else if (e.type === 'mouseleave') {
       this.popoverDisabled = {}
     }
+  }
+
+  /** element-ui table method clearSelection */
+  clearSelection() {
+    this.tableRef.clearSelection()
+  }
+
+  /** element-ui table method toggleRowSelection */
+  toggleRowSelection(row: object, selected?: boolean) {
+    this.tableRef.toggleRowSelection(row, selected)
+  }
+
+  /** element-ui table method toggleAllSelection */
+  toggleAllSelection() {
+    this.tableRef.toggleAllSelection()
+  }
+
+  /** element-ui table method toggleRowExpansion */
+  toggleRowExpansion(row: object, expanded?: boolean) {
+    this.tableRef.toggleRowExpansion(row, expanded)
+  }
+
+  /** element-ui table method setCurrentRow */
+  setCurrentRow(row?: object) {
+    this.tableRef.setCurrentRow(row)
+  }
+
+  /** element-ui table method clearSort */
+  clearSort() {
+    this.tableRef.clearSort()
+  }
+
+  /** element-ui table method clearFilter */
+  clearFilter(columnKey?: string[]) {
+    this.tableRef.clearFilter(columnKey)
+  }
+
+  /** element-ui table method doLayout */
+  doLayout() {
+    this.tableRef.doLayout()
+  }
+
+  /** element-ui table method sort */
+  sort(prop: string, order: string) {
+    this.tableRef.sort(prop, order)
   }
 
   @Emit('size-change')

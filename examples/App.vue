@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
+    <fnb-iconfont name="icon-xinkehu" size="50" @click="getList" />
     <fnb-select-goods
       v-model="name"
       row-key="id"
@@ -27,12 +28,14 @@
         <el-input v-model="row.name" />
       </template>
     </fnb-table>
+    <el-button @click="clearSelection">clearSelection</el-button>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Ref } from 'vue-property-decorator'
 import HelloWorld from './components/HelloWorld.vue'
+import { FnbTable } from '../types/table'
 
 @Component({
   components: {
@@ -50,7 +53,12 @@ export default class App extends Vue {
   table = [
     {
       label: '日期',
-      slot: 'date'
+      type: 'selection'
+    },
+    {
+      label: '日期',
+      slot: true,
+      prop: 'date'
     },
     {
       slot: true,
@@ -86,6 +94,8 @@ export default class App extends Vue {
     }
   ]
 
+  @Ref('table') readonly tableRef!: FnbTable
+
   mounted() {
     console.log(this.$refs)
     setTimeout(() => {
@@ -95,6 +105,10 @@ export default class App extends Vue {
         address: '上海市普陀区金沙江路 1516 弄'
       })
     }, 3000)
+  }
+
+  clearSelection() {
+    this.tableRef.clearSelection()
   }
 
   cellClick(e: any) {

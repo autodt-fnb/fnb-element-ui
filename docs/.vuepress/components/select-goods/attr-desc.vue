@@ -178,12 +178,6 @@ const tableAttrData = [
       '该列是否是slot插槽（自定义列的内容，参数为 { row, column, index }），是的话插槽名 <code>name</code> 是 <code>slot</code> 字段值（当 <code>slot</code> 不为 <code>true</code>  时）或者 <code>prop</code> 字段值',
     type: 'boolean | string',
     default: 'false'
-  },
-  {
-    name: 'hidden',
-    desc: '该列是否隐藏',
-    type: 'boolean',
-    default: 'false'
   }
 ]
 

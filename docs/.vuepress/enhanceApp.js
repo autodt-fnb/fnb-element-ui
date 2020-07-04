@@ -8,6 +8,7 @@ import javascript from 'highlight.js/lib/languages/javascript'
 import vue from 'vue-highlight.js/lib/languages/vue'
 
 import 'highlight.js/styles/atom-one-dark.css'
+import 'highlight.js/styles/atom-one-dark.css'
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'

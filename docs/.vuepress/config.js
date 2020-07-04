@@ -7,6 +7,13 @@ module.exports = {
     [
       'link',
       { rel: 'shortcut icon', type: 'image/x-icon', href: `./favicon.ico` }
+    ],
+    [
+      'link',
+      {
+        rel: 'stylesheet',
+        href: 'https://at.alicdn.com/t/font_1478682_k11j68pk13.css'
+      }
     ]
   ],
   themeConfig: {
@@ -20,7 +27,8 @@ module.exports = {
         collapsable: false,
         children: [
           ['/component/select-goods', 'SelectGoods 商品搜索选择'],
-          ['/component/table', 'Table 表格']
+          ['/component/table', 'Table 表格'],
+          ['/component/iconfont', 'Iconfont 字体图标']
         ]
       }
     ]

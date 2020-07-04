@@ -86,6 +86,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from 'vue-property-decorator'
+import { FnbTableColumn } from '../../../types/table'
 
 /**
  * 选择商品组件
@@ -93,14 +94,14 @@ import { Vue, Component, Prop, Emit, Model } from 'vue-property-decorator'
 @Component({
   name: 'FnbSelectGoods'
 })
-export default class FnbSelectGoods extends Vue {
+export default class SelectGoods extends Vue {
   /** 搜索内容 */
   @Model('input', { type: String, required: true }) readonly value!: string
 
   /**
    * 表格字段
    */
-  @Prop({ default: () => [], required: true }) readonly table!: unknown[]
+  @Prop({ default: () => [], required: true }) readonly table!: FnbTableColumn[]
 
   /**
    * 表格数据
@@ -184,11 +185,12 @@ export default class FnbSelectGoods extends Vue {
         if (v.slot) {
           // 如slot是boolean值。则slot名称为prop，否则就是slot值
           if (v.slot === true) {
-            v.slotName = v.prop
+            ;(v as any).slotName = v.prop
           } else {
-            v.slotName = v.slot
+            ;(v as any).slotName = v.slot
           }
         }
+        // 防止将slot绑定到 tableColumn上
         delete v.slot
         return v
       }) ?? []

@@ -1,66 +1,43 @@
-import { ElementUIComponent } from 'element-ui/types/component'
+import { ElTableColumn } from 'element-ui/types/table-column'
+import { ElTable } from 'element-ui/types/table'
 
-export declare class FnbTable extends ElementUIComponent {
+export interface FnbTableColumn extends ElTableColumn {
+  /** 该列是否是slot插槽（自定义列的内容，参数为 `{ row, column, index }`），插槽名 `name` 是 `slot` 字段值（当 `slot` 不为 `true`  时）或者 `prop` 字段值 */
+  slot?: boolean | string
+
+  /** 该列是否隐藏 */
+  hidden?: boolean
+}
+
+export declare class FnbTable extends ElTable {
   /**
    * 表格字段
    */
-  table: object[]
-
-  /**
-   * 表格数据
-   */
-  data: object[]
-
-  /** 行数据的 `Key`，用来优化 `Table` 的渲染；在使用 `reserve-selection` 功能与显示树形数据时，该属性是必填的。类型为 `String` 时，支持多层访问：`user.info.id`，但不支持 `user.info[0].id`，此种情况请使用 `Function` */
-  rowKey?: ((row: object) => string) | string
-
-  expandRowKeys?: string[] | number[]
+  table: FnbTableColumn[]
   /**
    * 是都显示分页组件
    */
-  showPagination?: boolean
+  showPagination: boolean
 
   /**
    * 每页显示数
    */
-  pageSizeProp?: number
+  pageSize: number
 
   /**
    * 当前页码
    */
-  currentPageProp?: number
+  currentPage: number
 
   /**
    * 数据总数
    */
-  total?: number
+  total: number
 
-  /**
-   * 表格高度
-   */
-  height?: number | string
-
-  /**
-   * 表格最大高度
-   */
-  maxHeight?: number | string
   /**
    * 是否显示外层的card组件
    */
-  noCard?: boolean
+  noCard: boolean
 
-  /** selection 改变事件 */
-  selectionChange(e: any): void
-
-  /** 单行点击事件 */
-  rowClick(e: any): void
-
-  /** 当前页 数据显示个数 */
-  sizeChange(size: number): void
-
-  /** 页码改变 */
-  currentChange(page: number): void
-
-  /** 表格改变事件 */
-  expandChange(row: object, expandedRows: object): void
+  clearFilter(columnKey?: string[]): void
 }
