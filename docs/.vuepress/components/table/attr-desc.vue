@@ -58,7 +58,7 @@ export default {
 const attrData = [
   {
     name: 'table',
-    desc: `表格Attributes，具体看下方 <a href="#Table Attributes">Table Attributes</a>`,
+    desc: `表格 Column Attributes，具体看下方 <a href="#Table Column Attributes">Table Column Attributes</a>`,
     type: 'array'
   },
   {
