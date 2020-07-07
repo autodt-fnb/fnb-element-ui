@@ -1,4 +1,5 @@
 import { ElementUIComponent } from 'element-ui/types/component'
+import { FnbTableColumn } from './table'
 
 export declare class FnbSelectGoods extends ElementUIComponent {
   /** 输入框内容 */
