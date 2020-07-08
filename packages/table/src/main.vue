@@ -13,7 +13,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          v-else-if="item.showOverflowTooltip"
+          v-else-if="item.showTooltip"
           :key="tableIndex"
           v-bind="item"
         >
@@ -215,8 +215,10 @@ export default class Table extends Vue {
             v.slotName = v.slot
           }
         }
+        v.showTooltip = v.showOverflowTooltip
         // 防止将slot绑定到 tableColumn上
         Reflect.deleteProperty(v, 'slot')
+        Reflect.deleteProperty(v, 'showOverflowTooltip')
         return v
       }) ?? []
     )
