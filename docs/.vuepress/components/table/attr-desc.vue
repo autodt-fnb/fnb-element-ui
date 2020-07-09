@@ -21,7 +21,7 @@
     <common-attribute
       title="Table Methods"
       :description="
-        `element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-methods' target='_blank' rel='noopener noreferrer'>Table Methods</a> 全部可用，如 <code>clearSelection</code> 方法使用： <code>this.$refs['curTableRef'].tableRef.clearSelection()</code>`
+        `element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-methods' target='_blank' rel='noopener noreferrer'>Table Methods</a> 全部可用。`
       "
     ></common-attribute>
 
@@ -134,6 +134,10 @@ const slotData = [
     name: 'append',
     desc:
       '插入至表格最后一行之后的内容，如果需要对表格的内容进行无限滚动操作，可能需要用到这个 slot。若表格有合计行，该 slot 会位于合计行之上。'
+  },
+  {
+    name: 'paginationAppend',
+    desc: '插入至分页组件同一行，右侧内容'
   }
 ]
 </script>
