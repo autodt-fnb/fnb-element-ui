@@ -61,6 +61,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       />
+      <slot name="paginationAppend" />
     </div>
   </div>
 </template>
@@ -184,6 +185,11 @@ export default class Table extends Vue {
   currentPageProp!: number
 
   /**
+   * 是否启用自动最大高度，使用当前窗口剩余高度
+   */
+  @Prop({ type: Boolean }) readonly autoMaxHeight!: boolean
+
+  /**
    * 数据总数
    */
   @Prop() readonly total!: number
@@ -195,6 +201,8 @@ export default class Table extends Vue {
 
   /** table组件ref */
   @Ref('table') readonly tableRef!: FnbTable
+
+  maxHeight: string | number = 0
 
   /** 禁止显示tooltip */
   popoverDisabled: { [i: string]: boolean } = {}
@@ -230,9 +238,13 @@ export default class Table extends Vue {
     for (const key in this.$attrs) {
       const name = kebab2camel(key)
       if (Reflect.has(props, name)) {
-        props[name] = this.$attrs[key]
+        // 处理最大高度
+        if (name === 'maxHeight') {
+          console.log(props[name])
+        } else props[name] = this.$attrs[key]
       }
     }
+    props.maxHeight = this.autoMaxHeight ? this.maxHeight : props.maxHeight
     props.cellClassName = props.cellClassName ?? 'cell-class-name'
     return props
   }
@@ -254,6 +266,19 @@ export default class Table extends Vue {
     return events
   }
 
+  mounted() {
+    if (this.autoMaxHeight) {
+      window.addEventListener('resize', this.autoMaxHeightEvent)
+      this.autoMaxHeightEvent()
+    }
+  }
+
+  destroyed() {
+    if (this.autoMaxHeight) {
+      window.removeEventListener('resize', this.autoMaxHeightEvent)
+    }
+  }
+
   /** 处理显示 popover */
   handlePopover(e: MouseEvent, type: string) {
     const el = e.target as Element
@@ -262,6 +287,23 @@ export default class Table extends Vue {
     } else if (e.type === 'mouseleave') {
       this.popoverDisabled = {}
     }
+  }
+
+  /** 自动高度 */
+  autoMaxHeightEvent() {
+    this.$nextTick(() => {
+      /** 分页容器的高度 */
+      const paginationHeight =
+        (this.$el.querySelector('.pagination-wrapper') as HTMLElement)
+          ?.offsetHeight ?? 0
+
+      this.maxHeight =
+        window.innerHeight -
+        (this.$el as HTMLElement).getBoundingClientRect().top -
+        20 -
+        (this.showPagination ? paginationHeight : 0) -
+        (this.noCard ? 0 : 2)
+    })
   }
 
   /** element-ui table method clearSelection */
@@ -351,6 +393,7 @@ export default class Table extends Vue {
 .pagination-wrapper {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .pagination {

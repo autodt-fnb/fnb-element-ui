@@ -83,6 +83,12 @@ const attrData = [
     desc: '当前页数，支持 .sync 修饰符',
     type: 'number',
     default: '1'
+  },
+  {
+    name: 'auto-max-height',
+    desc: '是否设置表格最大高度为，当前视图剩余高度，表格一屏显示',
+    type: 'boolean',
+    default: 'false'
   }
 ]
 

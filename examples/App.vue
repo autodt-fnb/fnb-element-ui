@@ -12,12 +12,12 @@
       ref="table"
       :table="table"
       row-key="date"
-      no-card
       :data="tableData"
       @cell-click="cellClick"
       :current-page.sync="pageNum"
       :page-size.sync="pageSize"
       :total="total"
+      autoMaxHeight
       @size-change="getList"
       @current-change="getList"
     >
@@ -28,7 +28,7 @@
         <el-input v-model="row.name" />
       </template>
     </fnb-table>
-    <el-button @click="clearSelection">clearSelection</el-button>
+    <!-- <el-button @click="clearSelection">clearSelection</el-button> -->
   </div>
 </template>
 
