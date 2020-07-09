@@ -295,7 +295,7 @@ export default class Table extends Vue {
       /** 分页容器的高度 */
       const paginationHeight =
         (this.$el.querySelector('.pagination-wrapper') as HTMLElement)
-          ?.offsetHeight ?? 0
+          ?.offsetHeight ?? 80
 
       this.maxHeight =
         window.innerHeight -

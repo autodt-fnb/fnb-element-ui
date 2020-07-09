@@ -1,6 +1,6 @@
 {
   "name": "@autodt/fnb-element-ui",
-  "version": "1.1.7",
+  "version": "1.1.9",
   "main": "lib/index.js",
   "style": "lib/index.css",
   "typings": "types/index.d.ts",
@@ -21,6 +21,7 @@
     "lib": "webpack --config build/webpack.common.js",
     "docs:dev": "vuepress dev docs",
     "docs:build": "npm run lib && vuepress build docs",
+    "release": "npm run lib && yrm use npm && npm publish && yrm use taobao",
     "clean": "rimraf lib",
     "lint": "vue-cli-service lint"
   },
