@@ -356,6 +356,7 @@ export default class SelectGoods extends Vue {
 
     &::-webkit-scrollbar {
       width: 10px;
+      height: 10px;
     }
   }
 }
