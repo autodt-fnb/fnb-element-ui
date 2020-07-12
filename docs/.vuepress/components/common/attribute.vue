@@ -1,8 +1,8 @@
 <template>
   <div class="card-wrap">
-    <h3 :id="title" class="title">
+    <h3 :id="title" class="title" :title="title">
       <a :href="'#' + title" class="header-anchor">#</a>
-      {{ title }}
+      <a :href="'#' + title" class="title-name">{{ title }}</a>
     </h3>
     <div class="description" v-if="description" v-html="description"></div>
     <el-table :data="data" v-if="type">
@@ -125,6 +125,11 @@ export default {
     margin: 0;
     margin-top: -3.1rem;
     padding-top: 4.6rem;
+
+    &-name {
+      color: inherit;
+      text-decoration: none !important;
+    }
   }
 
   .word {

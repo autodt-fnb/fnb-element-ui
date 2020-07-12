@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
+    <fnb-plate-number v-model="plateNumber" @change="plateInput" />
     <fnb-iconfont name="icon-xinkehu" size="50" @click="getList" />
     <fnb-select-goods
       v-model="name"
@@ -49,6 +50,7 @@ export default class App extends Vue {
   getList() {
     console.log(23423432)
   }
+  plateNumber = '皖BHT215'
   name = ''
   table = [
     {
@@ -114,6 +116,10 @@ export default class App extends Vue {
   }
 
   cellClick(e: any) {
+    console.log(e)
+  }
+
+  plateInput(e: string) {
     console.log(e)
   }
 }

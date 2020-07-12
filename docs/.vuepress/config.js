@@ -28,7 +28,8 @@ module.exports = {
         children: [
           ['/component/select-goods', 'SelectGoods 商品搜索选择'],
           ['/component/table', 'Table 表格'],
-          ['/component/iconfont', 'Iconfont 字体图标']
+          ['/component/iconfont', 'Iconfont 字体图标'],
+          ['/component/plate-number', 'PlateNumber 车牌号']
         ]
       }
     ]

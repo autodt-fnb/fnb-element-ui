@@ -21,7 +21,7 @@
     "lib": "webpack --config build/webpack.common.js",
     "docs:dev": "vuepress dev docs",
     "docs:build": "npm run lib && vuepress build docs",
-    "release": "npm run lib && yrm use npm && npm publish && yrm use taobao",
+    "release": "npm run lib && yrm use npm && yarn publish && yrm use taobao",
     "clean": "rimraf lib",
     "lint": "vue-cli-service lint"
   },

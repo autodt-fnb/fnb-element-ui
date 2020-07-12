@@ -10,7 +10,6 @@
 
 <script>
 export default {
-  components: {},
   data() {
     return {
       attrData: [
@@ -31,8 +30,7 @@ export default {
         }
       ]
     }
-  },
-  methods: {}
+  }
 }
 </script>
 
