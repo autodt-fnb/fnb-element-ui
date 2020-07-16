@@ -27,6 +27,11 @@ export default {
           default: 'yyyy-MM-dd'
         },
         {
+          name: 'maxWidth',
+          desc: '组件显示的最大宽度，默认自适应容器',
+          type: 'number'
+        },
+        {
           name: 'valueTime',
           desc:
             '是否在日期后面加 时间，开始时间加 <code>00:00:00</code>，结束时间后面加 <code>23:59:59</code>',

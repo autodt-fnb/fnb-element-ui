@@ -18,6 +18,9 @@ export declare class FnbPlateNumber extends ElementUIComponent {
    */
   valueFormat: string
 
+  /** 组件显示的最大宽度，默认自适应容器 */
+  maxWidth: number
+
   /** 是否在日期后面加 时间，开始时间加 00:00:00，结束时间后面加23:59:59 */
   valueTime: boolean
 

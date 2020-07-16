@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="date-range">
     <el-button-group
       class="button-group"
       v-if="operateBtns && operateBtns.length > 0"
@@ -12,6 +12,8 @@
       >
     </el-button-group>
     <el-date-picker
+      :style="{ maxWidth: maxWidth }"
+      class="date-picker"
       v-model="dateRange"
       type="daterange"
       :value-format="valueFormat"
@@ -43,6 +45,9 @@ export default class DateRange extends Vue {
 
   /** 是否在日期后面加 时间 */
   @Prop({ type: Boolean }) readonly valueTime!: boolean
+
+  /** 组件显示的最大宽度，默认自适应容器 */
+  @Prop({ type: Number }) readonly maxWidth!: number
 
   @Prop({
     type: Array,
@@ -113,7 +118,16 @@ export default class DateRange extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.date-range {
+  display: flex;
+}
+
 .button-group {
   margin-right: 15px;
+}
+
+.date-picker {
+  flex: 1;
+  min-width: 250px;
 }
 </style>
