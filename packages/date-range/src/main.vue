@@ -12,7 +12,7 @@
       >
     </el-button-group>
     <el-date-picker
-      :style="{ maxWidth: maxWidth }"
+      :style="{ maxWidth: `${maxWidth}px` }"
       class="date-picker"
       v-model="dateRange"
       type="daterange"
@@ -87,7 +87,7 @@ export default class DateRange extends Vue {
         this.dateRange = [dayjs(), dayjs()]
         break
       case 'yesterday':
-        this.dateRange = [dayjs().subtract(1, 'd'), dayjs()]
+        this.dateRange = [dayjs().subtract(1, 'd'), dayjs().subtract(1, 'd')]
         break
       case 'lastWeek':
         this.dateRange = [

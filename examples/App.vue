@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <fnb-date-range v-model="date" value-time />
+    <fnb-date-range v-model="date" value-time :max-width="350" />
     <fnb-plate-number v-model="plateNumber" @change="plateInput" />
     <fnb-iconfont name="icon-xinkehu" size="50" @click="getList" />
     <fnb-select-goods
