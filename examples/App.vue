@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
+    <fnb-date-range v-model="date" value-time />
     <fnb-plate-number v-model="plateNumber" @change="plateInput" />
     <fnb-iconfont name="icon-xinkehu" size="50" @click="getList" />
     <fnb-select-goods
@@ -44,6 +45,7 @@ import { FnbTable } from '../types/table'
   }
 })
 export default class App extends Vue {
+  date = []
   pageNum = 1
   pageSize = 10
   total = 105

@@ -7,8 +7,9 @@ import Table from '~/table/index'
 import SelectGoods from '~/select-goods'
 import Iconfont from '~/iconfont'
 import PlateNumber from '~/plate-number'
+import DateRange from '~/date-range'
 
-const components = [Table, SelectGoods, Iconfont, PlateNumber]
+const components = [Table, SelectGoods, Iconfont, PlateNumber, DateRange]
 
 const install = function(vue: typeof Vue) {
   components.forEach(component => {
@@ -16,6 +17,6 @@ const install = function(vue: typeof Vue) {
   })
 }
 
-export { Table, SelectGoods, Iconfont, PlateNumber }
+export { Table, SelectGoods, Iconfont, PlateNumber, DateRange }
 
 export default { install }

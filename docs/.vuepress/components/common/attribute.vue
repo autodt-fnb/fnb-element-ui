@@ -14,8 +14,8 @@
         :label="item.label"
       >
         <template v-slot="{ row }">
-          <template v-if="item.prop === 'desc'">
-            <span class="word" v-html="row[item.prop]"></span>
+          <template v-if="item.prop === 'desc' || item.prop === 'optional'">
+            <span class="word" v-html="row[item.prop] || '—'"></span>
           </template>
           <template v-else>
             <span class="word">{{ row[item.prop] || '—' }}</span>
@@ -52,12 +52,12 @@ export default {
         {
           prop: 'type',
           label: '类型',
-          width: '200'
+          width: '150'
         },
         {
-          prop: 'optional ',
+          prop: 'optional',
           label: '可选值',
-          width: '120'
+          width: '180'
         },
         {
           prop: 'default',
