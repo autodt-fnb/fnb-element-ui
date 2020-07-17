@@ -31,6 +31,14 @@ import dayjs, { Dayjs } from 'dayjs'
 import { BtnType } from '../../../types/date-range'
 import { DatePickerOptions } from 'element-ui/types/date-picker'
 
+const btnTypeMap: { [i in BtnType]: number } = {
+  today: 1,
+  yesterday: 2,
+  lastWeek: 3,
+  thisWeek: 4,
+  thisMonth: 5
+}
+
 /** 格式化日期 */
 function formatDate(date?: Date | Dayjs | string, type?: 'start' | 'end') {
   const suffix =
@@ -115,9 +123,10 @@ export default class DateRange extends Vue {
         ]
         break
       case 'thisMonth':
-        this.dateRange = [dayjs().startOf('M'), dayjs().endOf('M')]
+        this.dateRange = [dayjs().startOf('M'), dayjs()]
         break
     }
+    this.$emit('btnClick', btnTypeMap[type])
   }
 }
 </script>

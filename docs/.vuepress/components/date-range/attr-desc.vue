@@ -53,6 +53,18 @@ export default {
           optional:
             '[ <code>today</code> / <code>yesterday</code>  / <code>lastWeek</code>  / <code>thisWeek</code>  / <code>thisMonth</code> ]'
         }
+      ],
+      eventData: [
+        {
+          name: 'change',
+          desc: '用户确认选定的值时触发',
+          params: '组件绑定值。'
+        },
+        {
+          name: 'btnClick',
+          desc: '点击按钮组是触发',
+          params: '1 今日；2 昨日；3 上周；4 本周；5 本月'
+        }
       ]
     }
   }
