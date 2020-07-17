@@ -41,7 +41,7 @@ export default {
         {
           name: 'picker-options',
           desc:
-            '与 ElmentUI DatePicker 组件的 <a target="_blank" herf="https://element.eleme.cn/#/zh-CN/component/date-picker#picker-options">picker-options</a> 一致。',
+            '与 ElmentUI DatePicker 组件的 <a target="_blank" herf="https://element.eleme.cn/#/zh-CN/component/date-picker#picker-options" rel="noopener noreferrer">picker-options</a> 一致。',
           type: 'object',
           default: '{}'
         },
