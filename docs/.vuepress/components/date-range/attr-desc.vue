@@ -39,6 +39,13 @@ export default {
           default: 'false'
         },
         {
+          name: 'picker-options',
+          desc:
+            '与 ElmentUI DatePicker 组件的 <a target="_blank" herf="https://element.eleme.cn/#/zh-CN/component/date-picker#picker-options">picker-options</a> 一致。',
+          type: 'object',
+          default: '{}'
+        },
+        {
           name: 'operateBtns',
           desc:
             '需要显示的日期操作按钮，默认显示所有；如不想显示所有操作按钮，传空数组 <code>[]</code> ',

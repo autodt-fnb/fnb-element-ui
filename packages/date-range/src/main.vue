@@ -17,6 +17,7 @@
       v-model="dateRange"
       type="daterange"
       :value-format="valueFormat"
+      :picker-options="pickerOptions"
       clearable
       start-placeholder="开始日期"
       end-placeholder="结束日期"
@@ -28,6 +29,7 @@
 import { Vue, Component, Prop, Model } from 'vue-property-decorator'
 import dayjs, { Dayjs } from 'dayjs'
 import { BtnType } from '../../../types/date-range'
+import { DatePickerOptions } from 'element-ui/types/date-picker'
 
 /** 格式化日期 */
 function formatDate(date?: Date | Dayjs | string, type?: 'start' | 'end') {
@@ -48,6 +50,9 @@ export default class DateRange extends Vue {
 
   /** 组件显示的最大宽度，默认自适应容器 */
   @Prop({ type: Number }) readonly maxWidth!: number
+
+  @Prop({ type: Object, default: () => ({}) })
+  readonly pickerOptions!: DatePickerOptions
 
   @Prop({
     type: Array,
