@@ -44,7 +44,11 @@
             </el-popover>
           </template>
         </ElTableColumn>
-        <ElTableColumn v-else :key="tableIndex" v-bind="item" />
+        <ElTableColumn
+          v-else-if="!item.hidden"
+          :key="tableIndex"
+          v-bind="item"
+        />
       </template>
     </ElTable>
     <div

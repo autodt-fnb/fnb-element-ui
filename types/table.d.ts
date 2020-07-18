@@ -1,7 +1,7 @@
 import { ElTableColumn } from 'element-ui/types/table-column'
 import { ElTable } from 'element-ui/types/table'
 
-export interface FnbTableColumn extends ElTableColumn {
+export interface FnbTableColumn extends Partial<ElTableColumn> {
   /** 该列是否是slot插槽（自定义列的内容，参数为 `{ row, column, index }`），插槽名 `name` 是 `slot` 字段值（当 `slot` 不为 `true`  时）或者 `prop` 字段值 */
   slot?: boolean | string
 
