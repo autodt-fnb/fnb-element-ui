@@ -17,7 +17,7 @@
       :placeholder="!this.province ? '请先选择省简称' : '请输入车牌号码'"
       :disabled="!this.province"
       maxlength="7"
-      @blur="$emit('blur')"
+      @blur="$emit('blur', plateNumber)"
       v-model="plateOtherConvert"
     >
       <el-button slot="prepend" @click.stop="showKeyborad = !showKeyborad">

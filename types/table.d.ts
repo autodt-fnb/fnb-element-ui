@@ -1,6 +1,5 @@
 import { CreateElement, VNode } from 'vue'
 import {
-  ElTableColumn,
   TableColumnType,
   TableColumnFixedType,
   RenderHeaderData,

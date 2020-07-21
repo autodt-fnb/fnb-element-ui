@@ -165,8 +165,6 @@ export default class SelectGoods extends Vue {
   /** 选中数据列表 */
   selectionList: object[] = []
 
-  isCreated = false
-
   /** 表格最大高度 */
   get tableMaxHeight() {
     if (!this.showCancle && !this.showConfirm) {

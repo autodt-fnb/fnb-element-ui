@@ -30,6 +30,12 @@ export default {
           desc: `车牌号改变时触发事件`,
           type: 'string',
           params: '(value: string)'
+        },
+        {
+          name: 'blur',
+          desc: `输入框失去焦点事件`,
+          type: 'string',
+          params: '(value: string)'
         }
       ]
     }
