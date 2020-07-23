@@ -100,7 +100,8 @@ export default class DateRange extends Vue {
     return this.value
   }
   set dateRange(date: (string | Dayjs)[]) {
-    if (date?.length !== 2) {
+    date = date?.filter(v => !!v) ?? []
+    if (date.length !== 2) {
       this.minDate = null
       this.$emit('change', [])
       return
