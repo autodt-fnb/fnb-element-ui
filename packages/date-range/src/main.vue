@@ -97,7 +97,7 @@ export default class DateRange extends Vue {
   }
 
   get dateRange() {
-    return this.value
+    return this.value?.filter(v => !!v) ?? []
   }
   set dateRange(date: (string | Dayjs)[]) {
     date = date?.filter(v => !!v) ?? []
