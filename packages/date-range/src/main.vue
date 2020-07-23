@@ -125,6 +125,8 @@ export default class DateRange extends Vue {
         this.onPick(e)
         options.onPick?.(e)
       }
+    } else {
+      onPick = this.onPick
     }
     if (!options.disabledDate) {
       options.disabledDate = this.disabledDate
