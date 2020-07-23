@@ -7,6 +7,7 @@
       <el-button
         v-for="key in operateBtns"
         :key="key"
+        :disabled="disabled"
         @click="handleClickBtn(key)"
         >{{ operate[key] }}</el-button
       >
@@ -17,7 +18,8 @@
       v-model="dateRange"
       type="daterange"
       :value-format="valueFormat"
-      :picker-options="pickerOptions"
+      :picker-options="cusPickerOptions"
+      :disabled="disabled"
       clearable
       start-placeholder="开始日期"
       end-placeholder="结束日期"
@@ -27,9 +29,12 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Model } from 'vue-property-decorator'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs, { Dayjs, OpUnitType } from 'dayjs'
 import { BtnType } from '../../../types/date-range'
-import { DatePickerOptions } from 'element-ui/types/date-picker'
+import {
+  DatePickerOptions,
+  PickEventHandler
+} from 'element-ui/types/date-picker'
 
 const btnTypeMap: { [i in BtnType]: number } = {
   today: 1,
@@ -62,11 +67,26 @@ export default class DateRange extends Vue {
   @Prop({ type: Object, default: () => ({}) })
   readonly pickerOptions!: DatePickerOptions
 
+  /** 快捷操作按钮组 显示 */
   @Prop({
     type: Array,
     default: () => ['today', 'yesterday', 'lastWeek', 'thisWeek', 'thisMonth']
   })
   operateBtns!: BtnType[]
+
+  /** 日期限制范围 */
+  @Prop({ type: [Number, Object] }) readonly dateLimit!:
+    | number
+    | { limit: number; type?: OpUnitType }
+
+  /** 是否不能选择超过今日的日期 */
+  @Prop({ type: Boolean, default: true }) readonly endToday!: boolean
+
+  /** 是否禁止选择日期 */
+  @Prop({ type: Boolean }) readonly disabled!: boolean
+
+  /** 是否可清除 */
+  @Prop({ type: Boolean, default: true }) readonly clearable!: boolean
 
   operate = {
     today: '今日',
@@ -81,6 +101,7 @@ export default class DateRange extends Vue {
   }
   set dateRange(date: (string | Dayjs)[]) {
     if (date?.length !== 2) {
+      this.minDate = null
       this.$emit('change', [])
       return
     }
@@ -92,6 +113,22 @@ export default class DateRange extends Vue {
     } else {
       this.$emit('change', [formatDate(date[0]), formatDate(date[1])])
     }
+  }
+
+  get cusPickerOptions() {
+    const options = this.pickerOptions
+    let onPick!: PickEventHandler
+
+    if (options.onPick) {
+      onPick = e => {
+        this.onPick(e)
+        options.onPick?.(e)
+      }
+    }
+    if (!options.disabledDate) {
+      options.disabledDate = this.disabledDate
+    }
+    return { ...options, onPick }
   }
 
   handleClickBtn(type: BtnType) {
@@ -127,6 +164,57 @@ export default class DateRange extends Vue {
         break
     }
     this.$emit('btnClick', btnTypeMap[type])
+  }
+
+  /** 记录日期选择最小值 */
+  minDate!: Date | null
+  /** 日期选择事件 */
+  onPick({ minDate }: { minDate: Date }) {
+    this.minDate = minDate
+  }
+
+  /** 日期禁用选择 */
+  disabledDate(time: Date) {
+    if (!this.minDate) {
+      // 设置了今日截止
+      if (this.endToday) {
+        return dayjs().isBefore(time, 'd')
+      }
+      return false
+    }
+    // 未设置限制天数
+    if (!this.dateLimit) {
+      return false
+    }
+
+    let limit!: number
+    let type: OpUnitType = 'd'
+
+    if (typeof this.dateLimit === 'number') {
+      limit = this.dateLimit
+    } else if (typeof this.dateLimit === 'object') {
+      limit = parseInt(`${Math.abs(this.dateLimit.limit)}`)
+      if (!limit) {
+        return false
+      }
+      type = this.dateLimit.type ?? 'd'
+    }
+    return (
+      dayjs(this.minDate)
+        .subtract(limit, type)
+        .isAfter(time, type) ||
+      (this.endToday
+        ? dayjs(this.minDate)
+            .add(limit, type)
+            .isAfter(dayjs())
+          ? dayjs().isBefore(time, type)
+          : dayjs(this.minDate)
+              .add(limit, type)
+              .isBefore(time)
+        : dayjs(this.minDate)
+            .add(limit, type)
+            .isBefore(time))
+    )
   }
 }
 </script>

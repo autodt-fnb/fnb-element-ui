@@ -1,7 +1,14 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <fnb-date-range v-model="date" value-time :max-width="350" />
+    <fnb-date-range
+      v-model="date"
+      value-time
+      :max-width="350"
+      :pickerOptions="pickerOptions"
+      :dateLimit="3"
+      :end-today="false"
+    />
     <fnb-plate-number v-model="plateNumber" @change="plateInput" />
     <fnb-iconfont name="icon-xinkehu" size="50" @click="getList" />
     <fnb-select-goods
@@ -99,6 +106,12 @@ export default class App extends Vue {
       address: '上海市普陀区金沙江路 1516 弄'
     }
   ]
+
+  pickerOptions = {
+    onPick(e: any) {
+      console.log(e)
+    }
+  }
 
   @Ref('table') readonly tableRef!: FnbTable
 

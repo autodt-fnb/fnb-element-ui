@@ -52,6 +52,29 @@ export default {
           type: 'string[]',
           optional:
             '[ <code>today</code> / <code>yesterday</code>  / <code>lastWeek</code>  / <code>thisWeek</code>  / <code>thisMonth</code> ]'
+        },
+        {
+          name: 'date-limit',
+          desc: '日期限制范围',
+          type: 'number/object({limit: number;type: "d" | "m" | "y"})'
+        },
+        {
+          name: 'end-today',
+          desc: '是否不能选择超过今日的日期',
+          type: 'boolean',
+          default: 'true'
+        },
+        {
+          name: 'disabled',
+          desc: '是否禁止选择日期',
+          type: 'boolean',
+          default: 'false'
+        },
+        {
+          name: 'clearable',
+          desc: '是否可清除',
+          type: 'boolean',
+          default: 'true'
         }
       ],
       eventData: [
