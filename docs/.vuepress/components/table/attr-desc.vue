@@ -64,8 +64,8 @@ const attrData = [
   {
     name: 'show-pagination',
     desc: '是否显示分页',
-    type: 'number',
-    default: '700'
+    type: 'boolean',
+    default: 'true'
   },
   {
     name: 'page-size',
