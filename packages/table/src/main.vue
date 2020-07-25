@@ -73,6 +73,31 @@ function kebab2camel(str: string) {
     .join('')
 }
 
+/** 格式化table字段 */
+function formatTable(table: FnbTableColumn[]) {
+  return Array.isArray(table) && table.length > 0
+    ? table.map((v: any) => {
+        v.align = v.align || 'center' // 默认居中
+        if (v.slot) {
+          // 如slot是boolean值。则slot名称为prop，否则就是slot值
+          if (v.slot === true) {
+            v.slotName = v.prop
+          } else {
+            v.slotName = v.slot
+          }
+        }
+        if (v.table) {
+          v.table = formatTable(v.table)
+        }
+        v.showTooltip = v.showOverflowTooltip
+        // 防止将slot绑定到 tableColumn上
+        Reflect.deleteProperty(v, 'slot')
+        Reflect.deleteProperty(v, 'showOverflowTooltip')
+        return v
+      })
+    : []
+}
+
 /** table 默认事件 */
 const tableEventsList: string[] = [
   'select',
@@ -152,24 +177,7 @@ export default class Table extends Vue {
     if (!Array.isArray(this.table)) {
       return []
     }
-    return (
-      this.table?.map((v: any) => {
-        v.align = v.align || 'center' // 默认居中
-        if (v.slot) {
-          // 如slot是boolean值。则slot名称为prop，否则就是slot值
-          if (v.slot === true) {
-            v.slotName = v.prop
-          } else {
-            v.slotName = v.slot
-          }
-        }
-        v.showTooltip = v.showOverflowTooltip
-        // 防止将slot绑定到 tableColumn上
-        Reflect.deleteProperty(v, 'slot')
-        Reflect.deleteProperty(v, 'showOverflowTooltip')
-        return v
-      }) ?? []
-    )
+    return formatTable(this.table)
   }
 
   /** table attributes */
@@ -401,7 +409,7 @@ export default class Table extends Vue {
               }
             }}
           />
-        ) : Array.isArray(item.table) ? (
+        ) : Array.isArray(item.table) && item.table.length > 0 ? (
           <el-table-column {...{ attrs: item }}>
             {this.renderTableColumn(item.table)}
           </el-table-column>
