@@ -125,6 +125,11 @@ const tableAttrData = [
     desc: '该列是否隐藏',
     type: 'boolean',
     default: 'false'
+  },
+  {
+    name: 'table',
+    desc: '多级表头，值与 Table Attributes table字段值一样',
+    type: 'array'
   }
 ]
 

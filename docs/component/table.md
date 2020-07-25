@@ -37,4 +37,11 @@
   </highlight-code>
 </common-democode>
 
+<common-democode title="多级表头" description="数据结构比较复杂的时候，可使用多级表头来展现数据的层次关系。">
+  <table-demo6></table-demo6>
+  <highlight-code slot="codeText" lang="vue">
+<<< @/docs/.vuepress/components/table/demo6.vue
+  </highlight-code>
+</common-democode>
+
 <table-attr-desc></table-attr-desc>

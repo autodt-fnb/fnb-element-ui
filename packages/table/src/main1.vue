@@ -1,4 +1,77 @@
-<script lang="tsx">
+<template>
+  <div :class="{ 'el-card is-always-shadow': !noCard }">
+    <ElTable ref="table" v-bind="tableProps" v-on="tableEvents">
+      <template v-for="(item, tableIndex) in tableColumn">
+        <template v-if="!item.hidden">
+          <ElTableColumn v-if="item.slotName" :key="tableIndex" v-bind="item">
+            <template v-slot="{ row, column, $index }">
+              <slot
+                :index="$index"
+                :row="row"
+                :column="column"
+                :name="item.slotName"
+              />
+            </template>
+          </ElTableColumn>
+          <ElTableColumn
+            v-else-if="item.showTooltip"
+            :key="tableIndex"
+            v-bind="item"
+          >
+            <template v-slot="{ row, column, $index }">
+              <el-popover
+                trigger="hover"
+                placement="top"
+                popper-class="fnb-table__popper-class"
+                :disabled="!popoverDisabled[`${column.id}-index_${$index}`]"
+                :content="
+                  item.formatter ? item.formatter(row, column) : row[item.prop]
+                "
+              >
+                <div
+                  class="tow-line"
+                  slot="reference"
+                  @mouseenter.stop="
+                    handlePopover($event, `${column.id}-index_${$index}`)
+                  "
+                  @mouseleave.stop="
+                    handlePopover($event, `${column.id}-index_${$index}`)
+                  "
+                >
+                  {{
+                    item.formatter
+                      ? item.formatter(row, column)
+                      : row[item.prop]
+                  }}
+                </div>
+              </el-popover>
+            </template>
+          </ElTableColumn>
+
+          <ElTableColumn v-else :key="tableIndex" v-bind="item" />
+        </template>
+      </template>
+    </ElTable>
+    <div
+      class="pagination-wrapper"
+      v-if="showPagination && tableProps.data && tableProps.data.length > 0"
+    >
+      <el-pagination
+        class="pagination"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-sizes="[10, 30, 50, 100]"
+        :current-page.sync="currentPageProp"
+        :page-size.sync="pageSizeProp"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      />
+      <slot name="paginationAppend" />
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
 import {
   Vue,
   Component,
@@ -7,11 +80,8 @@ import {
   Ref,
   PropSync
 } from 'vue-property-decorator'
-import { debounce } from 'throttle-debounce'
 import { FnbTable, FnbTableColumn } from '../../../types/table'
 import TableColumn from './table-column.vue'
-import { ElTooltip } from 'element-ui/types/tooltip'
-import { VNode } from 'vue'
 
 /** table 默认 props */
 const tableProps: { [k: string]: any } = {
@@ -139,13 +209,10 @@ export default class Table extends Vue {
   /** table组件ref */
   @Ref('table') readonly tableRef!: FnbTable
 
-  /** popover 组件 ref */
-  @Ref('popover') readonly popoverRef!: ElTooltip
-
-  /** 提示框内容 */
-  popoverContent = ''
-
   maxHeight: string | number = 0
+
+  /** 禁止显示tooltip */
+  popoverDisabled: { [i: string]: boolean } = {}
 
   /** tableColumn 组件的属性 */
   get tableColumn() {
@@ -198,47 +265,12 @@ export default class Table extends Vue {
         // 为了兼容 分页的current-change
         if (name === 'current-row-change') {
           events['current-change'] = this.$listeners[key]
-        } else if (name === 'cell-mouse-enter') {
-          events[name] = (
-            row: any,
-            column: any,
-            cell: any,
-            event: MouseEvent
-          ) => {
-            this.handlePopover(row, column, cell, event)
-            ;(this.$listeners[key] as Function)(row, column, cell, event)
-          }
-        } else if (name === 'cell-mouse-leave') {
-          events[name] = (
-            row: any,
-            column: any,
-            cell: any,
-            event: MouseEvent
-          ) => {
-            this.handlePopover(row, column, cell, event)
-            ;(this.$listeners[key] as Function)(row, column, cell, event)
-          }
         } else {
           events[name] = this.$listeners[key]
         }
       }
     }
-    if (!Reflect.has(events, 'cell-mouse-enter')) {
-      events['cell-mouse-enter'] = this.handlePopover
-    }
-    if (!Reflect.has(events, 'cell-mouse-leave')) {
-      events['cell-mouse-leave'] = this.handlePopover
-    }
     return events
-  }
-
-  /** 显示tooltip文字弹窗 */
-  activateTooltip!: Function
-
-  created() {
-    this.activateTooltip = debounce(50, (tooltip: any) =>
-      tooltip.handleShowPopper()
-    )
   }
 
   mounted() {
@@ -255,47 +287,12 @@ export default class Table extends Vue {
   }
 
   /** 处理显示 popover */
-  handlePopover(
-    row: any,
-    column: any,
-    cell: HTMLTableCellElement,
-    event: MouseEvent
-  ) {
-    const type = event.type
-    if (type === 'mouseenter') {
-      const cellHtml = cell.querySelector('.cell') as HTMLDivElement
-
-      const range = document.createRange()
-      range.setStart(cellHtml, 0)
-      range.setEnd(cellHtml, cellHtml.childNodes.length)
-      const rangeHeight = range.getBoundingClientRect().height
-      const padding =
-        (parseInt(window.getComputedStyle(cellHtml).paddingTop, 10) || 0) +
-        (parseInt(window.getComputedStyle(cellHtml).paddingBottom, 10) || 0)
-      if (
-        (rangeHeight + padding > cellHtml.offsetHeight ||
-          cellHtml.scrollHeight > cellHtml.offsetHeight) &&
-        this.popoverRef
-      ) {
-        const tooltip = this.popoverRef as any
-
-        // TODO 会引起整个 Table 的重新渲染，需要优化
-        this.popoverContent = cellHtml.innerText || cellHtml.textContent || ''
-        tooltip.referenceElm = cell
-        if (tooltip.$refs.popper) {
-          const popper = tooltip.$refs.popper as HTMLDivElement
-          popper.style.display = 'none'
-        }
-        tooltip.doDestroy()
-        tooltip.setExpectedState(true)
-        this.activateTooltip(tooltip)
-      }
-    } else {
-      const tooltip = this.popoverRef as any
-      if (tooltip) {
-        tooltip.setExpectedState(false)
-        tooltip.handleClosePopper()
-      }
+  handlePopover(e: MouseEvent, type: string) {
+    const el = e.target as Element
+    if (e.type === 'mouseenter') {
+      this.popoverDisabled = { [type]: el.scrollHeight > el.clientHeight }
+    } else if (e.type === 'mouseleave') {
+      this.popoverDisabled = {}
     }
   }
 
@@ -371,89 +368,6 @@ export default class Table extends Vue {
   handleCurrentChange(page: number) {
     return page
   }
-
-  /** 渲染 tableColumn 组件 */
-  renderTableColumn(list: any[]): (VNode | Element)[] {
-    return list.map((item, tableIndex) => {
-      if (!item.hidden) {
-        return item.slotName ? (
-          <el-table-column
-            key={tableIndex}
-            {...{ attrs: item }}
-            scopedSlots={{
-              default: ({ row, column, $index }: any) =>
-                this.$scopedSlots[item.slotName]?.({
-                  row,
-                  column,
-                  index: $index
-                })
-            }}
-          />
-        ) : item.showTooltip ? (
-          <el-table-column
-            key={tableIndex}
-            {...{
-              attrs: {
-                ...item,
-                className: item.className
-                  ? item.className + ' tow-line'
-                  : 'tow-line'
-              }
-            }}
-          />
-        ) : Array.isArray(item.table) ? (
-          <el-table-column {...{ attrs: item }}>
-            {this.renderTableColumn(item.table)}
-          </el-table-column>
-        ) : (
-          <el-table-column key={tableIndex} {...{ attrs: item }} />
-        )
-      }
-    }) as (VNode | Element)[]
-  }
-
-  render() {
-    return (
-      <div class={!this.noCard ? 'el-card is-always-shadow' : ''}>
-        <el-table
-          ref="table"
-          {...{ attrs: this.tableProps, on: this.tableEvents }}
-        >
-          {this.renderTableColumn(this.tableColumn)}
-        </el-table>
-        {this.showPagination &&
-        this.tableProps.data &&
-        this.tableProps.data.length > 0 ? (
-          <div class="pagination-wrapper">
-            <el-pagination
-              class="pagination"
-              {...{
-                on: {
-                  ['size-change']: this.handleSizeChange,
-                  ['current-change']: this.handleCurrentChange,
-                  ['update:current-page']: (v: any) =>
-                    (this.currentPageProp = v),
-                  ['update:page-size']: (v: any) => (this.pageSizeProp = v)
-                }
-              }}
-              page-sizes={[10, 30, 50, 100]}
-              layout="total, sizes, prev, pager, next, jumper"
-              total={this.total}
-            />
-            {this.$slots.paginationAppend}
-          </div>
-        ) : null}
-        <el-tooltip
-          ref="popover"
-          effect="light"
-          placement="top"
-          popper-class="fnb-table__popper-class el-popover el-popper el-popover--plain"
-          x-placement="top"
-          content={this.popoverContent}
-        />
-      </div>
-    )
-  }
 }
 </script>
 
@@ -473,13 +387,14 @@ export default class Table extends Vue {
       line-height: 22px;
     }
   }
-  .tow-line > .cell {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
+}
+
+.tow-line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .pagination-wrapper {
@@ -495,59 +410,8 @@ export default class Table extends Vue {
   height: 80px;
 }
 </style>
-<style lang="scss">
+<style>
 .fnb-table__popper-class {
   max-width: 500px;
-
-  &.el-popover--plain {
-    padding: 18px 20px;
-  }
-
-  &.el-popover {
-    position: absolute;
-    background: #fff;
-    min-width: 150px;
-    border-radius: 4px;
-    border: 1px solid #ebeef5;
-    padding: 12px;
-    z-index: 2000;
-    color: #606266;
-    line-height: 1.4;
-    text-align: justify;
-    font-size: 14px;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    word-break: break-all;
-  }
-
-  &.el-popper {
-    .popper__arrow {
-      border-width: 6px;
-      filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03));
-    }
-    .popper__arrow,
-    .popper__arrow:after {
-      position: absolute;
-      display: block;
-      width: 0;
-      height: 0;
-      border-color: transparent;
-      border-style: solid;
-    }
-
-    &[x-placement^='bottom'] .popper__arrow {
-      top: -6px;
-      left: 50%;
-      margin-right: 3px;
-      border-top-width: 0;
-      border-bottom-color: #ebeef5;
-    }
-    &[x-placement^='top'] .popper__arrow {
-      bottom: -6px;
-      left: 50%;
-      margin-right: 3px;
-      border-top-color: #ebeef5;
-      border-bottom-width: 0;
-    }
-  }
 }
 </style>

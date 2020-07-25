@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
+    <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
     <fnb-date-range v-model="date" :max-width="350" :dateLimit="3" />
     <fnb-plate-number v-model="plateNumber" @change="plateInput" />
     <fnb-iconfont name="icon-xinkehu" size="50" @click="getList" />
@@ -30,6 +30,7 @@
         <el-input v-model="row.name" />
       </template>
     </fnb-table>
+    <div style="height: 500px" />
     <!-- <el-button @click="clearSelection">clearSelection</el-button> -->
   </div>
 </template>
@@ -61,12 +62,20 @@ export default class App extends Vue {
     },
     {
       label: '日期',
-      slot: true,
-      prop: 'date'
+      table: [
+        {
+          label: '日期',
+          prop: 'date'
+        },
+        {
+          label: '姓名',
+          prop: 'name'
+        }
+      ]
     },
     {
       slot: true,
-      prop: 'name',
+      prop: 'name1',
       label: '姓名'
     },
     {
