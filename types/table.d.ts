@@ -13,7 +13,7 @@ import { PopoverPlacement } from 'element-ui/types/popover'
 
 export interface FnbTableColumn<R = object> {
   /** 多级表头时用到 */
-  table?: FnbTableColumn<R>
+  table?: FnbTableColumn<R>[]
 
   /** Type of the column. If set to `selection`, the column will display checkbox. If set to `index`, the column will display index of the row (staring from 1). If set to `expand`, the column will display expand icon. */
   type?: TableColumnType

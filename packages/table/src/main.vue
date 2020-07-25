@@ -456,7 +456,6 @@ export default class Table extends Vue {
           effect="light"
           placement="top"
           popper-class="fnb-table__popper-class el-popover el-popper el-popover--plain"
-          x-placement="top"
           content={this.popoverContent}
         />
       </div>
