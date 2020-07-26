@@ -9,7 +9,6 @@ import {
 } from 'vue-property-decorator'
 import { debounce } from 'throttle-debounce'
 import { FnbTable, FnbTableColumn } from '../../../types/table'
-import TableColumn from './table-column.vue'
 import { ElTooltip } from 'element-ui/types/tooltip'
 import { VNode } from 'vue'
 
@@ -121,8 +120,7 @@ const tableEventsList: string[] = [
 
 @Component({
   name: 'FnbTable',
-  inheritAttrs: false,
-  components: { TableColumn }
+  inheritAttrs: false
 })
 export default class Table extends Vue {
   /**
@@ -269,6 +267,11 @@ export default class Table extends Vue {
     cell: HTMLTableCellElement,
     event: MouseEvent
   ) {
+    // 如不是 需要隐藏文字 单元，不显示tooltips
+    if (!new Set(cell.classList.values()).has('tow-line')) {
+      return
+    }
+
     const type = event.type
     if (type === 'mouseenter') {
       const cellHtml = cell.querySelector('.cell') as HTMLDivElement
