@@ -22,6 +22,12 @@ export default {
           name: 'value/v-model',
           desc: `车牌号码`,
           type: 'string'
+        },
+        {
+          name: 'clearable',
+          desc: '是否可清空',
+          type: 'boolean',
+          default: 'true'
         }
       ],
       eventData: [
@@ -36,6 +42,10 @@ export default {
           desc: `输入框失去焦点事件`,
           type: 'string',
           params: '(value: string)'
+        },
+        {
+          name: 'clear',
+          desc: `在点击由 <code>clearable</code> 属性生成的清空按钮时触发`
         }
       ]
     }

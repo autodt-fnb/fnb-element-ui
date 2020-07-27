@@ -18,7 +18,9 @@
       :disabled="!this.province"
       maxlength="7"
       @blur="$emit('blur', plateNumber)"
+      @clear="handleClear"
       v-model="plateOtherConvert"
+      :clearable="clearable"
     >
       <el-button slot="prepend" @click.stop="showKeyborad = !showKeyborad">
         <span class="title" :class="{ placeholder: !province }">{{
@@ -31,7 +33,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch, Model, Ref } from 'vue-property-decorator'
+import {
+  Vue,
+  Component,
+  Watch,
+  Model,
+  Ref,
+  Emit,
+  Prop
+} from 'vue-property-decorator'
 import { ElInput } from 'element-ui/types/input'
 
 /**
@@ -82,6 +92,9 @@ const provincialAbbrev = [
 @Component({ name: 'FnbPlateNumber' })
 export default class PlateNumber extends Vue {
   @Model('change', { type: String, default: '' }) readonly value!: string
+
+  /** 可清除按钮显示 */
+  @Prop({ type: Boolean, default: true }) readonly clearable!: boolean
 
   /**
    * 车牌号省简称
@@ -185,6 +198,12 @@ export default class PlateNumber extends Vue {
         this.inputRef.focus()
       }, 100)
     }
+  }
+
+  /** 处理点击清理按钮 */
+  @Emit('clear')
+  handleClear() {
+    this.plateNumber = ''
   }
 }
 </script>
