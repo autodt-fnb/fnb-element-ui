@@ -3,7 +3,7 @@
     <FnbSearchContainer>8</FnbSearchContainer>
     <FnbAppContainer fixed-height>
       <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
-      <fnb-date-range v-model="date" :max-width="350" :dateLimit="3" />
+      <fnb-date-range v-model="date" :max-width="350" />
       <fnb-plate-number v-model="plateNumber" @change="plateInput" />
       <fnb-iconfont name="icon-xinkehu" size="50" @click="getList" />
       <fnb-select-goods

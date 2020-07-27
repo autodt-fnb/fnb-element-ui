@@ -187,15 +187,11 @@ export default class DateRange extends Vue {
 
   /** 日期禁用选择 */
   disabledDate(time: Date) {
-    if (!this.minDate) {
-      // 设置了今日截止
+    // 未设置限制天数
+    if (!this.dateLimit || !this.minDate) {
       if (this.endToday) {
         return dayjs().isBefore(time, 'd')
       }
-      return false
-    }
-    // 未设置限制天数
-    if (!this.dateLimit) {
       return false
     }
 
