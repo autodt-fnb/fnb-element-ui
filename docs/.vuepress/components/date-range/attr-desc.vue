@@ -75,6 +75,13 @@ export default {
           desc: '是否可清除',
           type: 'boolean',
           default: 'true'
+        },
+        {
+          name: 'type',
+          desc: '当前按钮组的类型',
+          type: 'string | number',
+          optional: '1 今日；2 昨日；3 上周；4 本周；5 本月',
+          default: 'true'
         }
       ],
       eventData: [
