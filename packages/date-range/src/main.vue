@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Model } from 'vue-property-decorator'
+import { Vue, Component, Prop, Model, PropSync } from 'vue-property-decorator'
 import dayjs, { Dayjs, OpUnitType } from 'dayjs'
 import { BtnType } from '../../../types/date-range'
 import {
@@ -54,6 +54,12 @@ function formatDate(date?: Date | Dayjs | string, type?: 'start' | 'end') {
 @Component({ name: 'FnbDateRange', components: {} })
 export default class DateRange extends Vue {
   @Model('change', { type: Array, default: () => [] }) value!: string[]
+
+  /** 当前按钮日期类型 */
+  @PropSync('type', { type: [Number, String] }) dateType!:
+    | string
+    | number
+    | undefined
 
   @Prop({ type: String, default: 'yyyy-MM-dd' })
   readonly valueFormat!: string
@@ -101,6 +107,7 @@ export default class DateRange extends Vue {
   }
   set dateRange(date: (string | Dayjs)[]) {
     date = date?.filter(v => !!v) ?? []
+
     if (date.length !== 2) {
       this.minDate = null
       this.$emit('change', [])
@@ -135,6 +142,8 @@ export default class DateRange extends Vue {
   }
 
   handleClickBtn(type: BtnType) {
+    this.dateType = type
+    this.$emit('btnClick', btnTypeMap[type])
     switch (type) {
       case 'today':
         this.dateRange = [dayjs(), dayjs()]
@@ -166,13 +175,13 @@ export default class DateRange extends Vue {
         this.dateRange = [dayjs().startOf('M'), dayjs()]
         break
     }
-    this.$emit('btnClick', btnTypeMap[type])
   }
 
   /** 记录日期选择最小值 */
   minDate!: Date | null
   /** 日期选择事件 */
   onPick({ minDate }: { minDate: Date }) {
+    this.dateType = undefined
     this.minDate = minDate
   }
 
