@@ -374,12 +374,14 @@ export default class Table extends Vue {
 
   @Emit('size-change')
   handleSizeChange(size: number) {
+    this.pageSizeProp = size
     this.currentPageProp = 1
     return size
   }
 
   @Emit('current-change')
   handleCurrentChange(page: number) {
+    this.currentPageProp = page
     return page
   }
 
@@ -441,12 +443,11 @@ export default class Table extends Vue {
               {...{
                 on: {
                   ['size-change']: this.handleSizeChange,
-                  ['current-change']: this.handleCurrentChange,
-                  ['update:current-page']: (v: any) =>
-                    (this.currentPageProp = v),
-                  ['update:page-size']: (v: any) => (this.pageSizeProp = v)
+                  ['current-change']: this.handleCurrentChange
                 }
               }}
+              current-page={this.currentPageProp}
+              page-size={this.pageSizeProp}
               page-sizes={[10, 30, 50, 100]}
               layout="total, sizes, prev, pager, next, jumper"
               total={this.total}
