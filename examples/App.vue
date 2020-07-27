@@ -1,37 +1,40 @@
 <template>
   <div id="app">
-    <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
-    <fnb-date-range v-model="date" :max-width="350" :dateLimit="3" />
-    <fnb-plate-number v-model="plateNumber" @change="plateInput" />
-    <fnb-iconfont name="icon-xinkehu" size="50" @click="getList" />
-    <fnb-select-goods
-      v-model="name"
-      row-key="id"
-      :table="table"
-      :tableData="tableData"
-    />
-    <fnb-table
-      ref="table"
-      :table="table"
-      row-key="date"
-      :data="tableData"
-      @cell-click="cellClick"
-      :current-page.sync="pageNum"
-      :page-size.sync="pageSize"
-      :total="total"
-      autoMaxHeight
-      @size-change="getList"
-      @current-change="getList"
-    >
-      <template v-slot:date="{ row }">
-        <el-input v-model="row.date" />
-      </template>
-      <template v-slot:name="{ row }">
-        <el-input v-model="row.name" />
-      </template>
-    </fnb-table>
-    <div style="height: 500px" />
-    <!-- <el-button @click="clearSelection">clearSelection</el-button> -->
+    <FnbSearchContainer>8</FnbSearchContainer>
+    <FnbAppContainer fixed-height>
+      <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
+      <fnb-date-range v-model="date" :max-width="350" :dateLimit="3" />
+      <fnb-plate-number v-model="plateNumber" @change="plateInput" />
+      <fnb-iconfont name="icon-xinkehu" size="50" @click="getList" />
+      <fnb-select-goods
+        v-model="name"
+        row-key="id"
+        :table="table"
+        :tableData="tableData"
+      />
+      <fnb-table
+        ref="table"
+        :table="table"
+        row-key="date"
+        :data="tableData"
+        @cell-click="cellClick"
+        :current-page.sync="pageNum"
+        :page-size.sync="pageSize"
+        :total="total"
+        autoMaxHeight
+        @size-change="getList"
+        @current-change="getList"
+      >
+        <template v-slot:date="{ row }">
+          <el-input v-model="row.date" />
+        </template>
+        <template v-slot:name="{ row }">
+          <el-input v-model="row.name" />
+        </template>
+      </fnb-table>
+      <div style="height: 500px" />
+      <!-- <el-button @click="clearSelection">clearSelection</el-button> -->
+    </FnbAppContainer>
   </div>
 </template>
 
@@ -149,6 +152,5 @@ export default class App extends Vue {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
