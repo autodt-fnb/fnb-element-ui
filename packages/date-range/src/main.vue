@@ -142,7 +142,7 @@ export default class DateRange extends Vue {
   }
 
   handleClickBtn(type: BtnType) {
-    this.dateType = type
+    this.dateType = btnTypeMap[type]
     this.$emit('btnClick', btnTypeMap[type])
     switch (type) {
       case 'today':
