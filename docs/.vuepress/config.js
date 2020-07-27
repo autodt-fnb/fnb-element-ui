@@ -26,6 +26,7 @@ module.exports = {
         title: '组件',
         collapsable: false,
         children: [
+          ['/component/layout', '布局容器'],
           ['/component/select-goods', 'SelectGoods 商品搜索选择'],
           ['/component/table', 'Table 表格'],
           ['/component/iconfont', 'Iconfont 字体图标'],
