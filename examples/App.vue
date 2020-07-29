@@ -11,6 +11,13 @@
         row-key="id"
         :table="table"
         :tableData="tableData"
+        :tabList="tabList"
+        showSelection
+        show-tab
+        :showCancle="false"
+        :showConfirm="false"
+        :tab-active.sync="tabActive"
+        :selection.sync="sectionList"
       />
       <fnb-table
         ref="table"
@@ -56,6 +63,16 @@ export default class App extends Vue {
   getList() {
     console.log(23423432)
   }
+  tabList = [
+    {
+      label: '服务',
+      value: '1'
+    },
+    {
+      label: '商品',
+      value: '2'
+    }
+  ]
   plateNumber = '皖BHT215'
   name = ''
   table = [
@@ -87,6 +104,9 @@ export default class App extends Vue {
       showOverflowTooltip: true
     }
   ]
+  sectionList = []
+
+  tabActive = '2'
 
   tableData = [
     {

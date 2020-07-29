@@ -124,13 +124,48 @@ const attrData = [
     name: 'show-cancle',
     desc: '是否显示取消按钮',
     type: 'boolean',
-    default: 'true'
+    default: 'false'
   },
   {
     name: 'show-confirm',
     desc: '是否显示确认按钮',
     type: 'boolean',
-    default: 'true'
+    default: 'false'
+  },
+  {
+    name: 'show-tab',
+    desc: '是否显示顶部tab栏',
+    type: 'boolean',
+    default: 'false'
+  },
+  {
+    name: 'tab-list',
+    desc: '顶部tab栏显示数据',
+    type: '{value: string; label: string}[]',
+    default: '[]'
+  },
+  {
+    name: 'tab-active',
+    desc: '顶部tab栏当前选中，支持 sync',
+    type: 'string'
+  },
+  {
+    name: 'show-selection',
+    desc: '是否显示右边已选择项, 列表中要有 name 字段，name字段显示每一行',
+    type: 'boolean',
+    default: 'false'
+  },
+  {
+    name: 'selection',
+    desc: '已选择项列表',
+    type: '{name: string}[] (至少有个name字段)',
+    default: '[]'
+  },
+  {
+    name: 'selection-width',
+    desc: '已选择项区域宽度',
+    type: 'number',
+    default: '200'
   }
 ]
 
@@ -167,6 +202,16 @@ const eventsDate = [
     name: 'confirm',
     desc: '点击确认按钮时会触发该事件',
     params: 'selection'
+  },
+  {
+    name: 'tab-click',
+    desc: '点击 tab 栏触发该事件',
+    params: 'value'
+  },
+  {
+    name: 'delete-selection',
+    desc: '点击已选择项 删除 触发该事件',
+    params: '(index: number, row: object)'
   }
 ]
 

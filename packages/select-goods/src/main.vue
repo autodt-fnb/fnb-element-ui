@@ -8,68 +8,123 @@
     ref="elPopover"
   >
     <div class="flex" :style="{ height: `${popoverHeight}px` }">
-      <ElScrollbar
-        v-loading="treeLoading"
-        v-show="!value"
-        class="scrollbar-height tree"
-      >
-        <ElTree
-          highlight-current
-          :expand-on-click-node="false"
-          :node-key="nodeKey"
-          :data="categoryList"
-          :props="treeProps"
-          @node-click="categoryTreeClick"
-          ref="tree"
-        />
-      </ElScrollbar>
-      <div class="line" v-show="!value" />
-      <div class="right-content">
-        <div class="table-wrap" v-loading="tableLoading">
-          <ElTable
-            class="table"
-            header-cell-class-name="table-header"
-            cell-class-name="table-cell"
-            :max-height="tableMaxHeight"
-            :row-key="rowKey"
-            :data="tableData"
-            @row-click="handleRowClick"
-            @selection-change="handleSelectionChange"
+      <div class="cell flex  wrap-content">
+        <el-row class="tab" type="flex" v-if="showTab">
+          <el-col
+            :style="{ flexBasis: `calc(100% / ${tabList.length})` }"
+            :class="{ active: item.value === tabActiveValue }"
+            v-for="item in tabList"
+            :key="item.value"
+            @click.native="handleTabClick(item.value)"
+            >{{ item.label }}</el-col
           >
-            <template v-for="(item, tableIndex) in tableColumn">
-              <ElTableColumn
-                v-if="item.slotName"
-                :key="tableIndex"
-                v-bind="item"
+        </el-row>
+        <div class="flex cell">
+          <ElScrollbar
+            v-loading="treeLoading"
+            v-show="!value"
+            class="scrollbar-height tree"
+          >
+            <ElTree
+              highlight-current
+              :expand-on-click-node="false"
+              :node-key="nodeKey"
+              :data="categoryList"
+              :props="treeProps"
+              @node-click="categoryTreeClick"
+              ref="tree"
+            />
+          </ElScrollbar>
+          <div class="line" v-show="!value" />
+          <div class="right-content">
+            <div class="cell" v-loading="tableLoading">
+              <ElTable
+                class="table"
+                ref="table"
+                header-cell-class-name="table-header"
+                cell-class-name="table-cell"
+                :max-height="tableMaxHeight"
+                :row-key="rowKey"
+                :data="tableData"
+                @row-click="handleRowClick"
+                @selection-change="handleSelectionChange"
               >
-                <template v-slot="{ row, column, $index }">
-                  <slot
-                    :index="$index"
-                    :row="row"
-                    :column="column"
-                    :name="item.slotName"
-                  />
+                <template v-for="(item, tableIndex) in tableColumn">
+                  <ElTableColumn
+                    v-if="item.slotName"
+                    :key="tableIndex"
+                    v-bind="item"
+                  >
+                    <template v-slot="{ row, column, $index }">
+                      <slot
+                        :index="$index"
+                        :row="row"
+                        :column="column"
+                        :name="item.slotName"
+                      />
+                    </template>
+                  </ElTableColumn>
+                  <ElTableColumn v-else :key="tableIndex" v-bind="item" />
                 </template>
-              </ElTableColumn>
-              <ElTableColumn v-else :key="tableIndex" v-bind="item" />
-            </template>
-            <slot slot="append" name="append" />
-          </ElTable>
-        </div>
-        <div class="footer-btn">
-          <ElButton size="mini" v-if="showCancle" @click="handleCancle"
-            >取 消</ElButton
-          >
-          <ElButton
-            type="primary"
-            v-if="showConfirm"
-            size="mini"
-            @click="handleConfirm"
-          >
-            确 认
-          </ElButton>
+                <slot slot="append" name="append" />
+              </ElTable>
+            </div>
+            <div class="footer-btn" v-if="!showSelection">
+              <ElButton size="mini" v-if="showCancle" @click="handleCancle"
+                >取 消</ElButton
+              >
+              <ElButton
+                type="primary"
+                v-if="showConfirm"
+                size="mini"
+                @click="handleConfirm"
+              >
+                确 认
+              </ElButton>
+            </div>
+          </div>
         </div>
       </div>
+      <template v-if="showSelection">
+        <div class="line" />
+        <div
+          class="selection-content"
+          :style="{ width: `${selectionWidth}px` }"
+        >
+          <div class="right-scrollbar-title">
+            已选项目（{{ selectionList.length }}）
+          </div>
+          <el-scrollbar
+            :style="{ height: rightScrollHeight }"
+            class="scrollbar right-scrollbar"
+          >
+            <div
+              class="selection-list"
+              v-for="(item, index) in selectionList"
+              :key="index"
+            >
+              <div class="name">{{ item.name }}</div>
+              <div
+                class="el-icon-circle-close"
+                @click="handleDeleteSelection(index, item)"
+              />
+            </div>
+          </el-scrollbar>
+          <div class="footer-btn">
+            <ElButton size="mini" v-if="showCancle" @click="handleCancle"
+              >取 消</ElButton
+            >
+            <ElButton
+              type="primary"
+              v-if="showConfirm"
+              size="mini"
+              @click="handleConfirm"
+            >
+              确 认
+            </ElButton>
+          </div>
+        </div>
+      </template>
     </div>
     <template slot="reference">
       <ElInput
@@ -85,8 +140,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from 'vue-property-decorator'
+import {
+  Vue,
+  Component,
+  Prop,
+  Emit,
+  Model,
+  PropSync,
+  Ref
+} from 'vue-property-decorator'
 import { FnbTableColumn } from '../../../types/table'
+import { ElTable } from 'element-ui/types/table'
 
 /**
  * 选择商品组件
@@ -152,25 +216,60 @@ export default class SelectGoods extends Vue {
   @Prop({ default: 300, type: Number }) readonly popoverHeight!: number
 
   /** 是否显示取消按钮 */
-  @Prop({ default: true, type: Boolean }) readonly showCancle!: boolean
+  @Prop({ default: false, type: Boolean }) readonly showCancle!: boolean
 
   /** 是否显示确认按钮 */
-  @Prop({ default: true, type: Boolean }) readonly showConfirm!: boolean
+  @Prop({ default: false, type: Boolean }) readonly showConfirm!: boolean
+
+  /** 是否显示tab 栏 */
+  @Prop({ type: Boolean }) readonly showTab!: boolean
+
+  /** tab栏 列表，{value: string;label: string} */
+  @Prop({ type: Array, default: () => [] }) readonly tabList!: {
+    value: string
+    label: string
+  }[]
+
+  /** tab当前选中 */
+  @PropSync('tabActive', { type: String }) tabActiveValue!: string
+
+  /** 显示已选择项 */
+  @Prop({ type: Boolean }) readonly showSelection!: boolean
+
+  /** 当前选中的数据列表 */
+  @PropSync('selection', { type: Array, default: () => [] })
+  selectionList!: object[]
+
+  /** 已选项部分的宽度, 默认200px */
+  @Prop({ type: Number, default: 200 }) readonly selectionWidth!: number
 
   /**
    * 显示选择商品弹窗
    */
   showDialog = false
 
-  /** 选中数据列表 */
-  selectionList: object[] = []
+  @Ref('table') readonly tableRef!: ElTable
 
   /** 表格最大高度 */
   get tableMaxHeight() {
-    if (!this.showCancle && !this.showConfirm) {
-      return this.popoverHeight
+    let height = parseFloat(`${this.popoverHeight}`)
+    if (!this.showSelection) {
+      if (this.showCancle || this.showConfirm) {
+        height -= 38
+      }
     }
-    return parseInt(`${this.popoverHeight - 38}`)
+    if (this.showTab) {
+      height -= 40
+    }
+    return height
+  }
+
+  /** 右边已选择项滚动区域高度 */
+  get rightScrollHeight() {
+    if (!this.showCancle && !this.showConfirm) {
+      return this.popoverHeight - 40 + 'px'
+    }
+    return parseInt(`${this.popoverHeight - 78}`) + 'px'
   }
 
   get tableColumn() {
@@ -240,6 +339,16 @@ export default class SelectGoods extends Vue {
     }
   }
 
+  /** 删除已经选择的商品 */
+  handleDeleteSelection(index: number, row: object) {
+    this.$emit('delete-selection', index, row)
+  }
+
+  @Emit('tab-click')
+  handleTabClick(value: string) {
+    this.tabActiveValue = value
+  }
+
   /** 表格单行点击事件 */
   @Emit('row-click')
   handleRowClick(e: unknown) {
@@ -296,6 +405,38 @@ export default class SelectGoods extends Vue {
   background-color: #cdcdcd;
 }
 
+.tab {
+  line-height: 40px;
+  height: 40px;
+  text-align: center;
+  border-bottom: 1px solid #cdcdcd;
+  box-sizing: border-box;
+
+  & > div {
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    &.active {
+      color: #3a8ee6;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: #3a8ee6;
+      }
+    }
+  }
+}
+
+.wrap-content {
+  flex-direction: column;
+}
+
 .right-content {
   display: flex;
   flex-direction: column;
@@ -303,7 +444,7 @@ export default class SelectGoods extends Vue {
   width: 0%;
 }
 
-.table-wrap {
+.cell {
   flex: 1;
 }
 
@@ -371,5 +512,36 @@ export default class SelectGoods extends Vue {
   }
 
   @include scrollbar;
+}
+
+.selection-content {
+  .right-scrollbar {
+    &-title {
+      padding: 0 20px;
+      font-size: 16px;
+      line-height: 40px;
+      font-weight: 700;
+    }
+  }
+
+  .selection-list {
+    display: flex;
+    padding: 0 20px;
+    line-height: 40px;
+
+    .name {
+      flex: 1;
+      width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .el-icon-circle-close {
+      margin-left: 5px;
+      line-height: 40px;
+      cursor: pointer;
+    }
+  }
 }
 </style>

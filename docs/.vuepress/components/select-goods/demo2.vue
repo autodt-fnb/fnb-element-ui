@@ -1,6 +1,7 @@
 <template>
   <fnb-select-goods
     v-model="name"
+    ref="selectGoods"
     @input="handleInput"
     :table="table"
     :tableData="tableData"
@@ -12,10 +13,12 @@
     @row-click="rowClick"
     @selection-change="selectionChange"
     @tree-click="treeClick"
-    show-cancle
-    show-confirm
-    @cancle="cancle"
-    @confirm="confirm"
+    show-tab
+    show-selection
+    :tabList="tabList"
+    :tabActive.sync="tabActive"
+    :selection.sync="sectionList"
+    @delete-selection="deleteSelection"
   ></fnb-select-goods>
 </template>
 
@@ -91,7 +94,19 @@ export default {
           width: '80'
         }
       ],
+      tabList: [
+        {
+          label: '服务',
+          value: '1'
+        },
+        {
+          label: '商品',
+          value: '2'
+        }
+      ],
+      tabActive: '2',
       tableData: dataList,
+      sectionList: [],
       categoryList: [
         {
           code: '1',
@@ -200,6 +215,11 @@ export default {
         'color: #304FFE;',
         selection
       )
+    },
+
+    deleteSelection(index, row) {
+      this.sectionList.splice(index, 1)
+      this.$refs.selectGoods.tableRef.toggleRowSelection(row, false)
     }
   }
 }
