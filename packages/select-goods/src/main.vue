@@ -27,7 +27,7 @@
           >
             <ElTree
               highlight-current
-              :expand-on-click-node="false"
+              :expand-on-click-node="expandOnClickNode"
               :node-key="nodeKey"
               :data="categoryList"
               :props="treeProps"
@@ -151,6 +151,7 @@ import {
 } from 'vue-property-decorator'
 import { FnbTableColumn } from '../../../types/table'
 import { ElTable } from 'element-ui/types/table'
+import { ElTree } from 'element-ui/types/tree'
 
 /**
  * 选择商品组件
@@ -243,10 +244,15 @@ export default class SelectGoods extends Vue {
   /** 已选项部分的宽度, 默认200px */
   @Prop({ type: Number, default: 200 }) readonly selectionWidth!: number
 
+  /** 是否在点击节点的时候展开或者收缩节点， 默认值为 true，如果为 false，则只有点箭头图标的时候才会展开或者收缩节点。 */
+  @Prop({ type: Boolean, default: false }) readonly expandOnClickNode!: boolean
+
   /**
    * 显示选择商品弹窗
    */
   showDialog = false
+
+  @Ref('tree') readonly treeRef!: ElTree<string, any>
 
   @Ref('table') readonly tableRef!: ElTable
 
