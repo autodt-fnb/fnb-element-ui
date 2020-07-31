@@ -19,7 +19,7 @@
             >{{ item.label }}</el-col
           >
         </el-row>
-        <div class="flex cell">
+        <div class="flex cell" :style="{ height: treeScrollHeight }">
           <ElScrollbar
             v-loading="treeLoading"
             v-show="!value"
@@ -276,6 +276,14 @@ export default class SelectGoods extends Vue {
       return this.popoverHeight - 40 + 'px'
     }
     return parseInt(`${this.popoverHeight - 78}`) + 'px'
+  }
+
+  /** 树形 */
+  get treeScrollHeight() {
+    if (this.showTab) {
+      return this.popoverHeight - 40 + 'px'
+    }
+    return this.popoverHeight + 'px'
   }
 
   get tableColumn() {
