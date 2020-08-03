@@ -7,4 +7,11 @@
   </highlight-code>
 </common-democode>
 
+<common-democode title="滚动容器">
+  <layout-demo2></layout-demo2>
+  <highlight-code slot="codeText" lang="vue">
+<<< @/docs/.vuepress/components/layout/demo2.vue
+  </highlight-code>
+</common-democode>
+
 <layout-attr-desc></layout-attr-desc>

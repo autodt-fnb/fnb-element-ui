@@ -10,6 +10,7 @@ import PlateNumber from '~/plate-number'
 import DateRange from '~/date-range'
 import AppContainer from '~/app-container'
 import SearchContainer from '~/search-container'
+import ScrollConatiner from '~/scroll-container'
 
 const components = [
   Table,
@@ -18,7 +19,8 @@ const components = [
   PlateNumber,
   DateRange,
   AppContainer,
-  SearchContainer
+  SearchContainer,
+  ScrollConatiner
 ]
 
 const install = function(vue: typeof Vue) {
@@ -34,7 +36,8 @@ export {
   PlateNumber,
   DateRange,
   AppContainer,
-  SearchContainer
+  SearchContainer,
+  ScrollConatiner
 }
 
 export default { install }
