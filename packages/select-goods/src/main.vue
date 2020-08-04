@@ -1,9 +1,10 @@
 <template>
   <ElPopover
     placement="bottom-start"
-    trigger="manual"
+    :trigger="trigger"
     popper-class="select-goods__wrap"
     :width="popoverWidth"
+    :disabled="disabled"
     v-model="showDialog"
     ref="elPopover"
   >
@@ -126,16 +127,16 @@
         </div>
       </template>
     </div>
-    <template slot="reference">
+    <slot slot="reference" name="reference">
       <ElInput
-        @click.native="handleClickInput"
+        :disabled="disabled"
         :value="value"
         @input="$emit('input', $event)"
         @clear="$emit('input-clear')"
         clearable
         :placeholder="placeholder"
       />
-    </template>
+    </slot>
   </ElPopover>
 </template>
 
@@ -247,6 +248,12 @@ export default class SelectGoods extends Vue {
   /** 是否在点击节点的时候展开或者收缩节点， 默认值为 true，如果为 false，则只有点箭头图标的时候才会展开或者收缩节点。 */
   @Prop({ type: Boolean, default: false }) readonly expandOnClickNode!: boolean
 
+  /** 禁止输入框输入 */
+  @Prop({ type: Boolean }) readonly disabled!: boolean
+
+  /** 触发弹窗显示 */
+  @Prop({ type: String, default: 'focus' }) readonly trigger!: string
+
   /**
    * 显示选择商品弹窗
    */
@@ -306,51 +313,6 @@ export default class SelectGoods extends Vue {
         return v
       }) ?? []
     )
-  }
-
-  // 组件销毁的时候移除监听
-  destroyed() {
-    document.removeEventListener('click', this.clickListener)
-  }
-
-  /** 处理点击input框 */
-  handleClickInput() {
-    if (!this.showDialog) {
-      document.addEventListener('click', this.clickListener)
-    }
-    this.showDialog = true
-  }
-
-  /** 点击关闭弹窗事件监听 */
-  clickListener(e: any) {
-    if (!this.showDialog) {
-      return
-    }
-    const { target, path }: { path?: HTMLElement[]; target: HTMLElement } = e
-    // 点击输入框不关闭弹窗
-
-    let nodeId: string | undefined = undefined
-    let referenceNode: HTMLElement | undefined = undefined
-
-    if (path) {
-      referenceNode = path.find(v =>
-        v.className?.includes('el-popover__reference')
-      )
-    } else if (
-      target?.className.includes('el-input__inner') &&
-      target?.parentElement?.className.includes('el-popover__reference')
-    ) {
-      referenceNode = target.parentElement
-    }
-
-    nodeId = referenceNode?.attributes.getNamedItem('aria-describedby')?.value
-
-    if (this.$refs.elPopover) {
-      this.showDialog = nodeId === (this.$refs.elPopover as any).tooltipId
-      if (!this.showDialog) {
-        document.removeEventListener('click', this.clickListener)
-      }
-    }
   }
 
   /** 删除已经选择的商品 */

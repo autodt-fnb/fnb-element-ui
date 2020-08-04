@@ -6,20 +6,30 @@
         <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
         <fnb-date-range v-model="date" :max-width="350" />
         <fnb-plate-number v-model="plateNumber" @change="plateInput" />
-        <fnb-iconfont name="icon-xinkehu" size="50" @click="getList" />
+        <fnb-iconfont
+          name="icon-xinkehu"
+          size="50"
+          @click="disabled = !disabled"
+        />
         <fnb-select-goods
           v-model="name"
           row-key="id"
+          :input-disabled="disabled"
           :table="table"
           :tableData="tableData"
           :tabList="tabList"
           showSelection
           show-tab
-          :showCancle="false"
-          :showConfirm="false"
+          trigger="click"
+          :showCancle="true"
+          :showConfirm="true"
           :tab-active.sync="tabActive"
           :selection.sync="sectionList"
-        />
+        >
+          <template v-slot:reference>
+            <el-button>点击</el-button>
+          </template>
+        </fnb-select-goods>
         <fnb-table
           ref="table"
           :table="table"
@@ -58,6 +68,7 @@ import { FnbTable } from '../types/table'
   }
 })
 export default class App extends Vue {
+  disabled = false
   date = [undefined, undefined]
   pageNum = 1
   pageSize = 10

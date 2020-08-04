@@ -166,6 +166,19 @@ const attrData = [
     desc: '已选择项区域宽度',
     type: 'number',
     default: '200'
+  },
+  {
+    name: 'disabled',
+    desc: '禁止输入，弹窗不显示',
+    type: 'boolean',
+    default: 'false'
+  },
+  {
+    name: 'trigger',
+    desc: '触发弹窗显示的方式',
+    type: 'string',
+    optional: 'click/focus/hover/manual',
+    default: 'focus'
   }
 ]
 
@@ -232,6 +245,10 @@ const slotData = [
     name: 'append',
     desc:
       '插入至表格最后一行之后的内容，如果需要对表格的内容进行无限滚动操作，可能需要用到这个 slot。若表格有合计行，该 slot 会位于合计行之上。'
+  },
+  {
+    name: 'reference',
+    desc: '触发 Popover 显示的 HTML 元素'
   }
 ]
 
