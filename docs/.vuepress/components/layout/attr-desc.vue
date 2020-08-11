@@ -35,6 +35,11 @@ export default {
           desc: `当 <code>fixedHeigth</code> 为 true 时，height生效`,
           type: 'string',
           default: '窗口减去顶部使用高度后的剩余高度'
+        },
+        {
+          name: 'min-width',
+          desc: `容器的最小宽度，（包括左右padding 共40px）`,
+          type: 'string'
         }
       ],
 

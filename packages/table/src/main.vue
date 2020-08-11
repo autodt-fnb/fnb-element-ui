@@ -415,7 +415,7 @@ export default class Table extends Vue {
             }}
           />
         ) : Array.isArray(item.table) && item.table.length > 0 ? (
-          <el-table-column {...{ attrs: item }}>
+          <el-table-column key={tableIndex} {...{ attrs: item }}>
             {this.renderTableColumn(item.table)}
           </el-table-column>
         ) : (

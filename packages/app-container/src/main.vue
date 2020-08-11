@@ -7,10 +7,12 @@ export default class AppContainer extends Vue {
   @Prop({ type: Boolean, default: false }) readonly fixedHeight!: boolean
 
   /** 容器固定高度, 默认页面空余部分高度 */
-  @Prop({
-    type: String
-  })
+  @Prop({ type: String })
   readonly height!: string
+
+  /** 容器的最小宽度，（包括左右padding 共40px） */
+  @Prop({ type: String })
+  readonly minWidth!: string
 
   mountedHeight = ''
 
@@ -19,15 +21,17 @@ export default class AppContainer extends Vue {
   }
 
   mounted() {
-    this.mountedHeight = `${window.innerHeight -
-      (this.$el as HTMLElement).getBoundingClientRect().top}px`
+    if (this.fixedHeight) {
+      this.mountedHeight = `${window.innerHeight -
+        (this.$el as HTMLElement).getBoundingClientRect().top}px`
+    }
   }
 
   render() {
     return (
       <div
         class="app-container"
-        style={{ height: this.containerHeight }}
+        style={{ height: this.containerHeight, minWidth: this.minWidth }}
         {...{ on: this.$listeners }}
       >
         {this.$slots.default}
