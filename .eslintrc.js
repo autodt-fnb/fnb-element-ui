@@ -7,8 +7,7 @@ module.exports = {
   },
   extends: [
     'plugin:vue/essential',
-    'eslint:recommended',
-    '@vue/typescript/recommended',
+    '@vue/typescript',
     '@vue/prettier',
     'prettier/@typescript-eslint'
   ],
@@ -27,6 +26,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': [2],
     '@typescript-eslint/no-explicit-any': [0],
     '@typescript-eslint/array-type': 2,
+    '@typescript-eslint/ban-types': 0,
     '@typescript-eslint/explicit-member-accessibility': 0,
     'no-console': 0,
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
