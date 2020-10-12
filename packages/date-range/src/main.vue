@@ -2,7 +2,7 @@
   <div class="date-range">
     <el-button-group
       class="button-group"
-      v-if="operateBtns && operateBtns.length > 0"
+      v-if="showBtns && operateBtns && operateBtns.length > 0"
     >
       <el-button
         v-for="key in operateBtns"
@@ -17,12 +17,13 @@
       class="date-picker"
       v-model="dateRange"
       type="daterange"
-      :value-format="valueFormat"
+      :value-format="valueTime ? 'yyyy-MM-dd HH:mm:ss' : valueFormat"
       :picker-options="cusPickerOptions"
+      :default-time="valueTime ? ['00:00:00', '23:59:59'] : undefined"
       :disabled="disabled"
       clearable
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"
+      :start-placeholder="startPlaceholder"
+      :end-placeholder="endPlaceholder"
     />
   </div>
 </template>
@@ -45,11 +46,6 @@ const btnTypeMap: { [i in BtnType]: number } = {
 }
 
 /** 格式化日期 */
-function formatDate(date?: Date | Dayjs | string, type?: 'start' | 'end') {
-  const suffix =
-    type === 'start' ? '00:00:00' : type === 'end' ? '23:59:59' : ''
-  return `${dayjs(date).format('YYYY-MM-DD')}${suffix ? ' ' + suffix : ''}`
-}
 
 @Component({ name: 'FnbDateRange', components: {} })
 export default class DateRange extends Vue {
@@ -64,6 +60,14 @@ export default class DateRange extends Vue {
   @Prop({ type: String, default: 'yyyy-MM-dd' })
   readonly valueFormat!: string
 
+  /** 开始日期占位符 */
+  @Prop({ type: String, default: '开始日期' })
+  readonly startPlaceholder!: string
+
+  /** 结束日期占位符 */
+  @Prop({ type: String, default: '结束日期' })
+  readonly endPlaceholder!: string
+
   /** 是否在日期后面加 时间 */
   @Prop({ type: Boolean }) readonly valueTime!: boolean
 
@@ -72,6 +76,9 @@ export default class DateRange extends Vue {
 
   @Prop({ type: Object, default: () => ({}) })
   readonly pickerOptions!: DatePickerOptions
+
+  /** 是否显示按钮组 */
+  @Prop(Boolean) readonly showBtns!: boolean
 
   /** 快捷操作按钮组 显示 */
   @Prop({
@@ -107,20 +114,7 @@ export default class DateRange extends Vue {
   }
   set dateRange(date: (string | Dayjs)[]) {
     date = date?.filter(v => !!v) ?? []
-
-    if (date.length !== 2) {
-      this.minDate = null
-      this.$emit('change', [])
-      return
-    }
-    if (this.valueFormat === 'yyyy-MM-dd HH:mm:ss' || this.valueTime) {
-      this.$emit('change', [
-        formatDate(date[0], 'start'),
-        formatDate(date[1], 'end')
-      ])
-    } else {
-      this.$emit('change', [formatDate(date[0]), formatDate(date[1])])
-    }
+    this.$emit('change', date)
   }
 
   get cusPickerOptions() {
@@ -141,38 +135,56 @@ export default class DateRange extends Vue {
     return { ...options, onPick }
   }
 
+  /** 格式化日期 */
+  formatDate(dateRange: dayjs.Dayjs[]) {
+    let date: string[] = []
+    if (this.valueTime) {
+      date = [
+        dateRange[0].format('YYYY-MM-DD 00:00:00'),
+        dateRange[0].format('YYYY-MM-DD 23:59:59')
+      ]
+    } else {
+      date = [
+        dateRange[0].format('YYYY-MM-DD'),
+        dateRange[0].format('YYYY-MM-DD')
+      ]
+    }
+    return date
+  }
+
   handleClickBtn(type: BtnType) {
     this.dateType = btnTypeMap[type]
     this.$emit('btnClick', btnTypeMap[type])
     switch (type) {
       case 'today':
-        this.dateRange = [dayjs(), dayjs()]
+        this.dateRange = this.formatDate([dayjs(), dayjs()])
         break
       case 'yesterday':
-        this.dateRange = [dayjs().subtract(1, 'd'), dayjs().subtract(1, 'd')]
+        this.dateRange = this.formatDate([
+          dayjs().subtract(1, 'd'),
+          dayjs().subtract(1, 'd')
+        ])
         break
       case 'lastWeek':
-        this.dateRange = [
-          formatDate(
-            dayjs()
-              .startOf('w')
-              .subtract(6, 'd')
-          ),
-          formatDate(dayjs().startOf('w'))
-        ]
+        this.dateRange = this.formatDate([
+          dayjs()
+            .startOf('w')
+            .subtract(6, 'd'),
+          dayjs().startOf('w')
+        ])
         break
       case 'thisWeek':
-        this.dateRange = [
+        this.dateRange = this.formatDate([
           dayjs()
             .startOf('w')
             .add(1, 'd'),
           dayjs()
             .endOf('w')
             .add(1, 'd')
-        ]
+        ])
         break
       case 'thisMonth':
-        this.dateRange = [dayjs().startOf('M'), dayjs()]
+        this.dateRange = this.formatDate([dayjs().startOf('M'), dayjs()])
         break
     }
   }

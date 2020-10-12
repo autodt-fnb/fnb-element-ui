@@ -9,7 +9,7 @@ export type BtnType =
   | 'thisWeek'
   | 'thisMonth'
 
-export declare class FnbPlateNumber extends ElementUIComponent {
+export declare class FnbDateRange extends ElementUIComponent {
   /**
    * 日期
    */
@@ -19,6 +19,15 @@ export declare class FnbPlateNumber extends ElementUIComponent {
    * value 时间格式
    */
   valueFormat: string
+
+  /** 是否显示按钮组 */
+  showBtns: boolean
+
+  /** 开始日期占位符 */
+  startPlaceholder: string
+
+  /** 结束日期占位符 */
+  endPlaceholder: string
 
   /** 组件显示的最大宽度，默认自适应容器 */
   maxWidth: number

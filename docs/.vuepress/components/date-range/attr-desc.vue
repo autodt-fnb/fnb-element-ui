@@ -32,6 +32,18 @@ export default {
           type: 'number'
         },
         {
+          name: 'startPlaceholder',
+          desc: '开始日期占位符',
+          type: 'string',
+          default: '开始日期'
+        },
+        {
+          name: 'endPlaceholder',
+          desc: '结束日期占位符',
+          type: 'string',
+          default: '结束日期'
+        },
+        {
           name: 'valueTime',
           desc:
             '是否在日期后面加 时间，开始时间加 <code>00:00:00</code>，结束时间后面加 <code>23:59:59</code>',
@@ -46,9 +58,14 @@ export default {
           default: '{}'
         },
         {
+          name: 'showBtns',
+          desc: '是否显示的日期操作按钮',
+          type: 'boolean',
+          default: 'false'
+        },
+        {
           name: 'operateBtns',
-          desc:
-            '需要显示的日期操作按钮，默认显示所有；如不想显示所有操作按钮，传空数组 <code>[]</code> ',
+          desc: '需要显示的日期操作按钮，默认显示所有',
           type: 'string[]',
           optional:
             '[ <code>today</code> / <code>yesterday</code>  / <code>lastWeek</code>  / <code>thisWeek</code>  / <code>thisMonth</code> ]'

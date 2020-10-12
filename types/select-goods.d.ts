@@ -1,4 +1,6 @@
 import { ElementUIComponent } from 'element-ui/types/component'
+import { ElTable } from 'element-ui/types/table'
+import { ElTree } from 'element-ui/types/tree'
 import { FnbTableColumn } from './table'
 
 export declare class FnbSelectGoods extends ElementUIComponent {
@@ -48,4 +50,43 @@ export declare class FnbSelectGoods extends ElementUIComponent {
 
   /** 是否显示确认按钮 */
   showConfirm: boolean
+
+  /** 是否显示tab 栏 */
+  showTab: boolean
+
+  /** tab栏 列表，{value: string;label: string} */
+  tabList: {
+    value: string
+    label: string
+  }[]
+
+  /** tab当前选中 */
+  tabActiveValue: string
+
+  /** 显示已选择项 */
+  showSelection: boolean
+
+  /** 当前选中的数据列表 */
+  selectionList: object[]
+
+  /** 已选项部分的宽度, 默认200px */
+  selectionWidth: number
+
+  /** 是否在点击节点的时候展开或者收缩节点， 默认值为 true，如果为 false，则只有点箭头图标的时候才会展开或者收缩节点。 */
+  expandOnClickNode: boolean
+
+  /** 禁止输入框输入 */
+  disabled: boolean
+
+  /** 触发弹窗显示 */
+  trigger: string
+
+  /**
+   * 显示选择商品弹窗
+   */
+  showDialog: boolean
+
+  treeRef: ElTree<string, any>
+
+  tableRef: ElTable
 }

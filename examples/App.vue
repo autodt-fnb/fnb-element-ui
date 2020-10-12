@@ -4,7 +4,7 @@
     <FnbScrollContainer :height="300">
       <FnbAppContainer fixed-height>
         <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
-        <fnb-date-range v-model="date" :max-width="350" />
+        <fnb-date-range v-model="date" valueTime showBtns :max-width="350" />
         <fnb-plate-number v-model="plateNumber" @change="plateInput" />
         <fnb-iconfont
           name="icon-xinkehu"
@@ -69,7 +69,7 @@ import { FnbTable } from '../types/table'
 })
 export default class App extends Vue {
   disabled = false
-  date = [undefined, undefined]
+  date = []
   pageNum = 1
   pageSize = 10
   total = 105
