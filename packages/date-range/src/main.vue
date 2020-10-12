@@ -141,12 +141,12 @@ export default class DateRange extends Vue {
     if (this.valueTime) {
       date = [
         dateRange[0].format('YYYY-MM-DD 00:00:00'),
-        dateRange[0].format('YYYY-MM-DD 23:59:59')
+        dateRange[1].format('YYYY-MM-DD 23:59:59')
       ]
     } else {
       date = [
         dateRange[0].format('YYYY-MM-DD'),
-        dateRange[0].format('YYYY-MM-DD')
+        dateRange[1].format('YYYY-MM-DD')
       ]
     }
     return date
