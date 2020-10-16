@@ -11,6 +11,7 @@ import DateRange from '~/date-range'
 import AppContainer from '~/app-container'
 import SearchContainer from '~/search-container'
 import ScrollConatiner from '~/scroll-container'
+import AmountInput from '~/amount-input'
 
 const components = [
   Table,
@@ -20,7 +21,8 @@ const components = [
   DateRange,
   AppContainer,
   SearchContainer,
-  ScrollConatiner
+  ScrollConatiner,
+  AmountInput
 ]
 
 const install = function(vue: typeof Vue) {
@@ -37,7 +39,8 @@ export {
   DateRange,
   AppContainer,
   SearchContainer,
-  ScrollConatiner
+  ScrollConatiner,
+  AmountInput
 }
 
 export default { install }

@@ -31,6 +31,7 @@ module.exports = {
           ['/component/table', 'Table 表格'],
           ['/component/iconfont', 'Iconfont 字体图标'],
           ['/component/plate-number', 'PlateNumber 车牌号'],
+          ['/component/amount-input', 'AmountInput 金额输入框'],
           ['/component/date-range', 'DateRange 日期范围选择']
         ]
       }

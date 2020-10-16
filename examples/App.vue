@@ -4,6 +4,7 @@
     <FnbScrollContainer :height="300">
       <FnbAppContainer fixed-height>
         <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
+        <fnb-amount-input v-model="amount" @input="amountInput" />
         <fnb-date-range v-model="date" valueTime showBtns :max-width="350" />
         <fnb-plate-number v-model="plateNumber" @change="plateInput" />
         <fnb-iconfont
@@ -73,6 +74,7 @@ export default class App extends Vue {
   pageNum = 1
   pageSize = 10
   total = 105
+  amount = 0
   getList() {
     console.log(23423432)
   }
@@ -173,6 +175,10 @@ export default class App extends Vue {
   }
 
   plateInput(e: string) {
+    console.log(e)
+  }
+
+  amountInput(e: string) {
     console.log(e)
   }
 }
