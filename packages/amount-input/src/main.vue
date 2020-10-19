@@ -58,12 +58,15 @@ export default class main extends Vue {
     const value = val.toString().match(/^\d*(\.?\d{0,2})/g)?.[0] ?? ''
     this.$emit(
       'input',
-      value === '' || value.endsWith('.') ? value : parseFloat(value)
+      value === '' || value.endsWith('.') || value.endsWith('.0')
+        ? value
+        : parseFloat(value)
     )
   }
 
   /** change事件 */
   private emitChange(val: string) {
+    this.$emit('input', val === '' ? '' : parseFloat(val))
     this.$emit('change', val === '' ? '' : parseFloat(val))
   }
 
