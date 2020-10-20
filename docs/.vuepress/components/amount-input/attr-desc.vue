@@ -61,6 +61,16 @@ export default {
           desc: '是否显示 <code>￥</code> 符号',
           type: 'boolean',
           default: 'true'
+        },
+        {
+          name: 'min',
+          desc: '可输入的金额最小值',
+          type: 'number'
+        },
+        {
+          name: 'max',
+          desc: '可输入的金额最大值',
+          type: 'number'
         }
       ],
       eventData: [

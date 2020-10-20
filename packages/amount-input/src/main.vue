@@ -33,13 +33,19 @@ export default class main extends Vue {
   @Prop(Boolean) readonly disabled!: boolean
 
   /** 输入框占位文本 */
-  @Prop(String) readonly placeholder!: string
+  @Prop([String, Number]) readonly placeholder!: string | number
 
   /** 输入框尺寸 */
   @Prop(String) readonly size!: string
 
   /** 是否显示 ￥ 符号 */
   @Prop({ type: Boolean, default: true }) readonly showAmountIcon!: boolean
+
+  /** 金额最小值 */
+  @Prop(Number) readonly min!: number
+
+  /** 金额最大值 */
+  @Prop(Number) readonly max!: number
 
   /** input组件 */
   @Ref('input') readonly inputRef!: ElInput
@@ -56,12 +62,19 @@ export default class main extends Vue {
   private emitInput(val: string) {
     val = val ?? ''
     const value = val.toString().match(/^\d*(\.?\d{0,2})/g)?.[0] ?? ''
-    this.$emit(
-      'input',
-      value === '' || value.endsWith('.') || value.endsWith('.0')
-        ? value
-        : parseFloat(value)
-    )
+    let amount: string | number = parseFloat(value)
+    if (value === '' || value.endsWith('.') || value.endsWith('.0')) {
+      amount = value
+    } else {
+      if (typeof this.max === 'number' && amount > this.max) {
+        amount = this.max
+      }
+
+      if (typeof this.min === 'number' && amount < this.min) {
+        amount = this.min
+      }
+    }
+    this.$emit('input', amount)
   }
 
   /** change事件 */

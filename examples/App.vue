@@ -4,7 +4,7 @@
     <FnbScrollContainer :height="300">
       <FnbAppContainer fixed-height>
         <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
-        <fnb-amount-input v-model="amount" @input="amountInput" />
+        <fnb-amount-input v-model="amount" @input="amountInput" :max="9.3" />
         <fnb-date-range v-model="date" valueTime showBtns :max-width="350" />
         <fnb-plate-number v-model="plateNumber" @change="plateInput" />
         <fnb-iconfont
