@@ -44,6 +44,12 @@ export default {
           params: '(value: string)'
         },
         {
+          name: 'focus',
+          desc: `输入框获得焦点事件`,
+          type: 'string',
+          params: '(value: string)'
+        },
+        {
           name: 'clear',
           desc: `在点击由 <code>clearable</code> 属性生成的清空按钮时触发`
         }

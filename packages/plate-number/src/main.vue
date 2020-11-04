@@ -18,6 +18,7 @@
       :disabled="!this.province"
       maxlength="7"
       @blur="$emit('blur', plateNumber)"
+      @focus="$emit('focus', plateNumber)"
       @clear="handleClear"
       v-model="plateOtherConvert"
       :clearable="clearable"
