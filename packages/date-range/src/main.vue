@@ -21,7 +21,7 @@
       :picker-options="cusPickerOptions"
       :default-time="valueTime ? ['00:00:00', '23:59:59'] : undefined"
       :disabled="disabled"
-      clearable
+      :clearable="clearable"
       :start-placeholder="startPlaceholder"
       :end-placeholder="endPlaceholder"
     />
