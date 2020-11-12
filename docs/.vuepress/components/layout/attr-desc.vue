@@ -45,7 +45,7 @@ export default {
 
       searchAttrData: [
         {
-          name: 'last-item-form',
+          name: 'last-form-item',
           desc: `最后一行是否是form-item 组件，为了重置margin-bottom`,
           type: 'boolean',
           default: 'false'
