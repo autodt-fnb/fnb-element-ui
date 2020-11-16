@@ -1,5 +1,17 @@
 <template>
   <div id="app">
+    <FnbUpload
+      :show-file-list="true"
+      :onRemove="() => {}"
+      :fileList="fileList"
+      v-model="urlList"
+      :height="100"
+      :width="100"
+      :action="'http://qw-admin.yunchefu.cn/oss/image/toOss'"
+    />
+    <el-button @click="fileList.push({ url: fileList[0].url, type: 'image' })"
+      >增加</el-button
+    >
     <FnbSearchContainer>8</FnbSearchContainer>
     <FnbScrollContainer :height="300">
       <FnbAppContainer fixed-height>
@@ -75,6 +87,15 @@ export default class App extends Vue {
   pageSize = 10
   total = 105
   amount = 0
+
+  fileList = [
+    {
+      url:
+        'https://syautodt.oss-cn-shanghai.aliyuncs.com/test/image/1c1299c2-b137-4e59-8b91-d8ce8e54b5c4.jpg',
+      type: 'image'
+    }
+  ]
+  urlList = []
   getList() {
     console.log(23423432)
   }
@@ -163,6 +184,7 @@ export default class App extends Vue {
         name: '王小虎',
         address: '上海市普陀区金沙江路 1516 弄'
       })
+      this.fileList.push({ url: this.fileList[0].url, type: 'image' })
     }, 3000)
   }
 

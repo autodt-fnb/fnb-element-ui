@@ -12,6 +12,7 @@ import AppContainer from '~/app-container'
 import SearchContainer from '~/search-container'
 import ScrollConatiner from '~/scroll-container'
 import AmountInput from '~/amount-input'
+import Upload from '~/upload'
 
 const components = [
   Table,
@@ -22,10 +23,13 @@ const components = [
   AppContainer,
   SearchContainer,
   ScrollConatiner,
-  AmountInput
+  AmountInput,
+  Upload
 ]
 
-const install = function(vue: typeof Vue) {
+const install = function(vue: typeof Vue, options: Record<string, unknown>) {
+  // 上传组件，默认action
+  vue.prototype.UPLOAD_URL = options?.UPLOAD_URL
   components.forEach(component => {
     vue?.component(component.options.name, component)
   })
@@ -40,7 +44,8 @@ export {
   AppContainer,
   SearchContainer,
   ScrollConatiner,
-  AmountInput
+  AmountInput,
+  Upload
 }
 
 export default { install }

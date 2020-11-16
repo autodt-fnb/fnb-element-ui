@@ -4,6 +4,7 @@ import { FnbTable } from './table'
 import { FnbSelectGoods } from './select-goods'
 import { FnbIconfont } from './iconfont'
 import { FnbPlateNumber } from './plate-number'
+import { FnbUpload } from './upload'
 
 export function install(vue: typeof Vue): void
 
@@ -18,3 +19,6 @@ export class Iconfont extends FnbIconfont {}
 
 /** PlateNumber 组件 */
 export class PlateNumber extends FnbPlateNumber {}
+
+/** Upload 组件 */
+export class Upload extends FnbUpload {}

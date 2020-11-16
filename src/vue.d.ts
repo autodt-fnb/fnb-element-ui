@@ -11,6 +11,10 @@ declare module 'vue/types/vue' {
       name: string
     }
   }
+  interface Vue {
+    /** 上传的 默认 连接 */
+    UPLOAD_URL: string
+  }
 }
 
 declare module 'element-ui' {

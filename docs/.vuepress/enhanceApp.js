@@ -30,5 +30,7 @@ export default ({
     }
   })
   Vue.use(ElementUI)
-  Vue.use(FnbElementUI)
+  Vue.use(FnbElementUI, {
+    UPLOAD_URL: 'http://qw-admin.yunchefu.cn/oss/image/toOss'
+  })
 }
