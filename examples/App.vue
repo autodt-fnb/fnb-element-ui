@@ -1,13 +1,12 @@
 <template>
   <div id="app">
     <FnbUpload
-      :show-file-list="true"
-      :onRemove="() => {}"
-      :fileList="fileList"
-      v-model="urlList"
-      :height="100"
-      :width="100"
-      :action="'http://qw-admin.yunchefu.cn/oss/image/toOss'"
+      accept="image/png,image/jpeg"
+      :limit="1"
+      v-model="urlList.url"
+      :beforeUpload="handleUploadBefore"
+      :fileList="filesList"
+      action="http://qw-admin.yunchefu.cn/oss/image/toOss"
     />
     <el-button @click="fileList.push({ url: fileList[0].url, type: 'image' })"
       >增加</el-button
@@ -95,7 +94,11 @@ export default class App extends Vue {
       type: 'image'
     }
   ]
-  urlList = []
+  urlList: any = {}
+
+  get filesList() {
+    return this.urlList.url ? [{ url: this.urlList.url }] : []
+  }
   getList() {
     console.log(23423432)
   }
@@ -202,6 +205,12 @@ export default class App extends Vue {
 
   amountInput(e: string) {
     console.log(e)
+  }
+
+  /** 处理上传之前的操作 */
+  handleUploadBefore(file: any) {
+    console.log(file)
+    return true
   }
 }
 </script>

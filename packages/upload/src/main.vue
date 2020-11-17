@@ -26,12 +26,12 @@
       <audio
         :style="{ width: `${width}px`, height: `${height}px` }"
         :src="file.url"
-        v-if="formatterMediaType(file.type || file.raw.type) === 'audio'"
+        v-if="formatterMediaType(file) === 'audio'"
       />
       <video
         :style="{ width: `${width}px`, height: `${height}px` }"
         :src="file.url"
-        v-else-if="formatterMediaType(file.type || file.raw.type) === 'video'"
+        v-else-if="formatterMediaType(file) === 'video'"
       />
       <img
         :style="{ width: `${width}px`, height: `${height}px` }"
@@ -122,10 +122,11 @@ export default class Upload extends Vue {
   uploadedLength = 0
 
   @Watch('fileList', { immediate: true })
-  onFileList(list: FileDetail[]) {
-    const value =
-      typeof this.value === 'string' ? this.value.split(',') : this.value
-
+  onFileList(list: FileDetail[], oldList: FileDetail[]) {
+    const value = Array.isArray(this.value)
+      ? this.value
+      : this.value?.split(',') ?? []
+    console.log(this.value, list, list == oldList)
     const urlSet = new Set<string>([
       ...list.map(v => v.response?.data?.url ?? v.url!).filter(v => !!v),
       ...value
@@ -141,12 +142,14 @@ export default class Upload extends Vue {
 
   @Emit('input')
   emitInput(list: string[]) {
+    list = list.filter(v => !!v)
     this.uploadedLength = list.length
-    typeof this.value === 'string' ? list.join() : list
+    return Array.isArray(this.value) ? list : list.join()
   }
 
   /** 判断媒体类型 */
-  formatterMediaType(type: string) {
+  formatterMediaType(file: any) {
+    const type = file.type ?? file.raw?.type
     return type?.split('/')?.[0]
   }
 
@@ -178,7 +181,7 @@ export default class Upload extends Vue {
       maxHeight: 'calc(100vh - 137.6px)'
     }
     let message = <img style={style} src={file.url} />
-    const type = this.formatterMediaType(file.type ?? file.raw.type)
+    const type = this.formatterMediaType(file)
     if (type === 'video') {
       message = <video style={style} autoplay controls src={file.url}></video>
     } else if (type === 'audio') {
