@@ -185,9 +185,7 @@ export default class Table extends Vue {
       const name = kebab2camel(key)
       if (Reflect.has(props, name)) {
         // 处理最大高度
-        if (name === 'maxHeight') {
-          console.log(props[name])
-        } else props[name] = this.$attrs[key]
+        props[name] = this.$attrs[key]
       }
     }
     props.maxHeight = this.autoMaxHeight ? this.maxHeight : props.maxHeight
