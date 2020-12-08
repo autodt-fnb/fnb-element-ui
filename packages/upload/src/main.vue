@@ -57,10 +57,18 @@
       />
       <div v-if="preview || !disabled" class="el-upload-list__item-actions">
         <span v-if="preview" class="el-upload-list__item-preview">
-          <i class="el-icon-zoom-in" @click="handlePreview(file)" />
+          <i
+            class="el-icon-zoom-in"
+            title="预览"
+            @click="handlePreview(file)"
+          />
         </span>
         <span v-if="!disabled" class="el-upload-list__item-delete">
-          <i class="el-icon-delete" @click="handleRemove(file, file.raw)" />
+          <i
+            class="el-icon-delete"
+            title="删除"
+            @click="handleRemove(file, file.raw)"
+          />
         </span>
       </div>
     </template>
