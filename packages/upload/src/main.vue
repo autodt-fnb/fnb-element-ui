@@ -19,33 +19,23 @@
       justify="center"
       align="middle"
       class="uploader-icon"
-      :style="{ width: `${width}px`, height: `${height}px` }"
+      :style="contentStyle"
       ><i class="el-icon-plus"
     /></el-row>
     <template #file="{file}">
       <audio
-        :style="{ width: `${width}px`, height: `${height}px` }"
+        :style="contentStyle"
         :src="file.url"
         v-if="formatterMediaType(file) === 'audio'"
       />
       <video
-        :style="{ width: `${width}px`, height: `${height}px` }"
+        :style="contentStyle"
         :src="file.url"
         v-else-if="formatterMediaType(file) === 'video'"
       />
-      <img
-        :style="{ width: `${width}px`, height: `${height}px` }"
-        :src="file.url"
-        :alt="file.name"
-        v-else
-      />
+      <img :style="contentStyle" :src="file.url" :alt="file.name" v-else />
       <label class="el-upload-list__item-status-label">
-        <i
-          :class="{
-            'el-icon-upload-success': true,
-            'el-icon-check': true
-          }"
-        />
+        <i class="el-icon-upload-success el-icon-check" />
       </label>
       <el-progress
         v-if="file.status === 'uploading'"
@@ -130,16 +120,19 @@ export default class Upload extends Vue {
   uploadedLength = 0
 
   @Watch('fileList', { immediate: true })
-  onFileList(list: FileDetail[], oldList: FileDetail[]) {
+  onFileList(list: FileDetail[]) {
     const value = Array.isArray(this.value)
       ? this.value
-      : this.value?.split(',') ?? []
-    console.log(this.value, list, list == oldList)
+      : (this.value || null)?.split(',') ?? []
     const urlSet = new Set<string>([
       ...list.map(v => v.response?.data?.url ?? v.url!).filter(v => !!v),
       ...value
     ])
     this.emitInput([...urlSet])
+  }
+
+  get contentStyle() {
+    return { width: `${this.width}px`, height: `${this.height}px` }
   }
 
   get uploadUrl() {

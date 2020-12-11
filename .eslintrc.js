@@ -1,16 +1,19 @@
 module.exports = {
   root: true,
+
   env: {
     browser: true,
     node: true,
     es6: true
   },
+
   extends: [
     'plugin:vue/essential',
     '@vue/typescript',
     '@vue/prettier',
     'prettier/@typescript-eslint'
   ],
+
   rules: {
     'prettier/prettier': ['error', {}, { usePrettierrc: true }],
     'vue/name-property-casing': [2, 'PascalCase'],
@@ -31,6 +34,7 @@ module.exports = {
     'no-console': 0,
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
   },
+
   parserOptions: {
     useJSXTextNode: true,
     ecmaVersion: 6,
@@ -40,5 +44,17 @@ module.exports = {
     ecmaFeatures: {
       jsx: true
     }
-  }
+  },
+
+  overrides: [
+    {
+      files: [
+        '**/__tests__/*.{j,t}s?(x)',
+        '**/tests/unit/**/*.spec.{j,t}s?(x)'
+      ],
+      env: {
+        jest: true
+      }
+    }
+  ]
 }

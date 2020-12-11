@@ -136,6 +136,7 @@ export default class App extends Vue {
     {
       slot: true,
       prop: 'name1',
+      sortable: true,
       label: '姓名'
     },
     {
