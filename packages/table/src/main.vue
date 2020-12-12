@@ -12,48 +12,6 @@ import { FnbTable, FnbTableColumn } from '../../../types/table'
 import { ElTooltip } from 'element-ui/types/tooltip'
 import { VNode } from 'vue'
 
-/** table 默认 props */
-const tableProps: { [k: string]: any } = {
-  data: [],
-  size: undefined,
-  width: undefined,
-  height: undefined,
-  maxHeight: undefined,
-  fit: true,
-  stripe: false,
-  border: true,
-  rowKey: undefined,
-  context: undefined,
-  showHeader: true,
-  showSummary: false,
-  sumText: undefined,
-  summaryMethod: undefined,
-  rowClassName: undefined,
-  rowStyle: undefined,
-  cellClassName: undefined,
-  cellStyle: undefined,
-  headerRowClassName: undefined,
-  headerRowStyle: undefined,
-  headerCellClassName: undefined,
-  headerCellStyle: undefined,
-  highlightCurrentRow: false,
-  currentRowKey: undefined,
-  emptyText: undefined,
-  expandRowKeys: undefined,
-  defaultExpandAll: false,
-  defaultSort: undefined,
-  tooltipEffect: undefined,
-  spanMethod: undefined,
-  selectOnIndeterminate: true,
-  indent: 16,
-  treeProps: {
-    hasChildren: 'hasChildren',
-    children: 'children'
-  },
-  lazy: false,
-  load: undefined
-}
-
 const hyphenateRE = /([^-])([A-Z])/g
 /** 驼峰转短横线方法 */
 function camel2kebab(str: string) {
@@ -96,27 +54,6 @@ function formatTable(table: FnbTableColumn[]) {
       })
     : []
 }
-
-/** table 默认事件 */
-const tableEventsList: string[] = [
-  'select',
-  'select-all',
-  'selection-change',
-  'cell-mouse-enter',
-  'cell-mouse-leave',
-  'cell-click',
-  'cell-dblclick',
-  'row-click',
-  'row-contextmenu',
-  'row-dblclick',
-  'header-click',
-  'header-contextmenu',
-  'sort-change',
-  'filter-change',
-  'current-row-change',
-  'header-dragend',
-  'expand-change'
-]
 
 @Component({
   name: 'FnbTable',
@@ -180,13 +117,10 @@ export default class Table extends Vue {
 
   /** table attributes */
   get tableProps() {
-    const props = { ...tableProps }
+    const props: Record<string, any> = {}
     for (const key in this.$attrs) {
-      const name = kebab2camel(key)
-      if (Reflect.has(props, name)) {
-        // 处理最大高度
-        props[name] = this.$attrs[key]
-      }
+      // 处理最大高度
+      props[kebab2camel(key)] = this.$attrs[key]
     }
     props.maxHeight = this.autoMaxHeight ? this.maxHeight : props.maxHeight
     props.cellClassName = props.cellClassName ?? 'cell-class-name'
@@ -198,33 +132,31 @@ export default class Table extends Vue {
     const events: Record<string, Function | Function[]> = {}
     for (const key in this.$listeners) {
       const name = camel2kebab(key)
-      if (tableEventsList.includes(name)) {
-        // 为了兼容 分页的current-change
-        if (name === 'current-row-change') {
-          events['current-change'] = this.$listeners[key]
-        } else if (name === 'cell-mouse-enter') {
-          events[name] = (
-            row: any,
-            column: any,
-            cell: any,
-            event: MouseEvent
-          ) => {
-            this.handlePopover(row, column, cell, event)
-            ;(this.$listeners[key] as Function)(row, column, cell, event)
-          }
-        } else if (name === 'cell-mouse-leave') {
-          events[name] = (
-            row: any,
-            column: any,
-            cell: any,
-            event: MouseEvent
-          ) => {
-            this.handlePopover(row, column, cell, event)
-            ;(this.$listeners[key] as Function)(row, column, cell, event)
-          }
-        } else {
-          events[name] = this.$listeners[key]
+      // 为了兼容 分页的current-change
+      if (name === 'current-row-change') {
+        events['current-change'] = this.$listeners[key]
+      } else if (name === 'cell-mouse-enter') {
+        events[name] = (
+          row: any,
+          column: any,
+          cell: any,
+          event: MouseEvent
+        ) => {
+          this.handlePopover(row, column, cell, event)
+          ;(this.$listeners[key] as Function)(row, column, cell, event)
         }
+      } else if (name === 'cell-mouse-leave') {
+        events[name] = (
+          row: any,
+          column: any,
+          cell: any,
+          event: MouseEvent
+        ) => {
+          this.handlePopover(row, column, cell, event)
+          ;(this.$listeners[key] as Function)(row, column, cell, event)
+        }
+      } else {
+        events[name] = this.$listeners[key]
       }
     }
     if (!Reflect.has(events, 'cell-mouse-enter')) {
@@ -385,42 +317,49 @@ export default class Table extends Vue {
 
   /** 渲染 tableColumn 组件 */
   renderTableColumn(list: any[]): (VNode | Element)[] {
-    return list.map((item, tableIndex) => {
-      if (!item.hidden) {
-        return item.slotName ? (
-          <el-table-column
-            key={tableIndex}
-            {...{ attrs: item }}
-            scopedSlots={{
-              default: ({ row, column, $index }: any) =>
+    return list
+      .filter(v => !v.hidden)
+      .map((item, tableIndex) => {
+        const columnSlots = {
+          default: this.$scopedSlots[item.slotName]
+            ? ({ row, column, $index }: any) =>
                 this.$scopedSlots[item.slotName]?.({
                   row,
                   column,
                   index: $index
                 })
-            }}
-          />
-        ) : item.showTooltip ? (
+            : undefined,
+          header: this.$scopedSlots[`${item.prop}Header`]
+            ? ({ column, $index }: any) =>
+                this.$scopedSlots[`${item.prop}Header`]?.({
+                  column,
+                  index: $index
+                })
+            : undefined
+        }
+
+        return Array.isArray(item.table) && item.table.length > 0 ? (
+          <el-table-column
+            key={tableIndex}
+            {...{ attrs: item }}
+            scopedSlots={columnSlots}
+          >
+            {this.renderTableColumn(item.table)}
+          </el-table-column>
+        ) : (
           <el-table-column
             key={tableIndex}
             {...{
               attrs: {
                 ...item,
-                className: item.className
-                  ? item.className + ' tow-line'
-                  : 'tow-line'
+                className:
+                  (item.className ?? '') + (item.showTooltip ? ' tow-line' : '')
               }
             }}
+            scopedSlots={columnSlots}
           />
-        ) : Array.isArray(item.table) && item.table.length > 0 ? (
-          <el-table-column key={tableIndex} {...{ attrs: item }}>
-            {this.renderTableColumn(item.table)}
-          </el-table-column>
-        ) : (
-          <el-table-column key={tableIndex} {...{ attrs: item }} />
         )
-      }
-    }) as (VNode | Element)[]
+      }) as (VNode | Element)[]
   }
 
   render() {
@@ -431,6 +370,7 @@ export default class Table extends Vue {
           {...{ attrs: this.tableProps, on: this.tableEvents }}
         >
           {this.renderTableColumn(this.tableColumn)}
+          <template slot="append">{this.$slots.append}</template>
         </el-table>
         {this.showPagination &&
         this.tableProps.data &&

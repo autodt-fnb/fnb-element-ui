@@ -2,42 +2,40 @@
   <div>
     <common-attribute
       title="Table Attributes"
-      :description="
-        `element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-attributes' target='_blank' rel='noopener noreferrer'>Table Attributes</a> 全部可用，这里列举新添加字段`
-      "
+      :description="`element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-attributes' target='_blank' rel='noopener noreferrer'>Table Attributes</a> 全部可用，这里列举新添加字段`"
       type="attr"
       :data="attrData"
     ></common-attribute>
 
     <common-attribute
       title="Table Events"
-      :description="
-        `element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-events' target='_blank' rel='noopener noreferrer'>Table Events</a> 全部可用（ <code>current-change</code>改名为 <code>current-row-change</code>，为兼容分页的 <code>current-change</code> ），这里列举新添加的事件`
-      "
+      :description="`element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-events' target='_blank' rel='noopener noreferrer'>Table Events</a> 全部可用（ <code>current-change</code>改名为 <code>current-row-change</code>，为兼容分页的 <code>current-change</code> ），这里列举新添加的事件`"
       type="event"
       :data="eventsDate"
     ></common-attribute>
 
     <common-attribute
       title="Table Methods"
-      :description="
-        `element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-methods' target='_blank' rel='noopener noreferrer'>Table Methods</a> 全部可用。`
-      "
+      :description="`element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-methods' target='_blank' rel='noopener noreferrer'>Table Methods</a> 全部可用。`"
     ></common-attribute>
 
     <common-attribute
-      title="Slot"
+      title="Table Slot"
       type="slot"
       :data="slotData"
     ></common-attribute>
 
     <common-attribute
       title="Table Column Attributes"
-      :description="
-        `<a href='#Attributes'>Attributes</a> <code>table</code> 字段的属性， element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-column-attributes' target='_blank' rel='noopener noreferrer'>Table-column Attributes</a> 全部可用，这里列举新添加字段`
-      "
+      :description="`<a href='#Attributes'>Attributes</a> <code>table</code> 字段的属性， element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-column-attributes' target='_blank' rel='noopener noreferrer'>Table-column Attributes</a> 全部可用，这里列举新添加字段`"
       type="attr"
       :data="tableAttrData"
+    ></common-attribute>
+
+    <common-attribute
+      title="Table Column Slot"
+      type="slot"
+      :data="cloumnSlotdata"
     ></common-attribute>
   </div>
 </template>
@@ -143,6 +141,14 @@ const slotData = [
   {
     name: 'paginationAppend',
     desc: '插入至分页组件同一行，右侧内容'
+  }
+]
+
+const cloumnSlotdata = [
+  {
+    name: '[prop]Header',
+    desc:
+      '自定义表头的内容. 参数为 { column, index }， 有 <code>prop</code> 值和 <code>Header</code> 单词组成，如 <code>prop: name</code>, 则slot名称为 <code>nameHeader</code> '
   }
 ]
 </script>
