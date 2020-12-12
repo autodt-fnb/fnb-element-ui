@@ -22,8 +22,10 @@ export default class AppContainer extends Vue {
 
   mounted() {
     if (this.fixedHeight) {
-      this.mountedHeight = `${window.innerHeight -
-        (this.$el as HTMLElement).getBoundingClientRect().top}px`
+      this.mountedHeight = `${
+        window.innerHeight -
+        (this.$el as HTMLElement).getBoundingClientRect().top
+      }px`
     }
   }
 

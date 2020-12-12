@@ -6,7 +6,6 @@ import 'element-ui/lib/theme-chalk/index.css'
 // import FnbElementUI from 'fnb-element-ui/lib'
 // import 'fnb-element-ui/lib/index.css'
 import FnbElementUI from '../src/index'
-
 Vue.use(FnbElementUI)
 
 Vue.use(ElementUI)

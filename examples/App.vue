@@ -12,7 +12,7 @@
       >增加</el-button
     >
     <FnbSearchContainer>8</FnbSearchContainer>
-    <FnbScrollContainer :height="300">
+    <FnbScrollContainer :height="800">
       <FnbAppContainer fixed-height>
         <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
         <fnb-amount-input v-model="amount" @input="amountInput" :max="9.3" />
@@ -51,7 +51,6 @@
           :current-page.sync="pageNum"
           :page-size.sync="pageSize"
           :total="total"
-          autoMaxHeight
           @size-change="getList"
           @current-change="getList"
         >
@@ -61,6 +60,9 @@
           <template v-slot:name="{ row }">
             <el-input v-model="row.name" />
           </template>
+          <template v-slot:nameHeader> 5555 </template>
+          <template v-slot:append> <div>656565656</div> </template>
+          <template v-slot:paginationAppend> <div>656565656</div> </template>
         </fnb-table>
         <div style="height: 500px" />
         <!-- <el-button @click="clearSelection">clearSelection</el-button> -->
@@ -135,7 +137,7 @@ export default class App extends Vue {
     },
     {
       slot: true,
-      prop: 'name1',
+      prop: 'name',
       sortable: true,
       label: '姓名'
     },

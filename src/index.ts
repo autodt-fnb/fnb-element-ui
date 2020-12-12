@@ -27,7 +27,7 @@ const components = [
   Upload
 ]
 
-const install = function(vue: typeof Vue, options: Record<string, unknown>) {
+const install = function (vue: typeof Vue, options: Record<string, unknown>) {
   // 上传组件，默认action
   vue.prototype.UPLOAD_URL = options?.UPLOAD_URL
   components.forEach(component => {
@@ -35,7 +35,21 @@ const install = function(vue: typeof Vue, options: Record<string, unknown>) {
   })
 }
 
-export {
+// export {
+//   Table,
+//   SelectGoods,
+//   Iconfont,
+//   PlateNumber,
+//   DateRange,
+//   AppContainer,
+//   SearchContainer,
+//   ScrollConatiner,
+//   AmountInput,
+//   Upload
+// }
+
+export default {
+  install,
   Table,
   SelectGoods,
   Iconfont,
@@ -47,5 +61,3 @@ export {
   AmountInput,
   Upload
 }
-
-export default { install }

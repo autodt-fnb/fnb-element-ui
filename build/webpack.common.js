@@ -21,7 +21,7 @@ module.exports = {
     chunkFilename: '[id].js',
     libraryExport: 'default',
     library: 'FNB_ELEMENT',
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'umd'
   },
   resolve: {
     extensions: [
@@ -53,8 +53,6 @@ module.exports = {
             drop_console: true
           }
         },
-        sourceMap: false,
-        cache: true,
         parallel: true,
         extractComments: false
       })
@@ -116,7 +114,7 @@ module.exports = {
       {
         test: /\.(svg|otf|ttf|woff2?|eot|gif|png|jpe?g)(\?\S*)?$/,
         loader: 'url-loader',
-        query: {
+        options: {
           limit: 10000,
           name: path.posix.join('static', '[name].[hash:7].[ext]')
         }

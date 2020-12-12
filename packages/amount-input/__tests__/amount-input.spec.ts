@@ -130,10 +130,7 @@ describe('AmountInput Component', () => {
 
     await wrapper.find('input').trigger('focus')
     const vm = wrapper.vm
-    await wrapper
-      .findComponent(Input)
-      .find('.el-input__clear')
-      .trigger('click')
+    await wrapper.findComponent(Input).find('.el-input__clear').trigger('click')
     expect(handleClear).toBeCalledTimes(1)
     expect(vm.value).toEqual('')
   })

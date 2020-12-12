@@ -22,7 +22,7 @@
       :style="contentStyle"
       ><i class="el-icon-plus"
     /></el-row>
-    <template #file="{file}">
+    <template #file="{ file }">
       <audio
         :style="contentStyle"
         :src="file.url"

@@ -9,7 +9,7 @@
     ref="elPopover"
   >
     <div class="flex" :style="{ height: `${popoverHeight}px` }">
-      <div class="cell flex  wrap-content">
+      <div class="cell flex wrap-content">
         <el-row class="tab" type="flex" v-if="showTab">
           <el-col
             :style="{ flexBasis: `calc(100% / ${tabList.length})` }"

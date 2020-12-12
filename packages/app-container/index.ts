@@ -1,7 +1,7 @@
 import AppContainer from './src/main.vue'
 
 /* istanbul ignore next */
-AppContainer.install = function(Vue: typeof AppContainer) {
+AppContainer.install = function (Vue: typeof AppContainer) {
   Vue.component(AppContainer.options.name, AppContainer)
 }
 

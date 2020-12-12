@@ -167,20 +167,14 @@ export default class DateRange extends Vue {
         break
       case 'lastWeek':
         this.dateRange = this.formatDate([
-          dayjs()
-            .startOf('w')
-            .subtract(6, 'd'),
+          dayjs().startOf('w').subtract(6, 'd'),
           dayjs().startOf('w')
         ])
         break
       case 'thisWeek':
         this.dateRange = this.formatDate([
-          dayjs()
-            .startOf('w')
-            .add(1, 'd'),
-          dayjs()
-            .endOf('w')
-            .add(1, 'd')
+          dayjs().startOf('w').add(1, 'd'),
+          dayjs().endOf('w').add(1, 'd')
         ])
         break
       case 'thisMonth':
@@ -220,20 +214,12 @@ export default class DateRange extends Vue {
       type = this.dateLimit.type ?? 'd'
     }
     return (
-      dayjs(this.minDate)
-        .subtract(limit, type)
-        .isAfter(time, type) ||
+      dayjs(this.minDate).subtract(limit, type).isAfter(time, type) ||
       (this.endToday
-        ? dayjs(this.minDate)
-            .add(limit, type)
-            .isAfter(dayjs())
+        ? dayjs(this.minDate).add(limit, type).isAfter(dayjs())
           ? dayjs().isBefore(time, type)
-          : dayjs(this.minDate)
-              .add(limit, type)
-              .isBefore(time)
-        : dayjs(this.minDate)
-            .add(limit, type)
-            .isBefore(time))
+          : dayjs(this.minDate).add(limit, type).isBefore(time)
+        : dayjs(this.minDate).add(limit, type).isBefore(time))
     )
   }
 }

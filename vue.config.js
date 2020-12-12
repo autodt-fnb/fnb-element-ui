@@ -15,11 +15,7 @@ module.exports = {
       .set('fnb-element-ui', path.resolve('.'))
 
     config.when(process.env.NODE_ENV === 'development', config => {
-      config
-        .entry('app')
-        .clear()
-        .add('./examples/main.ts')
-        .end()
+      config.entry('app').clear().add('./examples/main.ts').end()
     })
   }
 }
