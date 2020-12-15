@@ -8,6 +8,9 @@
       :fileList="filesList"
       action="http://qw-admin.yunchefu.cn/oss/image/toOss"
     />
+    <el-button v-clipboard="'copy'" v-clipboard:success="copySuccess"
+      >复制</el-button
+    >
     <el-button @click="fileList.push({ url: fileList[0].url, type: 'image' })"
       >增加</el-button
     >
@@ -196,6 +199,10 @@ export default class App extends Vue {
 
   clearSelection() {
     this.tableRef.clearSelection()
+  }
+
+  copySuccess() {
+    this.$message.success('复制成功')
   }
 
   cellClick(e: any) {

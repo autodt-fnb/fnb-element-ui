@@ -47,7 +47,8 @@ export default {
       attrData,
       tableAttrData,
       eventsDate,
-      slotData
+      slotData,
+      cloumnSlotdata
     }
   },
   methods: {}

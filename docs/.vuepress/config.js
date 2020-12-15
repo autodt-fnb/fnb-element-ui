@@ -23,6 +23,11 @@ module.exports = {
       '/',
       '/quickstart',
       {
+        title: '自定义指令',
+        collapsable: false,
+        children: [['/directives/clipboard', 'Clipboard 剪切板']]
+      },
+      {
         title: '组件',
         collapsable: false,
         children: [

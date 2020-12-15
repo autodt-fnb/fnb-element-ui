@@ -13,6 +13,7 @@ import SearchContainer from '~/search-container'
 import ScrollConatiner from '~/scroll-container'
 import AmountInput from '~/amount-input'
 import Upload from '~/upload'
+import Clipboard from './directives/clipboard'
 
 const components = [
   Table,
@@ -27,26 +28,19 @@ const components = [
   Upload
 ]
 
+const directives = [Clipboard]
+
 const install = function (vue: typeof Vue, options: Record<string, unknown>) {
   // 上传组件，默认action
   vue.prototype.UPLOAD_URL = options?.UPLOAD_URL
   components.forEach(component => {
     vue?.component(component.options.name, component)
   })
-}
 
-// export {
-//   Table,
-//   SelectGoods,
-//   Iconfont,
-//   PlateNumber,
-//   DateRange,
-//   AppContainer,
-//   SearchContainer,
-//   ScrollConatiner,
-//   AmountInput,
-//   Upload
-// }
+  directives.forEach(directive => {
+    vue.directive(directive.name, directive)
+  })
+}
 
 export default {
   install,
