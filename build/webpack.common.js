@@ -20,8 +20,7 @@ module.exports = {
     filename: 'index.js',
     chunkFilename: '[id].js',
     libraryExport: 'default',
-    library: 'FNB_ELEMENT',
-    libraryTarget: 'umd'
+    libraryTarget: 'commonjs'
   },
   resolve: {
     extensions: [
