@@ -13,12 +13,12 @@
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "clean": "rimraf lib",
-    "docs:build": "npm run lib && vuepress build docs",
+    "docs:build": "yarn lib && vuepress build docs",
     "docs:dev": "vuepress dev docs",
     "lib": "webpack --config build/webpack.common.js",
-    "postrelease": "yrm use taobao",
-    "prerelease": "yrm use npm",
-    "release": "npm run lib && yarn login && yarn publish"
+    "prerelease": "npm config set registry https://registry.npmjs.org/",
+    "release": "yarn lib && npm publish --access public",
+    "postrelease": "npm config set registry https://registry.npm.taobao.org/"
   },
   "main": "lib/index.js",
   "files": [
