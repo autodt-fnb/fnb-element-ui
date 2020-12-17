@@ -119,10 +119,14 @@ export default class Table extends Vue {
   get tableProps() {
     const props: Record<string, any> = {}
     for (const key in this.$attrs) {
-      // 处理最大高度
       props[kebab2camel(key)] = this.$attrs[key]
     }
+    // 纵向边框
+    props.border = props.border ?? true
+
+    // 处理最大高度
     props.maxHeight = this.autoMaxHeight ? this.maxHeight : props.maxHeight
+
     props.cellClassName = props.cellClassName ?? 'cell-class-name'
     return props
   }
@@ -155,7 +159,8 @@ export default class Table extends Vue {
           this.handlePopover(row, column, cell, event)
           ;(this.$listeners[key] as Function)(row, column, cell, event)
         }
-      } else {
+      } else if (name !== 'current-change') {
+        // 为了兼容 分页的current-change
         events[name] = this.$listeners[key]
       }
     }
