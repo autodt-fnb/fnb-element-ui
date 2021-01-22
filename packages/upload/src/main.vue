@@ -245,11 +245,13 @@ export default class Upload extends Vue {
       width: auto;
       height: auto;
       line-height: inherit;
+      margin: 0 8px 8px 0;
     }
 
     .el-upload-list--picture-card .el-upload-list__item {
       width: auto;
       height: auto;
+      vertical-align: top;
     }
   }
 

@@ -5,7 +5,7 @@
       :limit="1"
       v-model="urlList.url"
       :beforeUpload="handleUploadBefore"
-      :fileList="filesList"
+      :fileList="fileListB"
       action="http://qw-admin.yunchefu.cn/oss/image/toOss"
     />
     <el-button v-clipboard="'copy'" v-clipboard:success="copySuccess"
@@ -97,8 +97,15 @@ export default class App extends Vue {
       url:
         'https://syautodt.oss-cn-shanghai.aliyuncs.com/test/image/1c1299c2-b137-4e59-8b91-d8ce8e54b5c4.jpg',
       type: 'image'
+    },
+    {
+      url:
+        'https://syautodt.oss-cn-shanghai.aliyuncs.com/test/image/ec2de6b5-26a0-4154-a49d-8fbfcd7aa72b.png'
     }
   ]
+
+  fileListB: any = []
+
   urlList: any = {}
 
   get filesList() {
@@ -194,6 +201,17 @@ export default class App extends Vue {
         address: '上海市普陀区金沙江路 1516 弄'
       })
       this.fileList.push({ url: this.fileList[0].url, type: 'image' })
+      this.fileListB = [
+        {
+          url:
+            'https://syautodt.oss-cn-shanghai.aliyuncs.com/test/image/1c1299c2-b137-4e59-8b91-d8ce8e54b5c4.jpg',
+          type: 'image'
+        },
+        {
+          url:
+            'https://syautodt.oss-cn-shanghai.aliyuncs.com/test/image/ec2de6b5-26a0-4154-a49d-8fbfcd7aa72b.png'
+        }
+      ]
     }, 3000)
   }
 
