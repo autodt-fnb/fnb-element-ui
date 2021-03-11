@@ -66,18 +66,20 @@
 </template>
 
 <script lang="tsx">
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-21 00:03:50
+ * @Last Modified by: 陈超
+ * @Last Modified time: 2021-03-03 14:58:50
+ */
 import { Vue, Component, Prop, Ref, Watch, Emit } from 'vue-property-decorator'
 import { ElUpload, ElUploadInternalFileDetail } from 'element-ui/types/upload'
-
-type FileDetail = ElUploadInternalFileDetail & {
-  response?: { data?: { url?: string } }
-}
-
-type Remove = (file: FileDetail, fileList: FileDetail[]) => void
-
-type Success = (response: any, file: FileDetail, fileList: FileDetail[]) => void
-
-type Preview = (file: ElUploadInternalFileDetail) => void
+import {
+  FileDetail,
+  Remove,
+  Success,
+  Preview
+} from 'fnb-element-ui/types/upload'
 
 @Component({ name: 'FnbUpload', components: {}, inheritAttrs: false })
 export default class Upload extends Vue {
@@ -87,9 +89,9 @@ export default class Upload extends Vue {
     | string
 
   /** 宽度 */
-  @Prop({ type: Number, default: 148 }) readonly width!: number
+  @Prop({ type: Number, default: 100 }) readonly width!: number
   /** 高度 */
-  @Prop({ type: Number, default: 148 }) readonly height!: number
+  @Prop({ type: Number, default: 100 }) readonly height!: number
 
   /** 是否禁止选择 */
   @Prop(Boolean) readonly disabled!: boolean
@@ -181,12 +183,12 @@ export default class Upload extends Vue {
       maxWidth: '100%',
       maxHeight: 'calc(100vh - 137.6px)'
     }
-    let message = <img style={style} src={file.url} />
+    let message = <img src={file.url} style={style} />
     const type = this.formatterMediaType(file)
     if (type === 'video') {
-      message = <video style={style} autoplay controls src={file.url}></video>
+      message = <video autoplay controls src={file.url} style={style} />
     } else if (type === 'audio') {
-      message = <audio style={style} autoplay controls src={file.url}></audio>
+      message = <audio autoplay controls src={file.url} style={style} />
     }
     this.$msgbox({
       title: '预览',

@@ -1,6 +1,12 @@
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-20 23:55:51
+ * @Last Modified by: 陈超
+ * @Last Modified time: 2021-02-20 23:59:26
+ */
 import { mount, ThisTypedMountOptions, createLocalVue } from '@vue/test-utils'
 import { Input } from 'element-ui'
-import AmountInput from '../src/main.vue'
+import AmountInput from '../src/amount-input.vue'
 const localVue = createLocalVue()
 localVue.use(Input)
 

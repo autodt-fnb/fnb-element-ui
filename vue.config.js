@@ -3,8 +3,12 @@ const path = require('path')
 
 module.exports = {
   devServer: {
+    host: 'localhost',
     port: 8369,
     hot: true
+  },
+  configureWebpack: {
+    devtool: 'cheap-eval-source-map'
   },
   chainWebpack: config => {
     // @ 默认指向 src 目录，这里要改成 examples
@@ -13,6 +17,7 @@ module.exports = {
       .set('@', path.resolve('examples'))
       .set('~', path.resolve('packages'))
       .set('fnb-element-ui', path.resolve('.'))
+      .set('types', path.resolve('types'))
 
     config.when(process.env.NODE_ENV === 'development', config => {
       config.entry('app').clear().add('./examples/main.ts').end()

@@ -1,6 +1,12 @@
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-20 23:59:14
+ * @Last Modified by: 陈超
+ * @Last Modified time: 2021-02-20 23:59:56
+ */
 import { mount, ThisTypedMountOptions, createLocalVue } from '@vue/test-utils'
 import ElementUI from 'element-ui'
-import PlateNumber from '../src/main.vue'
+import PlateNumber from '../src/plate-number.vue'
 const localVue = createLocalVue()
 localVue.use(ElementUI)
 

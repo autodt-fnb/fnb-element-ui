@@ -1,3 +1,9 @@
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-20 23:58:44
+ * @Last Modified by: 陈超
+ * @Last Modified time: 2021-02-27 20:01:21
+ */
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({ name: 'FnbIconfont' })
@@ -16,12 +22,12 @@ export default class Iconfont extends Vue {
 
     return (
       <i
-        onClick={() => this.$emit('click')}
+        class={[name]}
         style={{
           fontSize: this.size ? `${this.size}px` : '',
           color: this.color
         }}
-        class={[name]}
+        onClick={() => this.$emit('click')}
       />
     )
   }

@@ -1,4 +1,10 @@
 <script lang="tsx">
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-21 00:03:27
+ * @Last Modified by: 陈超
+ * @Last Modified time: 2021-03-10 16:36:34
+ */
 import {
   Vue,
   Component,
@@ -96,6 +102,10 @@ export default class Table extends Vue {
    */
   @Prop({ default: false, type: Boolean }) readonly noCard!: boolean
 
+  /** 分页 layou 参数 */
+  @Prop({ default: 'total, sizes, prev, pager, next, jumper' })
+  readonly paginationLayout!: string
+
   /** table组件ref */
   @Ref('table') readonly tableRef!: FnbTable
 
@@ -109,6 +119,7 @@ export default class Table extends Vue {
 
   /** tableColumn 组件的属性 */
   get tableColumn() {
+    console.log('tableColumn', this.table)
     if (!Array.isArray(this.table)) {
       return []
     }
@@ -127,7 +138,9 @@ export default class Table extends Vue {
     // 处理最大高度
     props.maxHeight = this.autoMaxHeight ? this.maxHeight : props.maxHeight
 
-    props.cellClassName = props.cellClassName ?? 'cell-class-name'
+    props.cellClassName ??= 'cell-class-name'
+
+    props.headerCellClassName ??= 'header-cell-class-name'
     return props
   }
 
@@ -139,26 +152,6 @@ export default class Table extends Vue {
       // 为了兼容 分页的current-change
       if (name === 'current-row-change') {
         events['current-change'] = this.$listeners[key]
-      } else if (name === 'cell-mouse-enter') {
-        events[name] = (
-          row: any,
-          column: any,
-          cell: any,
-          event: MouseEvent
-        ) => {
-          this.handlePopover(row, column, cell, event)
-          ;(this.$listeners[key] as Function)(row, column, cell, event)
-        }
-      } else if (name === 'cell-mouse-leave') {
-        events[name] = (
-          row: any,
-          column: any,
-          cell: any,
-          event: MouseEvent
-        ) => {
-          this.handlePopover(row, column, cell, event)
-          ;(this.$listeners[key] as Function)(row, column, cell, event)
-        }
       } else if (name !== 'current-change') {
         // 为了兼容 分页的current-change
         events[name] = this.$listeners[key]
@@ -251,12 +244,12 @@ export default class Table extends Vue {
       /** 分页容器的高度 */
       const paginationHeight =
         (this.$el.querySelector('.pagination-wrapper') as HTMLElement)
-          ?.offsetHeight ?? 80
+          ?.offsetHeight ?? 48
 
       this.maxHeight =
         window.innerHeight -
         (this.$el as HTMLElement).getBoundingClientRect().top -
-        20 -
+        10 -
         (this.showPagination ? paginationHeight : 0) -
         (this.noCard ? 0 : 2)
     })
@@ -326,14 +319,23 @@ export default class Table extends Vue {
       .filter(v => !v.hidden)
       .map((item, tableIndex) => {
         const columnSlots = {
-          default: this.$scopedSlots[item.slotName]
-            ? ({ row, column, $index }: any) =>
-                this.$scopedSlots[item.slotName]?.({
-                  row,
-                  column,
-                  index: $index
-                })
-            : undefined,
+          default:
+            (item.render
+              ? ({ row, column, $index }: any) =>
+                  item.render?.({
+                    row,
+                    column,
+                    index: $index
+                  })
+              : undefined) ??
+            (this.$scopedSlots[item.slotName]
+              ? ({ row, column, $index }: any) =>
+                  this.$scopedSlots[item.slotName]?.({
+                    row,
+                    column,
+                    index: $index
+                  })
+              : undefined),
           header: this.$scopedSlots[`${item.prop}Header`]
             ? ({ column, $index }: any) =>
                 this.$scopedSlots[`${item.prop}Header`]?.({
@@ -345,7 +347,7 @@ export default class Table extends Vue {
 
         return Array.isArray(item.table) && item.table.length > 0 ? (
           <el-table-column
-            key={tableIndex}
+            key={`${item.props ?? ''}-${tableIndex}`}
             {...{ attrs: item }}
             scopedSlots={columnSlots}
           >
@@ -353,7 +355,7 @@ export default class Table extends Vue {
           </el-table-column>
         ) : (
           <el-table-column
-            key={tableIndex}
+            key={`${item.props ?? ''}-${tableIndex}`}
             {...{
               attrs: {
                 ...item,
@@ -370,12 +372,18 @@ export default class Table extends Vue {
   render() {
     return (
       <div class={!this.noCard ? 'el-card is-always-shadow' : ''}>
+        {this.$scopedSlots.TABLE_CARD_HEADER?.(null) ??
+          this.$slots.TABLE_CARD_HEADER}
         <el-table
           ref="table"
+          onCellMouseEnter={this.handlePopover}
+          onCellMouseLeave={this.handlePopover}
           {...{ attrs: this.tableProps, on: this.tableEvents }}
         >
           {this.renderTableColumn(this.tableColumn)}
-          <template slot="append">{this.$slots.append}</template>
+          <template slot="append">
+            {this.$scopedSlots.append?.(null) ?? this.$slots.append}
+          </template>
         </el-table>
         {this.showPagination &&
         this.tableProps.data &&
@@ -389,21 +397,23 @@ export default class Table extends Vue {
                   ['current-change']: this.handleCurrentChange
                 }
               }}
+              small
               current-page={this.currentPageProp}
+              layout={this.paginationLayout}
               page-size={this.pageSizeProp}
               page-sizes={[10, 30, 50, 100]}
-              layout="total, sizes, prev, pager, next, jumper"
               total={this.total}
             />
-            {this.$slots.paginationAppend}
+            {this.$scopedSlots.paginationAppend?.(null) ??
+              this.$slots.paginationAppend}
           </div>
         ) : null}
         <el-tooltip
-          ref="popover"
+          content={this.popoverContent}
           effect="light"
           placement="top"
           popper-class="fnb-table__popper-class el-popover el-popper el-popover--plain"
-          content={this.popoverContent}
+          ref="popover"
         />
       </div>
     )
@@ -414,18 +424,23 @@ export default class Table extends Vue {
 <style lang="scss" scoped>
 ::v-deep {
   .el-table {
+    font-size: 12px;
     .cell {
-      line-height: 22px;
+      line-height: 1.25;
     }
   }
   .cell-class-name {
     padding: 0;
-    height: 48px;
+    height: 44px;
 
     button[type='button'].el-button.el-button--text {
       padding: 0;
       line-height: 22px;
     }
+  }
+  .header-cell-class-name {
+    @extend .cell-class-name;
+    background-color: #f5f7fa;
   }
   .tow-line > .cell {
     overflow: hidden;
@@ -434,9 +449,32 @@ export default class Table extends Vue {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
+
+  .is-group.has-gutter {
+    .gutter {
+      width: 10px !important;
+    }
+  }
+
+  .el-table__body-wrapper {
+    &::-webkit-scrollbar-track-piece {
+      background: #f4f4f5;
+    }
+
+    &::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #dcdfe6;
+      border-radius: 5px;
+    }
+  }
 }
 
 .pagination-wrapper {
+  padding: 0 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -445,8 +483,15 @@ export default class Table extends Vue {
 .pagination {
   display: flex;
   align-items: center;
-  padding: 0 20px;
-  height: 80px;
+  height: 48px;
+
+  ::v-deep {
+    .el-input--mini .el-input__inner {
+      font-size: 12px;
+      height: 22px;
+      line-height: 22px;
+    }
+  }
 }
 </style>
 <style lang="scss">
@@ -468,7 +513,7 @@ export default class Table extends Vue {
     color: #606266;
     line-height: 1.4;
     text-align: justify;
-    font-size: 14px;
+    font-size: 12px;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     word-break: break-all;
   }

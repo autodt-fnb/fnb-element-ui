@@ -13,6 +13,13 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({ components: {}, name: 'FnbScrollContainer' })
 export default class ScrollContainer extends Vue {
+  /*
+   * @Author: 陈超
+   * @Date: 2021-02-21 00:02:16
+   * @Last Modified by:   陈超
+   * @Last Modified time: 2021-02-21 00:02:16
+   */
+
   /** 滚动区域高度 */
   @Prop({ type: Number, default: 0 }) readonly height!: number
 

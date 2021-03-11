@@ -1,7 +1,15 @@
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-21 00:04:09
+ * @Last Modified by: 陈超
+ * @Last Modified time: 2021-03-09 20:23:33
+ */
 import Vue from 'vue'
 
 import './styles/common.scss'
 import './styles/reset-element-ui.scss'
+
+import Clipboard from './directives/clipboard'
 
 import Table from '~/table/index'
 import SelectGoods from '~/select-goods'
@@ -13,7 +21,11 @@ import SearchContainer from '~/search-container'
 import ScrollConatiner from '~/scroll-container'
 import AmountInput from '~/amount-input'
 import Upload from '~/upload'
-import Clipboard from './directives/clipboard'
+import Form from '~/form'
+import FormItem from '~/form-item'
+import { FormItemType } from '~/form/src/item-content'
+import SearchForm from '~/search-form'
+import RemoteTable from '~/remote-table'
 
 const components = [
   Table,
@@ -25,7 +37,11 @@ const components = [
   SearchContainer,
   ScrollConatiner,
   AmountInput,
-  Upload
+  Upload,
+  Form,
+  FormItem,
+  SearchForm,
+  RemoteTable
 ]
 
 const directives = [Clipboard]
@@ -53,5 +69,10 @@ export default {
   SearchContainer,
   ScrollConatiner,
   AmountInput,
-  Upload
+  Upload,
+  Form,
+  FormItem,
+  FormItemType,
+  SearchForm,
+  RemoteTable
 }

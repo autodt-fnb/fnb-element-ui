@@ -1,4 +1,11 @@
 <script lang="tsx">
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-20 23:53:56
+ * @Last Modified by:   陈超
+ * @Last Modified time: 2021-02-20 23:53:56
+ */
+
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({ name: 'FnbAppContainer', inheritAttrs: false })
@@ -46,7 +53,7 @@ export default class AppContainer extends Vue {
 <style lang="scss" scoped>
 .app-container {
   height: 100%;
-  padding: 20px;
+  padding: 10px;
   box-sizing: border-box;
 }
 </style>

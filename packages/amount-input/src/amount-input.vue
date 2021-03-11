@@ -19,6 +19,12 @@
 </template>
 
 <script lang="ts">
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-20 23:54:11
+ * @Last Modified by: 陈超
+ * @Last Modified time: 2021-02-20 23:55:29
+ */
 import { Vue, Component, Prop, Ref } from 'vue-property-decorator'
 import { ElInput } from 'element-ui/types/input'
 
@@ -51,7 +57,7 @@ export default class main extends Vue {
   @Ref('input') readonly inputRef!: ElInput
 
   /** 去除 input,change 事件 */
-  private get events() {
+  get events() {
     const es = { ...this.$listeners }
     Reflect.deleteProperty(es, 'input')
     Reflect.deleteProperty(es, 'change')
@@ -59,7 +65,7 @@ export default class main extends Vue {
   }
 
   /** input输入事件 */
-  private emitInput(val: string) {
+  emitInput(val: string) {
     val = val ?? ''
     const value = val.toString().match(/^\d*(\.?\d{0,2})/g)?.[0] ?? ''
     let amount: string | number = parseFloat(value)
@@ -78,7 +84,7 @@ export default class main extends Vue {
   }
 
   /** change事件 */
-  private emitChange(val: string) {
+  emitChange(val: string) {
     this.$emit('input', val === '' ? '' : parseFloat(val))
     this.$emit('change', val === '' ? '' : parseFloat(val))
   }

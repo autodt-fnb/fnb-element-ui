@@ -29,6 +29,13 @@
 </template>
 
 <script lang="ts">
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-20 23:56:18
+ * @Last Modified by: 陈超
+ * @Last Modified time: 2021-02-20 23:56:41
+ */
+
 import { Vue, Component, Prop, Model, PropSync } from 'vue-property-decorator'
 import dayjs, { Dayjs, OpUnitType } from 'dayjs'
 import { BtnType } from '../../../types/date-range'
@@ -46,7 +53,6 @@ const btnTypeMap: { [i in BtnType]: number } = {
 }
 
 /** 格式化日期 */
-
 @Component({ name: 'FnbDateRange', components: {} })
 export default class DateRange extends Vue {
   @Model('change', { type: Array, default: () => [] }) value!: string[]

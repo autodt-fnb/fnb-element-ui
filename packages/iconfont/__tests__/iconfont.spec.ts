@@ -1,5 +1,11 @@
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-20 23:59:05
+ * @Last Modified by:   陈超
+ * @Last Modified time: 2021-02-20 23:59:05
+ */
 import { mount } from '@vue/test-utils'
-import Iconfont from '../src/main'
+import Iconfont from '../src/iconfont'
 
 describe('Iconfont Component', () => {
   it('name', () => {

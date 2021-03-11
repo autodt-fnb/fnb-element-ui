@@ -54,6 +54,25 @@ export interface FnbTableColumn<R = object> {
   /** Function that formats content */
   formatter?: (row: R, column: TableColumn) => any
 
+  /**
+   * 自定义渲染内容，代替slot 插入内容，必须要使用箭头函数的写法
+   *
+   * @example
+   * ```ts
+   * {
+   *   prop: 'example',
+   *   render: ({ row, column, index }) => {
+   *     return <div>自定义</div>
+   *   }
+   * }
+   * ```
+   */
+  render?: (data: {
+    row: R
+    column: TableColumn
+    index: number
+  }) => VNode | string | number | null
+
   /** Whether to hide extra content and show them in a tooltip when hovering on the cell */
   showOverflowTooltip?: boolean
 
@@ -107,6 +126,9 @@ export declare class FnbTable extends ElTable {
    */
   showPagination: boolean
 
+  /** 是否自动最大高度 */
+  autoMaxHeight: boolean
+
   /**
    * 每页显示数
    */
@@ -128,4 +150,7 @@ export declare class FnbTable extends ElTable {
   noCard: boolean
 
   clearFilter(columnKey?: string[]): void
+
+  /** 自动高度调用事件 */
+  autoMaxHeightEvent(): void
 }
