@@ -1,6 +1,6 @@
 <script lang="tsx">
 import { ElTree } from 'fnb-element-ui/node_modules/element-ui/types/tree'
-import { FnbTableColumn } from 'fnb-element-ui/types/table'
+import { FnbTable, FnbTableColumn } from 'fnb-element-ui/types/table'
 import { Vue, Component, Prop, Watch, Ref } from 'vue-property-decorator'
 import Table from '~/table'
 import TableHeader from './table-header.vue'
@@ -60,6 +60,9 @@ export default class RemoteTable extends Vue {
   /** 排序key值 */
   sortKeys: string[] = []
 
+  /** 已选择项个数 */
+  selectionSize = 0
+
   get tableList() {
     return sortList(
       ((this.$attrs as any).table as FnbTableColumn[]).map(v => ({
@@ -72,7 +75,7 @@ export default class RemoteTable extends Vue {
 
   @Ref('dropdownTree') readonly dropdownTreeRef!: ElTree<any, any>
 
-  @Ref('table') readonly tableRef!: any
+  @Ref('table') readonly tableRef!: FnbTable
 
   @Watch('params')
   watchParams() {
@@ -85,22 +88,77 @@ export default class RemoteTable extends Vue {
   }
 
   async getList() {
-    try {
-      this.listLoading = true
-      const { data, total } = await this.fetchApi({
-        [this.pageProp.pageSize]: this.pageSize,
-        [this.pageProp.pageNum]: this.pageNum,
-        ...this.params
-      })
-      this.list =
-        (this.dataProp.records ? data[this.dataProp.records] : data) ?? []
-      this.total =
-        (this.dataProp.total ? data[this.dataProp.total] : total) ?? 0
-    } catch (error) {
-      console.log(error)
-    } finally {
-      this.listLoading = false
+    if (typeof this.fetchApi === 'function') {
+      try {
+        this.listLoading = true
+        const { data, total } = await this.fetchApi({
+          [this.pageProp.pageSize]: this.pageSize,
+          [this.pageProp.pageNum]: this.pageNum,
+          ...this.params
+        })
+        this.list =
+          (this.dataProp.records ? data[this.dataProp.records] : data) ?? []
+        this.total =
+          (this.dataProp.total ? data[this.dataProp.total] : total) ?? 0
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.listLoading = false
+      }
     }
+  }
+
+  handleSelectionChange(list: any[] = []) {
+    this.selectionSize = list.length
+  }
+
+  /** 更新最大高度 */
+  updateMaxHeight() {
+    this.tableRef.updateMaxHeight()
+  }
+  /** element-ui table method clearSelection */
+  clearSelection() {
+    this.tableRef.clearSelection()
+  }
+
+  /** element-ui table method toggleRowSelection */
+  toggleRowSelection(row: object, selected?: boolean) {
+    this.tableRef.toggleRowSelection(row, selected)
+  }
+
+  /** element-ui table method toggleAllSelection */
+  toggleAllSelection() {
+    this.tableRef.toggleAllSelection()
+  }
+
+  /** element-ui table method toggleRowExpansion */
+  toggleRowExpansion(row: object, expanded?: boolean) {
+    this.tableRef.toggleRowExpansion(row, expanded)
+  }
+
+  /** element-ui table method setCurrentRow */
+  setCurrentRow(row?: object) {
+    this.tableRef.setCurrentRow(row)
+  }
+
+  /** element-ui table method clearSort */
+  clearSort() {
+    this.tableRef.clearSort()
+  }
+
+  /** element-ui table method clearFilter */
+  clearFilter(columnKey?: string[]) {
+    this.tableRef.clearFilter(columnKey)
+  }
+
+  /** element-ui table method doLayout */
+  doLayout() {
+    this.tableRef.doLayout()
+  }
+
+  /** element-ui table method sort */
+  sort(prop: string, order: string) {
+    this.tableRef.sort(prop, order)
   }
 
   render() {
@@ -109,9 +167,12 @@ export default class RemoteTable extends Vue {
         autoMaxHeight
         currentPage={this.pageNum}
         data={this.list}
+        on-selection-change={this.handleSelectionChange}
         pageSize={this.pageSize}
         paginationLayout="sizes, prev, pager, next, jumper"
         ref="table"
+        table={this.tableList}
+        total={this.total}
         v-loading={this.listLoading}
         {...{
           attrs: { ...this.$attrs },
@@ -126,21 +187,20 @@ export default class RemoteTable extends Vue {
         scopedSlots={{
           ...this.$scopedSlots
         }}
-        table={this.tableList}
-        total={this.total}
       >
         <TableHeader
           checkedKeys={this.checkedKeys}
+          on-clear-selection={() => this.$emit('clear-selection')}
           {...{
             on: {
-              'update:checkedKeys': (val: string[]) => {
-                this.checkedKeys = val
-              },
-              'update:sortKeys': (val: string[]) => {
-                this.sortKeys = val
-              }
+              'update:checkedKeys': (val: string[]) => (this.checkedKeys = val),
+              'update:sortKeys': (val: string[]) => (this.sortKeys = val)
             }
           }}
+          scopedSlots={{
+            headerActions: this.$scopedSlots.headerActions
+          }}
+          selectionSize={this.selectionSize}
           slot="TABLE_CARD_HEADER"
           sortKeys={this.sortKeys}
           storageSortKey={this.storageSortKey}

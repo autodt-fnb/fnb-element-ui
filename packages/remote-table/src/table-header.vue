@@ -13,6 +13,7 @@ import {
 } from 'fnb-element-ui/node_modules/element-ui/types/tree'
 import { FnbTableColumn } from 'fnb-element-ui/types/table'
 import { sortList } from './utils'
+
 type Tree = ElTree<string, FnbTableColumn>
 type TreeNode = ElTreeNode<string, FnbTableColumn>
 
@@ -21,6 +22,8 @@ export default class TableHeadera extends Vue {
   @Prop(Number) readonly total!: number
   @Prop(Array) readonly table!: FnbTableColumn[]
   @Prop(String) readonly storageSortKey!: string
+  /** 已选择项的个数 */
+  @Prop(Number) readonly selectionSize!: number
 
   @PropSync('sortKeys', Array) sortKeysComputed!: string[]
 
@@ -41,6 +44,11 @@ export default class TableHeadera extends Vue {
     )
   }
 
+  /** 是否有选择项 */
+  get hasSelection() {
+    return this.table.findIndex(v => v.type === 'selection') >= 0
+  }
+
   @Ref('dropdownTree') readonly dropdownTreeRef!: Tree
 
   allChecked = false
@@ -59,6 +67,7 @@ export default class TableHeadera extends Vue {
         this.allChecked = true
         this.indeterminate = false
       } else {
+        this.allChecked = false
         this.indeterminate = true
         console.log('indeterminate: ', this.indeterminate)
       }
@@ -70,6 +79,7 @@ export default class TableHeadera extends Vue {
     const getKeys = [...(keys.length === 0 ? this.defaultCheckedKeys : keys)]
     this.checkedKeysComputed = getKeys
     this.sortKeysComputed = getKeys
+    console.log(this.$scopedSlots)
   }
 
   handleCheckChange() {
@@ -107,6 +117,11 @@ export default class TableHeadera extends Vue {
     )
   }
 
+  handleClearSelection() {
+    ;(this.$parent as any).tableRef.clearSelection()
+    this.$emit('clear-selection')
+  }
+
   render() {
     return (
       <el-row
@@ -117,11 +132,29 @@ export default class TableHeadera extends Vue {
       >
         <el-alert show-icon closable={false} type="info">
           <div slot="title">
-            总共 <span class="total">{this.total}</span> 条数据
+            <span>
+              总共 <i class="total">{this.total}</i> 条数据
+            </span>
+            {this.hasSelection && (
+              <span>
+                ，已选择 <i class="total">{this.selectionSize}</i> 项
+                {this.selectionSize > 0 && (
+                  <el-button
+                    class="clear-btn"
+                    size="small"
+                    type="text"
+                    onClick={this.handleClearSelection}
+                  >
+                    清空
+                  </el-button>
+                )}
+              </span>
+            )}
           </div>
         </el-alert>
         <el-row align="center" type="flex">
-          <el-dropdown trigger="click">
+          {this.$scopedSlots.headerActions?.(null)}
+          <el-dropdown style={{ marginLeft: '10px' }} trigger="click">
             <el-button icon="el-icon-s-operation" type="text">
               列筛选排序
             </el-button>
@@ -189,8 +222,17 @@ export default class TableHeadera extends Vue {
     .el-alert__icon {
       color: #409eff;
     }
+    .el-alert__content {
+      padding-right: 0;
+    }
   }
 }
+
+.clear-btn {
+  padding: 0;
+  margin-left: 7px;
+}
+
 .dropdown-checkbox {
   display: flex;
   align-items: center;

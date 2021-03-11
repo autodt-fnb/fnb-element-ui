@@ -11,7 +11,7 @@
  * @Author: 陈超
  * @Date: 2021-03-09 17:52:30
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-10 15:31:38
+ * @Last Modified time: 2021-03-11 16:24:16
  */
 import { FnbForm } from 'fnb-element-ui/types/form'
 import { FormItemProps } from 'fnb-element-ui/types/form-item'
@@ -29,6 +29,9 @@ import SearchContainer from '~/search-container'
 })
 export default class SearchForm extends Vue {
   @Prop({ type: Array, default: () => [] }) readonly listItems!: FormItemProps[]
+
+  /** 是否是默认展开 */
+  @Prop({ type: Boolean, default: true }) defaultExpand!: boolean
 
   get list(): FormItemProps[] {
     return [
@@ -82,6 +85,10 @@ export default class SearchForm extends Vue {
 
   @Ref('form') readonly formRef!: FnbForm
 
+  created() {
+    this.visible = this.defaultExpand
+  }
+
   handleVisible() {
     this.visible = !this.visible
     const table = this.$parent?.$children.find(
@@ -90,10 +97,11 @@ export default class SearchForm extends Vue {
         v.$options.name === 'FnbRemoteTable'
     ) as FnbTable
     if (table.$options.name === 'FnbTable') {
-      table?.autoMaxHeightEvent()
+      table?.updateMaxHeight()
     } else {
-      ;((table as any)?.tableRef as FnbTable)?.autoMaxHeightEvent()
+      table?.updateMaxHeight()
     }
+    this.$emit('expand', this.visible)
   }
 }
 </script>

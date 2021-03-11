@@ -3,7 +3,7 @@
  * @Author: 陈超
  * @Date: 2021-02-21 00:03:27
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-10 16:36:34
+ * @Last Modified time: 2021-03-11 16:24:05
  */
 import {
   Vue,
@@ -177,14 +177,14 @@ export default class Table extends Vue {
 
   mounted() {
     if (this.autoMaxHeight) {
-      window.addEventListener('resize', this.autoMaxHeightEvent)
-      this.autoMaxHeightEvent()
+      window.addEventListener('resize', this.updateMaxHeight)
+      this.updateMaxHeight()
     }
   }
 
-  destroyed() {
+  beforeDestroy() {
     if (this.autoMaxHeight) {
-      window.removeEventListener('resize', this.autoMaxHeightEvent)
+      window.removeEventListener('resize', this.updateMaxHeight)
     }
   }
 
@@ -239,7 +239,7 @@ export default class Table extends Vue {
   }
 
   /** 自动高度 */
-  autoMaxHeightEvent() {
+  updateMaxHeight() {
     this.$nextTick(() => {
       /** 分页容器的高度 */
       const paginationHeight =
@@ -248,7 +248,7 @@ export default class Table extends Vue {
 
       this.maxHeight =
         window.innerHeight -
-        (this.$el as HTMLElement).getBoundingClientRect().top -
+        (this.tableRef.$el as HTMLElement).getBoundingClientRect().top -
         10 -
         (this.showPagination ? paginationHeight : 0) -
         (this.noCard ? 0 : 2)

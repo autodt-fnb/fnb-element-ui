@@ -14,7 +14,13 @@
         :label="item.label"
       >
         <template v-slot="{ row }">
-          <template v-if="item.prop === 'desc' || item.prop === 'optional'">
+          <template
+            v-if="
+              item.prop === 'desc' ||
+              item.prop === 'optional' ||
+              item.prop === 'default'
+            "
+          >
             <span class="word" v-html="row[item.prop] || '—'"></span>
           </template>
           <template v-else>

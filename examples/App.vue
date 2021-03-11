@@ -19,6 +19,10 @@
         <template v-slot:nameHeader> {{ 'row.name' }} </template>
         <template v-slot:append> <div>656565656</div> </template>
         <template v-slot:paginationAppend> <div>656565656</div> </template>
+        <template #headerActions>
+          <el-button>545headerActions</el-button>
+          <el-button>545headerActions</el-button>
+        </template>
       </FnbRemoteTable>
       <FnbUpload
         accept="image/png,image/jpeg"

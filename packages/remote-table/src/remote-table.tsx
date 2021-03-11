@@ -60,6 +60,26 @@ const RemoteTable = defineComponent({
         state.sortKeys
       )
     )
+
+    const getList = async () => {
+      try {
+        state.listLoading = true
+        const { data, total } = await props.fetchApi({
+          [props.pageProp!.pageSize]: state.pageSize,
+          [props.pageProp!.pageNum]: state.pageNum,
+          ...props.params
+        })
+        state.list =
+          (props.dataProp!.records ? data[props.dataProp!.records] : data) ?? []
+        state.total =
+          (props.dataProp!.total ? data[props.dataProp!.total] : total) ?? 0
+      } catch (error) {
+        console.log(error)
+      } finally {
+        state.listLoading = false
+      }
+    }
+
     watch(
       () => props.params,
       () => {
@@ -69,24 +89,6 @@ const RemoteTable = defineComponent({
       { deep: true, immediate: true }
     )
 
-    const getList = async () => {
-      try {
-        state.listLoading = true
-        const { data, total } = await props.fetchApi({
-          [props.pageProp.pageSize]: state.pageSize,
-          [props.pageProp.pageNum]: state.pageNum,
-          ...props.params
-        })
-        state.list =
-          (props.dataProp.records ? data[props.dataProp.records] : data) ?? []
-        state.total =
-          (props.dataProp.total ? data[props.dataProp.total] : total) ?? 0
-      } catch (error) {
-        console.log(error)
-      } finally {
-        state.listLoading = false
-      }
-    }
     return () => (
       <fnb-table
         autoMaxHeight

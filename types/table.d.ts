@@ -152,5 +152,5 @@ export declare class FnbTable extends ElTable {
   clearFilter(columnKey?: string[]): void
 
   /** 自动高度调用事件 */
-  autoMaxHeightEvent(): void
+  updateMaxHeight(): void
 }

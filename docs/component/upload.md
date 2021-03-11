@@ -10,7 +10,7 @@ Vue.use(FnbElementUI, { UPLOAD_URL: 'http://xxxxx' })
 <common-democode title="基本用法">
   <upload-demo1></upload-demo1>
   <highlight-code slot="codeText" lang="vue">
-<<< @/docs/.vuepress/components/upload/demo1.vue
+<<< @/.vuepress/components/upload/demo1.vue
   </highlight-code>
 </common-democode>
 

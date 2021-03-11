@@ -2,9 +2,10 @@
  * @Author: 陈超
  * @Date: 2021-02-21 00:04:09
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-09 20:23:33
+ * @Last Modified time: 2021-03-11 17:11:26
  */
 import Vue from 'vue'
+import VueCompositionApi from '@vue/composition-api'
 
 import './styles/common.scss'
 import './styles/reset-element-ui.scss'
@@ -56,6 +57,8 @@ const install = function (vue: typeof Vue, options: Record<string, unknown>) {
   directives.forEach(directive => {
     vue.directive(directive.name, directive)
   })
+
+  vue.use(VueCompositionApi)
 }
 
 export default {

@@ -18,7 +18,10 @@ module.exports = {
   ],
   themeConfig: {
     logo: '/logo.png',
-    sidebarDepth: 0,
+    sidebarDepth: 2,
+    nav: [
+      { text: 'Github', link: 'https://github.com/autodt-fnb/fnb-element-ui' }
+    ],
     sidebar: [
       '/',
       '/quickstart',
@@ -34,6 +37,37 @@ module.exports = {
           ['/component/layout', '布局容器'],
           ['/component/select-goods', 'SelectGoods 商品搜索选择'],
           ['/component/table', 'Table 表格'],
+          {
+            title: 'Form 表单',
+            path: '/component/form/index',
+            collapsable: true,
+            children: [
+              [
+                '/component/form/render-form-content',
+                'RENDER_FORM_CONTENT 自定义内容'
+              ],
+              ['/component/form/input', 'INPUT 输入框'],
+              [
+                '/component/form/input-number',
+                'INPUT_NUMBER 数字输入框/计数器'
+              ],
+              [
+                '/component/form/autocomplete',
+                'AUTOCOMPLETE 带输入建议的输入框'
+              ],
+              ['/component/form/select', 'SELECT 选择框'],
+              ['/component/form/date-picker', 'DATE_PICKER 日期选择'],
+              ['/component/form/time-picker', 'TIME_PICKER 任意时间选择'],
+              ['/component/form/time-select', 'TIME_SELECT 固定时间选择'],
+              ['/component/form/switch', 'SWITCH 开关'],
+              ['/component/form/checkbox', 'CHECKBOX 多选框'],
+              ['/component/form/checkbox-group', 'CHECKBOX_GROUP 多选框组'],
+              ['/component/form/radio', 'RADIO 单选框'],
+              ['/component/form/radio-group', 'RADIO_GROUP 单选框组'],
+              ['/component/form/cascader', 'CASCADER 级联选择'],
+              ['/component/form/upload', 'UPLOAD 媒体上传']
+            ]
+          },
           ['/component/iconfont', 'Iconfont 字体图标'],
           ['/component/plate-number', 'PlateNumber 车牌号'],
           ['/component/amount-input', 'AmountInput 金额输入框'],

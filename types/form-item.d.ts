@@ -67,12 +67,6 @@ export interface ElFormItemProps {
   /** Whether to display the error message inline with the form item */
   inlineMessage?: boolean
 
-  /** Reset current field and remove validation result */
-  resetField?: () => void
-
-  /** Remove validation status of the field */
-  clearValidate?: () => void
-
   /** slot label */
   renderItemLabel?: () => VNode
 

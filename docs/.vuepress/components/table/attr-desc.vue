@@ -16,6 +16,8 @@
 
     <common-attribute
       title="Table Methods"
+      :data="methodsData"
+      type="methods"
       :description="`element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-methods' target='_blank' rel='noopener noreferrer'>Table Methods</a> 全部可用。`"
     ></common-attribute>
 
@@ -48,7 +50,8 @@ export default {
       tableAttrData,
       eventsDate,
       slotData,
-      cloumnSlotdata
+      cloumnSlotdata,
+      methodsData
     }
   },
   methods: {}
@@ -113,6 +116,12 @@ const eventsDate = [
 /** table Attributes data */
 const tableAttrData = [
   {
+    name: 'render',
+    desc:
+      'render 函数，自定义列的内容，参数为 { row, column, index }，返回一个 JSX | VNode | number | string',
+    type: 'function'
+  },
+  {
     name: 'slot',
     desc:
       '该列是否是slot插槽（自定义列的内容，参数为 { row, column, index }），插槽名 <code>name</code> 是 <code>slot</code> 字段值（当 <code>slot</code> 不为 <code>true</code>  时）或者 <code>prop</code> 字段值',
@@ -142,6 +151,14 @@ const slotData = [
   {
     name: 'paginationAppend',
     desc: '插入至分页组件同一行，右侧内容'
+  }
+]
+
+const methodsData = [
+  {
+    name: 'updateMaxHeight',
+    desc:
+      '更新表格的最大高度，当表格顶部区域的高度变化时，需要同步调整表格的最大高度，可以调用此方法，需要 <code>auto-max-height</code> 参数为 <code>true</code>'
   }
 ]
 
