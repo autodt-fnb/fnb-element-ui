@@ -193,10 +193,7 @@ export default class RemoteTable extends Vue {
           on-clear-selection={() => this.$emit('clear-selection')}
           {...{
             on: {
-              'update:checkedKeys': (val: string[]) => {
-                console.log('checkedKeys: ', val)
-                this.checkedKeys = val
-              },
+              'update:checkedKeys': (val: string[]) => (this.checkedKeys = val),
               'update:sortKeys': (val: string[]) => (this.sortKeys = val)
             }
           }}

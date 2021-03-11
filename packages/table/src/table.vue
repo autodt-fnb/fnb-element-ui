@@ -3,7 +3,7 @@
  * @Author: 陈超
  * @Date: 2021-02-21 00:03:27
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-11 16:24:05
+ * @Last Modified time: 2021-03-12 00:19:03
  */
 import {
   Vue,
@@ -119,7 +119,6 @@ export default class Table extends Vue {
 
   /** tableColumn 组件的属性 */
   get tableColumn() {
-    console.log('tableColumn', this.table)
     if (!Array.isArray(this.table)) {
       return []
     }
@@ -347,7 +346,7 @@ export default class Table extends Vue {
 
         return Array.isArray(item.table) && item.table.length > 0 ? (
           <el-table-column
-            key={`${item.props ?? ''}-${tableIndex}`}
+            key={`${item.prop ?? ''}-${tableIndex}`}
             {...{ attrs: item }}
             scopedSlots={columnSlots}
           >
@@ -355,7 +354,7 @@ export default class Table extends Vue {
           </el-table-column>
         ) : (
           <el-table-column
-            key={`${item.props ?? ''}-${tableIndex}`}
+            key={`${item.prop ?? ''}-${tableIndex}`}
             {...{
               attrs: {
                 ...item,

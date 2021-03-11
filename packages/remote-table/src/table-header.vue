@@ -69,7 +69,6 @@ export default class TableHeadera extends Vue {
       } else {
         this.allChecked = false
         this.indeterminate = true
-        console.log('indeterminate: ', this.indeterminate)
       }
     })
   }
