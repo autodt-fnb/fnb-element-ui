@@ -169,9 +169,6 @@ export default class RemoteTable extends Vue {
         data={this.list}
         on-selection-change={this.handleSelectionChange}
         pageSize={this.pageSize}
-        paginationLayout="sizes, prev, pager, next, jumper"
-        ref="table"
-        table={this.tableList}
         total={this.total}
         v-loading={this.listLoading}
         {...{
@@ -184,16 +181,22 @@ export default class RemoteTable extends Vue {
             ...this.$listeners
           }
         }}
+        paginationLayout="sizes, prev, pager, next, jumper"
+        ref="table"
         scopedSlots={{
           ...this.$scopedSlots
         }}
+        table={this.tableList}
       >
         <TableHeader
           checkedKeys={this.checkedKeys}
           on-clear-selection={() => this.$emit('clear-selection')}
           {...{
             on: {
-              'update:checkedKeys': (val: string[]) => (this.checkedKeys = val),
+              'update:checkedKeys': (val: string[]) => {
+                console.log('checkedKeys: ', val)
+                this.checkedKeys = val
+              },
               'update:sortKeys': (val: string[]) => (this.sortKeys = val)
             }
           }}
