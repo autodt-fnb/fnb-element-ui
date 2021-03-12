@@ -5,7 +5,7 @@ import {
   reactive,
   watch
 } from '@vue/composition-api'
-import { FnbTableColumn } from 'fnb-element-ui/types/table'
+import { FnbTableColumn } from '@autodt/fnb-element-ui/types/table'
 import { sortList } from './utils'
 
 // import styles from './src.module.scss'

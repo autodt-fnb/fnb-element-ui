@@ -5,12 +5,12 @@
  * @Last Modified by: 陈超
  * @Last Modified time: 2021-03-09 22:25:47
  */
-import { FormRuleItem } from 'fnb-element-ui/types/form'
+import { FormRuleItem } from '@autodt/fnb-element-ui/types/form'
 import {
   ElFormItemProps,
   FormItemProps,
   InputPorps
-} from 'fnb-element-ui/types/form-item'
+} from '@autodt/fnb-element-ui/types/form-item'
 import { camelCase, isArray, mapKeys, pick, trimStart } from 'lodash-es'
 import {
   Vue,

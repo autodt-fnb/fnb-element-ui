@@ -21,7 +21,7 @@ import {
   RadioGroupProps,
   CascaderProps,
   UploadProps
-} from 'fnb-element-ui/types/form-item'
+} from '@autodt/fnb-element-ui/types/form-item'
 import { VNode } from 'vue/types/umd'
 import {
   camelCase,
@@ -31,7 +31,7 @@ import {
   pickBy,
   trimStart
 } from 'lodash-es'
-import { pickerOptions } from 'fnb-element-ui/src/utils/date-util'
+import { pickerOptions } from '@autodt/fnb-element-ui/src/utils/date-util'
 import dayjs from 'dayjs'
 
 export const elFormItemAttributes = [

@@ -13,9 +13,9 @@
  * @Last Modified by: 陈超
  * @Last Modified time: 2021-03-11 16:24:16
  */
-import { FnbForm } from 'fnb-element-ui/types/form'
-import { FormItemProps } from 'fnb-element-ui/types/form-item'
-import { FnbTable } from 'fnb-element-ui/types/table'
+import { FnbForm } from '@autodt/fnb-element-ui/types/form'
+import { FormItemProps } from '@autodt/fnb-element-ui/types/form-item'
+import { FnbTable } from '@autodt/fnb-element-ui/types/table'
 import { Vue, Component, Prop, Ref } from 'vue-property-decorator'
 import Form from '~/form'
 import FormItem from '~/form-item'

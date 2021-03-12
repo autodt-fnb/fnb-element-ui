@@ -1,6 +1,6 @@
 <script lang="tsx">
-import { ElTree } from 'fnb-element-ui/node_modules/element-ui/types/tree'
-import { FnbTable, FnbTableColumn } from 'fnb-element-ui/types/table'
+import { ElTree } from '@autodt/fnb-element-ui/node_modules/element-ui/types/tree'
+import { FnbTable, FnbTableColumn } from '@autodt/fnb-element-ui/types/table'
 import { Vue, Component, Prop, Watch, Ref } from 'vue-property-decorator'
 import Table from '~/table'
 import TableHeader from './table-header.vue'

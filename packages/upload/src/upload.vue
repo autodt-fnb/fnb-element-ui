@@ -79,7 +79,7 @@ import {
   Remove,
   Success,
   Preview
-} from 'fnb-element-ui/types/upload'
+} from '@autodt/fnb-element-ui/types/upload'
 
 @Component({ name: 'FnbUpload', components: {}, inheritAttrs: false })
 export default class Upload extends Vue {
