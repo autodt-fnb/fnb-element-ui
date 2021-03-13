@@ -2,7 +2,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:51:13
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-13 20:55:20
+ * @Last Modified time: 2021-03-13 21:45:28
  */
 import {
   AutocompletePorps,
@@ -95,7 +95,7 @@ const itemContent: {
     if (type === 'phone') {
       props.maxlength = 11
     }
-    attrs.placeholder ??= '请输入' + attrs.itemLabel
+    attrs.placeholder ??= '请输入' + (attrs.itemLabel ?? '')
     return (
       <el-input
         type={inputType}
@@ -125,7 +125,7 @@ const itemContent: {
   },
   [FormItemType.INPUT_NUMBER](this, attrs: InputNumberProps) {
     const { type, field, ...props } = attrs
-    props.placeholder ??= '请输入' + props.itemLabel
+    props.placeholder ??= '请输入' + (props.itemLabel ?? '')
     if (type === 'amount') {
       props.min ??= 0
       props.precision ??= 2
@@ -143,7 +143,7 @@ const itemContent: {
   [FormItemType.AUTOCOMPLETE](this, attrs: AutocompletePorps) {
     const { renderPrefix, renderSuffix, renderPrepend, renderAppend } = attrs
 
-    attrs.placeholder ??= '请输入' + attrs.itemLabel
+    attrs.placeholder ??= '请输入' + (attrs.itemLabel ?? '')
     return (
       <el-autocomplete
         {...wrapProps(attrs)}
@@ -167,7 +167,7 @@ const itemContent: {
       renderEmpty,
       ...props
     } = attrs
-    props.placeholder ??= '请选择' + attrs.itemLabel
+    props.placeholder ??= '请选择' + (attrs.itemLabel ?? '')
     let value = this.form[props.field!]
     if (props.multiple) {
       props.collapseTags ??= true
