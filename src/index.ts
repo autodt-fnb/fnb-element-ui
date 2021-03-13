@@ -2,7 +2,7 @@
  * @Author: 陈超
  * @Date: 2021-02-21 00:04:09
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-11 17:11:26
+ * @Last Modified time: 2021-03-13 20:57:45
  */
 import Vue from 'vue'
 import VueCompositionApi from '@vue/composition-api'
@@ -24,7 +24,7 @@ import AmountInput from '~/amount-input'
 import Upload from '~/upload'
 import Form from '~/form'
 import FormItem from '~/form-item'
-import { FormItemType } from '~/form/src/item-content'
+import { FormItemType } from './enum/form-item'
 import SearchForm from '~/search-form'
 import RemoteTable from '~/remote-table'
 

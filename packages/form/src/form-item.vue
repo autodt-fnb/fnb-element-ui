@@ -3,7 +3,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:49:41
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-09 22:25:47
+ * @Last Modified time: 2021-03-13 20:59:05
  */
 import { FormRuleItem } from '@autodt/fnb-element-ui/types/form'
 import {
@@ -19,9 +19,8 @@ import {
   Prop,
   InjectReactive
 } from 'vue-property-decorator'
-import itemContent, { FormItemType } from './item-content'
-
-import { elFormItemAttributes } from './item-content'
+import itemContent, { elFormItemAttributes } from './item-content'
+import { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
 
 @Component({ name: 'FnbFormItem', components: {}, inheritAttrs: false })
 export default class FormItem extends Vue {

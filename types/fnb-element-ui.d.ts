@@ -7,8 +7,10 @@ import { FnbPlateNumber } from './plate-number'
 import { FnbUpload } from './upload'
 import { FnbForm } from './form'
 import { FnbFormItem } from './form-item'
+import { FnbRemoteTable } from './remote-table'
+import { FnbSearchForm } from './search-form'
 
-export { FormItemType } from '../packages/form/src/item-content'
+export { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
 
 export function install(vue: typeof Vue): void
 
@@ -32,3 +34,9 @@ export class Form extends FnbForm {}
 
 /** FormItem 组件 */
 export class FormItem extends FnbFormItem {}
+
+/** RemoteTable 组件 */
+export class RemoteTable extends FnbRemoteTable {}
+
+/** 搜索 表单 */
+export class SearchForm extends FnbSearchForm {}

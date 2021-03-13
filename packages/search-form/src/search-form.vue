@@ -11,7 +11,7 @@
  * @Author: 陈超
  * @Date: 2021-03-09 17:52:30
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-11 16:24:16
+ * @Last Modified time: 2021-03-13 21:00:00
  */
 import { FnbForm } from '@autodt/fnb-element-ui/types/form'
 import { FormItemProps } from '@autodt/fnb-element-ui/types/form-item'
@@ -19,7 +19,7 @@ import { FnbTable } from '@autodt/fnb-element-ui/types/table'
 import { Vue, Component, Prop, Ref } from 'vue-property-decorator'
 import Form from '~/form'
 import FormItem from '~/form-item'
-import { FormItemType } from '~/form/src/item-content'
+import { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
 import SearchContainer from '~/search-container'
 
 @Component({
