@@ -95,9 +95,11 @@ export interface ItemCommon extends ElFormItemProps {
   style?: string | Record<string, string | number | undefined> | any[]
 }
 
-export interface RenderFormContentProps extends ItemCommon {
+export interface RenderFormContentProps extends Omit<ItemCommon, 'field'> {
   /** 表单控件类型 */
   formType: FormItemType.RENDER_FORM_CONTENT
+
+  field?: string | string[]
   /** 自定义内容 */
   render?: (form: unknown) => VNode
 }

@@ -11,7 +11,7 @@
  * @Author: 陈超
  * @Date: 2021-03-09 17:52:30
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-13 21:00:00
+ * @Last Modified time: 2021-03-15 14:20:54
  */
 import { FnbForm } from '@autodt/fnb-element-ui/types/form'
 import { FormItemProps } from '@autodt/fnb-element-ui/types/form-item'
@@ -21,6 +21,7 @@ import Form from '~/form'
 import FormItem from '~/form-item'
 import { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
 import SearchContainer from '~/search-container'
+import { isArray } from 'lodash-es'
 
 @Component({
   name: 'FnbSearchForm',
@@ -36,10 +37,12 @@ export default class SearchForm extends Vue {
   get list(): FormItemProps[] {
     return [
       ...this.listItems.map((item, index) => {
+        const props = { ...item }
+        ;(props as any).clearable ??= true
         if (index > 1) {
-          return { ...item, invisible: !this.visible }
+          return { ...props, invisible: !this.visible }
         } else {
-          return item
+          return props
         }
       }),
       {
@@ -56,19 +59,24 @@ export default class SearchForm extends Vue {
               </el-button>
               <el-button
                 onClick={() => {
+                  this.handleReset()
                   this.formRef.resetFields()
                   this.$emit('reset', form)
                 }}
               >
                 重置
               </el-button>
-              <el-button
-                icon={this.visible ? 'el-icon-arrow-up' : 'el-icon-arrow-down'}
-                type="text"
-                onClick={() => this.handleVisible()}
-              >
-                {this.visible ? '收起' : '展开'}
-              </el-button>
+              {this.listItems.length > 2 && (
+                <el-button
+                  icon={
+                    this.visible ? 'el-icon-arrow-up' : 'el-icon-arrow-down'
+                  }
+                  type="text"
+                  onClick={this.handleVisible}
+                >
+                  {this.visible ? '收起' : '展开'}
+                </el-button>
+              )}
             </el-row>
           )
         }
@@ -87,6 +95,12 @@ export default class SearchForm extends Vue {
 
   created() {
     this.visible = this.defaultExpand
+  }
+
+  handleReset() {
+    Object.keys(this.form).forEach(key => {
+      this.form[key] = isArray(this.form[key]) ? [] : undefined
+    })
   }
 
   handleVisible() {
@@ -115,7 +129,7 @@ export default class SearchForm extends Vue {
       }
 
       .el-form-item--small.el-form-item {
-        margin-bottom: 10;
+        margin-bottom: 10px;
       }
     }
   }
