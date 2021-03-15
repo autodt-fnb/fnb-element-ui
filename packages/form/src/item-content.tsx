@@ -2,7 +2,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:51:13
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-13 21:45:28
+ * @Last Modified time: 2021-03-14 19:19:48
  */
 import {
   AutocompletePorps,
@@ -95,7 +95,7 @@ const itemContent: {
     if (type === 'phone') {
       props.maxlength = 11
     }
-    attrs.placeholder ??= '请输入' + (attrs.itemLabel ?? '')
+    props.placeholder ??= '请输入' + (props.itemLabel ?? '')
     return (
       <el-input
         type={inputType}
@@ -167,7 +167,7 @@ const itemContent: {
       renderEmpty,
       ...props
     } = attrs
-    props.placeholder ??= '请选择' + (attrs.itemLabel ?? '')
+    props.placeholder ??= '请选择' + (props.itemLabel ?? '')
     let value = this.form[props.field!]
     if (props.multiple) {
       props.collapseTags ??= true

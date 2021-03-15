@@ -70,7 +70,7 @@
  * @Author: 陈超
  * @Date: 2021-02-21 00:03:50
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-03 14:58:50
+ * @Last Modified time: 2021-03-14 22:22:03
  */
 import { Vue, Component, Prop, Ref, Watch, Emit } from 'vue-property-decorator'
 import { ElUpload, ElUploadInternalFileDetail } from 'element-ui/types/upload'
@@ -232,7 +232,7 @@ export default class Upload extends Vue {
     overflow: hidden;
     width: 100%;
     height: 100%;
-    font-size: 24px;
+    font-size: 20px;
     color: #8c939d;
     cursor: pointer;
     box-sizing: border-box;
@@ -250,10 +250,16 @@ export default class Upload extends Vue {
       margin: 0 8px 8px 0;
     }
 
-    .el-upload-list--picture-card .el-upload-list__item {
+    .el-upload-list--picture-card {
       width: auto;
       height: auto;
-      vertical-align: top;
+      line-height: inherit;
+
+      .el-upload-list__item {
+        width: auto;
+        height: auto;
+        vertical-align: top;
+      }
     }
   }
 

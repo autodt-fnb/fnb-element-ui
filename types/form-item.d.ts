@@ -365,7 +365,7 @@ export interface RadioButtonProps extends GetCommonProps<ElRadioButton> {
 }
 
 export interface RadioGroupProps extends GetCommonProps<ElRadioGroup> {
-  formType: FormItemType.CHECKBOX_GROUP
+  formType: FormItemType.RADIO_GROUP
 
   /** 是否是 Radio-button */
   isRadioButton?: boolean
@@ -415,7 +415,7 @@ export interface CascaderProps<V = any, D = CascaderOption>
     )[]
   ) => void
 
-  /** 无匹配选项时的内容 */
+  /** 自定义内容 */
   render?: (e: { node: CascaderNode<V, D>; data: D[] }) => VNode
 
   /** 无匹配选项时的内容 */

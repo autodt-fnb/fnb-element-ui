@@ -3,7 +3,7 @@
  * @Author: 陈超
  * @Date: 2021-02-21 00:03:27
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-12 00:19:03
+ * @Last Modified time: 2021-03-14 17:54:20
  */
 import {
   Vue,
@@ -17,24 +17,7 @@ import { debounce } from 'throttle-debounce'
 import { FnbTable, FnbTableColumn } from '../../../types/table'
 import { ElTooltip } from 'element-ui/types/tooltip'
 import { VNode } from 'vue'
-
-const hyphenateRE = /([^-])([A-Z])/g
-/** 驼峰转短横线方法 */
-function camel2kebab(str: string) {
-  return str
-    .replace(hyphenateRE, '$1-$2')
-    .replace(hyphenateRE, '$1-$2')
-    .toLowerCase()
-}
-/** 短横线转驼峰方法 */
-function kebab2camel(str: string) {
-  return str
-    .split('-')
-    .map((v, i) =>
-      i ? v.toLowerCase().replace(/( |^)[a-z]/g, L => L.toUpperCase()) : v
-    )
-    .join('')
-}
+import { camelCase, kebabCase } from 'lodash-es'
 
 /** 格式化table字段 */
 function formatTable(table: FnbTableColumn[]) {
@@ -129,7 +112,7 @@ export default class Table extends Vue {
   get tableProps() {
     const props: Record<string, any> = {}
     for (const key in this.$attrs) {
-      props[kebab2camel(key)] = this.$attrs[key]
+      props[camelCase(key)] = this.$attrs[key]
     }
     // 纵向边框
     props.border = props.border ?? true
@@ -147,7 +130,7 @@ export default class Table extends Vue {
   get tableEvents() {
     const events: Record<string, Function | Function[]> = {}
     for (const key in this.$listeners) {
-      const name = camel2kebab(key)
+      const name = kebabCase(key)
       // 为了兼容 分页的current-change
       if (name === 'current-row-change') {
         events['current-change'] = this.$listeners[key]

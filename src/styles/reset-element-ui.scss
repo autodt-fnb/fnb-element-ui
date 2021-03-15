@@ -1,8 +1,8 @@
 /*
  * @Author: 陈超 
  * @Date: 2021-02-21 00:04:26 
- * @Last Modified by:   陈超 
- * @Last Modified time: 2021-02-21 00:04:26 
+ * @Last Modified by: 陈超
+ * @Last Modified time: 2021-03-14 22:44:13
  */
 .el-breadcrumb__inner,
 .el-breadcrumb__inner a {
@@ -29,6 +29,14 @@ label.el-form-item__label {
 
 // 时间范围选择器样式
 .el-form-item__content {
+  .el-input-number {
+    vertical-align: top;
+  }
+
+  .el-input__inner {
+    vertical-align: top;
+  }
+
   .el-date-editor--daterange {
     &.el-input__inner {
       width: 100%;

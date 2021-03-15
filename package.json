@@ -13,8 +13,6 @@
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "clean": "rimraf lib",
-    "docs:build": "yarn lib && vuepress build docs",
-    "docs:dev": "vuepress dev docs",
     "lib": "webpack --config build/webpack.common.js --stats-error-details true",
     "prerelease": "npm config set registry https://registry.npmjs.org/",
     "release": "yarn lib && npm publish --access public",

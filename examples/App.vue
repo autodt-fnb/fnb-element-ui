@@ -359,7 +359,7 @@ export default class App extends Vue {
         prop: 'date',
         minWidth: 500,
         render: () => {
-          return '9999993'
+          return <div>2365</div>
         }
       },
       {
