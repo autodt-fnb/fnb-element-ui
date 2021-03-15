@@ -85,12 +85,12 @@ const listItemsAttrData = [
   {
     name: 'prop',
     desc:
-      '表单域 value/v-model 字段，如想自定义字段，可用 field 属性，在使用 validate、resetFields 方法的情况下，该属性是必填的',
+      '表单域 value/v-model 字段，如想自定义表单数据对象字段名，可用 field 属性，在使用 validate、resetFields 方法的情况下，该属性是必填的',
     type: 'string'
   },
   {
     name: 'field',
-    desc: '表单域 value/v-model 字段，如字段名称不与 prop 相同，可自定义',
+    desc: '表单域 value/v-model 字段，如字段值与 prop 相同，可不填',
     type: 'string'
   },
   {

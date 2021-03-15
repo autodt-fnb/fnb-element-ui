@@ -10,7 +10,10 @@ export default {
         {
           prop: 'date',
           label: '日期',
-          width: '180'
+          width: '180',
+          render: ({ row }) => {
+            return row.date
+          }
         },
         {
           prop: 'name',

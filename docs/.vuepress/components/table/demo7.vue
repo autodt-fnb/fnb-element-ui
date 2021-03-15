@@ -7,12 +7,6 @@
     :page-size.sync="pageSize"
     :current-page.sync="pageNum"
   >
-    <template v-slot:date="{ row }">
-      <span style="color: green">{{ row.date }}</span>
-    </template>
-    <template v-slot:name="{ row }">
-      <span style="color: red">{{ row.name }}</span>
-    </template>
   </fnb-table>
 </template>
 
@@ -22,23 +16,6 @@ export default {
     return {
       pageSize: 3,
       pageNum: 1,
-      table: [
-        {
-          slot: 'date',
-          label: '日期',
-          width: '180'
-        },
-        {
-          slot: true,
-          prop: 'name',
-          label: '姓名',
-          width: '180'
-        },
-        {
-          prop: 'address',
-          label: '地址'
-        }
-      ],
       tableData: [
         {
           date: '2016-05-02',
@@ -59,6 +36,32 @@ export default {
           date: '2016-05-03',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1516 弄'
+        }
+      ]
+    }
+  },
+  computed: {
+    table() {
+      return [
+        {
+          prop: 'date',
+          label: '日期',
+          width: '180',
+          render: ({ row }) => {
+            return <span style="color: red">{row.date}</span>
+          }
+        },
+        {
+          prop: 'name',
+          label: '姓名',
+          width: '180',
+          render: ({ row }) => {
+            return <span style="color: green">{row.name}</span>
+          }
+        },
+        {
+          prop: 'address',
+          label: '地址'
         }
       ]
     }

@@ -1,3 +1,5 @@
+const merge = require('merge')
+
 module.exports = {
   title: 'fnb-element-ui',
   description: 'Vue 组件库',
@@ -86,5 +88,18 @@ module.exports = {
         after: '</div>'
       }
     ]
-  ]
+  ],
+  configureWebpack: {
+    devtool: 'cheap-eval-source-map'
+  },
+  chainWebpack: (config, isServer) => {
+    config.module
+      .rule('js') // Find the rule.
+      .use('babel-loader') // Find the loader
+      .tap(options =>
+        merge(options, {
+          presets: [['@vue/app']]
+        })
+      )
+  }
 }

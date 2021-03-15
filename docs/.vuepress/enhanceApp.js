@@ -12,8 +12,8 @@ import 'highlight.js/styles/atom-one-dark.css'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
-import FnbElementUI from '@autodt/fnb-element-ui'
-import '@autodt/fnb-element-ui/lib/index.css'
+import FnbElementUI from '../../lib'
+import '../../lib/index.css'
 
 export default ({
   Vue // VuePress 正在使用的 Vue 构造函数
@@ -28,7 +28,7 @@ export default ({
       vue
     }
   })
-  Vue.use(ElementUI)
+  Vue.use(ElementUI, { size: 'small' })
   Vue.use(FnbElementUI, {
     UPLOAD_URL: ''
   })

@@ -118,7 +118,7 @@ const tableAttrData = [
   {
     name: 'render',
     desc:
-      'render 函数，自定义列的内容，参数为 { row, column, index }，返回一个 JSX | VNode | number | string',
+      'render 函数（使用箭头函数，不然会报 h 错误），自定义列的内容，参数为 { row, column, index }，返回一个 JSX | VNode | number | string',
     type: 'function'
   },
   {
