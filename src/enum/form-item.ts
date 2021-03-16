@@ -4,6 +4,8 @@ export enum FormItemType {
   RENDER_FORM_CONTENT = 'RENDER_FORM_CONTENT',
   /** 输入框组件 */
   INPUT = 'INPUT',
+  /** 金额输入框 */
+  AMOUNT_INPUT = 'AMOUNT_INPUT',
   /** 输入框组件 */
   INPUT_NUMBER = 'INPUT_NUMBER',
   /** 自动建议组件 */

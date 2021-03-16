@@ -9,10 +9,14 @@ import { FnbForm } from './form'
 import { FnbFormItem } from './form-item'
 import { FnbRemoteTable } from './remote-table'
 import { FnbSearchForm } from './search-form'
+import { FnbAmountInput } from './amount-input'
 
-export { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
+export { FormItemType } from '../src/enum/form-item'
 
 export function install(vue: typeof Vue): void
+
+/** 金额输入 组件 */
+export class AmountInput extends FnbAmountInput {}
 
 /** table 组件 */
 export class Table extends FnbTable {}

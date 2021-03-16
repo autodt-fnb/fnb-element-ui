@@ -49,6 +49,7 @@ module.exports = {
                 'RENDER_FORM_CONTENT 自定义内容'
               ],
               ['/component/form/input', 'INPUT 输入框'],
+              ['/component/form/amount-input', 'AMOUNT_INPUT 金额输入框'],
               [
                 '/component/form/input-number',
                 'INPUT_NUMBER 数字输入框/计数器'

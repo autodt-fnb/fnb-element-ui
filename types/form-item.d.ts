@@ -28,6 +28,7 @@ import {
 } from 'element-ui/types/cascader'
 import { FnbUpload } from './upload'
 import { Render } from './common'
+import { FnbAmountInput } from './amount-input'
 
 /** 提取出 除ElementUIComponent 的属性 */
 export type GetElementProps<T> = Partial<
@@ -116,6 +117,32 @@ export interface InputPorps extends Omit<GetCommonProps<ElInput>, 'type'> {
   formType: FormItemType.INPUT
   /** 输入框类型 */
   type?: InputType | 'phone'
+  /** 输入框头部内容 */
+  renderPrefix?: () => Render
+  /** 输入框尾部内容 */
+  renderSuffix?: () => Render
+  /** 输入框前置内容 */
+  renderPrepend?: () => Render
+  /** 输入框后置内容 */
+  renderAppend?: () => Render
+  /** 在 Input 失去焦点时触发 */
+  onBlur?: (event: Event) => void
+  /** 在 Input 获得焦点时触发 */
+  onFocus?: (event: Event) => void
+  /** 仅在输入框失去焦点或用户按下回车时触发 */
+  onChange?: (value: string | number) => void
+  /** 在 Input 值改变时触发 */
+  onInput?: (value: string | number) => void
+  /** 在点击由 clearable 属性生成的清空按钮时触发 */
+  onClear?: () => void
+}
+
+/**
+ *  金额输入框 props
+ */
+export interface AmountInputPorps extends GetCommonProps<FnbAmountInput> {
+  /** 表单控件类型 */
+  formType: FormItemType.AMOUNT_INPUT
   /** 输入框头部内容 */
   renderPrefix?: () => Render
   /** 输入框尾部内容 */
@@ -435,6 +462,7 @@ export interface UploadProps extends GetCommonProps<FnbUpload> {
 export type FormItemProps =
   | RenderFormContentProps
   | InputPorps
+  | AmountInputPorps
   | InputNumberProps
   | AutocompletePorps
   | SelectProps

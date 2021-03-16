@@ -40,6 +40,11 @@ export default {
           prop: 'input'
         },
         {
+          formType: FormItemType.AMOUNT_INPUT,
+          itemLabel: '金额输入框',
+          prop: 'amount'
+        },
+        {
           formType: FormItemType.INPUT_NUMBER,
           itemLabel: '数字输入框',
           required: true,

@@ -15,7 +15,7 @@ export default {
       attrData: [
         {
           name: 'formType',
-          desc: '表单类型，必填 <code>RENDER_FORM_CONTENT</code>',
+          desc: '表单类型，固定填写 <code>RENDER_FORM_CONTENT</code>',
           optional: `<code>RENDER_FORM_CONTENT</code>`,
           type: 'string'
         },

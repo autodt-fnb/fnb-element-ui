@@ -80,7 +80,7 @@ const listItemsAttrData = [
     desc:
       '表单类型，可用 <code>FormItemType</code> 枚举表示，不同字段表示的组件可看子菜单',
     type: 'string',
-    optional: `<code>RENDER_FORM_CONTENT</code> <code>INPUT</code> <code>INPUT_NUMBER</code> <code>AUTOCOMPLETE</code> <code>SELECT</code> <code>DATE_PICKER</code> <code>TIME_PICKER</code> <code>TIME_SELECT</code> <code>SWITCH</code> <code>CHECKBOX</code> <code>CHECKBOX_GROUP</code> <code>RADIO</code> <code>RADIO_GROUP</code> <code>CASCADER</code> <code>UPLOAD</code>`
+    optional: `<code>RENDER_FORM_CONTENT</code> <code>INPUT</code> <code>AMOUNT_INPUT</code> <code>INPUT_NUMBER</code> <code>AUTOCOMPLETE</code> <code>SELECT</code> <code>DATE_PICKER</code> <code>TIME_PICKER</code> <code>TIME_SELECT</code> <code>SWITCH</code> <code>CHECKBOX</code> <code>CHECKBOX_GROUP</code> <code>RADIO</code> <code>RADIO_GROUP</code> <code>CASCADER</code> <code>UPLOAD</code>`
   },
   {
     name: 'prop',
@@ -186,6 +186,12 @@ const listItemsAttrData = [
     name: 'colPull',
     desc: '自定义当前栅格向左移动格数',
     type: 'number'
+  },
+  {
+    name: 'clearfix',
+    desc: '清除浮动，使当前 form-item 在下一行显示',
+    type: 'boolean',
+    default: 'false'
   },
   {
     name: 'class',

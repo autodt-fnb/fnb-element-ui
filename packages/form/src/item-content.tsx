@@ -2,7 +2,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:51:13
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-16 22:40:35
+ * @Last Modified time: 2021-03-17 00:12:16
  */
 import {
   AutocompletePorps,
@@ -20,7 +20,8 @@ import {
   RadioProps,
   RadioGroupProps,
   CascaderProps,
-  UploadProps
+  UploadProps,
+  AmountInputPorps
 } from '@autodt/fnb-element-ui/types/form-item'
 import {
   camelCase,
@@ -34,6 +35,7 @@ import { pickerOptions } from '@autodt/fnb-element-ui/src/utils/date-util'
 import dayjs from 'dayjs'
 import { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
 import { Render } from '@autodt/fnb-element-ui/types/common'
+import AmountInput from '~/amount-input'
 
 export const elFormItemAttributes = [
   'prop',
@@ -122,6 +124,28 @@ const itemContent: {
         )}
         {!!renderAppend && <template slot="append">{renderAppend()}</template>}
       </el-input>
+    )
+  },
+  [FormItemType.AMOUNT_INPUT](this, attrs: AmountInputPorps) {
+    const {
+      renderPrefix,
+      renderSuffix,
+      renderPrepend,
+      renderAppend,
+      ...props
+    } = attrs
+
+    props.placeholder ??= '请输入'
+
+    return (
+      <AmountInput v-model={this.form[props.field!]} {...wrapProps(props)}>
+        {!!renderPrefix && <template slot="prefix">{renderPrefix()}</template>}
+        {!!renderSuffix && <template slot="suffix">{renderSuffix()}</template>}
+        {!!renderPrepend && (
+          <template slot="prepend">{renderPrepend()}</template>
+        )}
+        {!!renderAppend && <template slot="append">{renderAppend()}</template>}
+      </AmountInput>
     )
   },
   [FormItemType.INPUT_NUMBER](this, attrs: InputNumberProps) {

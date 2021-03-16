@@ -23,10 +23,11 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:54:11
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-02-20 23:55:29
+ * @Last Modified time: 2021-03-17 00:00:55
  */
 import { Vue, Component, Prop, Ref } from 'vue-property-decorator'
 import { ElInput } from 'element-ui/types/input'
+import { ElementUIComponentSize } from 'element-ui/types/component'
 
 @Component({ name: 'FnbAmountInput', components: {} })
 export default class main extends Vue {
@@ -42,7 +43,7 @@ export default class main extends Vue {
   @Prop([String, Number]) readonly placeholder!: string | number
 
   /** 输入框尺寸 */
-  @Prop(String) readonly size!: string
+  @Prop(String) readonly size!: ElementUIComponentSize
 
   /** 是否显示 ￥ 符号 */
   @Prop({ type: Boolean, default: true }) readonly showAmountIcon!: boolean

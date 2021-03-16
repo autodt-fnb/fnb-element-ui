@@ -154,6 +154,14 @@ export default class App extends Vue {
         required: true
       },
       {
+        formType: FormItemType.AMOUNT_INPUT,
+        itemLabel: '陈超',
+        prop: 'amount',
+        renderSuffix() {
+          return '万元'
+        }
+      },
+      {
         field: 'edit2',
         itemLabel: '陈超234',
         formType: FormItemType.AUTOCOMPLETE
