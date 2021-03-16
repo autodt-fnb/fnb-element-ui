@@ -91,15 +91,18 @@ export default class RemoteTable extends Vue {
     if (typeof this.fetchApi === 'function') {
       try {
         this.listLoading = true
-        const { data, total } = await this.fetchApi({
-          [this.pageProp.pageSize]: this.pageSize,
-          [this.pageProp.pageNum]: this.pageNum,
-          ...this.params
-        })
-        this.list =
-          (this.dataProp.records ? data[this.dataProp.records] : data) ?? []
-        this.total =
-          (this.dataProp.total ? data[this.dataProp.total] : total) ?? 0
+        const { data, total } =
+          (await this.fetchApi({
+            [this.pageProp.pageSize]: this.pageSize,
+            [this.pageProp.pageNum]: this.pageNum,
+            ...this.params
+          })) ?? {}
+        if (data) {
+          this.list =
+            (this.dataProp.records ? data[this.dataProp.records] : data) ?? []
+          this.total =
+            (this.dataProp.total ? data[this.dataProp.total] : total) ?? 0
+        }
       } catch (error) {
         console.log(error)
       } finally {
