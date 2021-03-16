@@ -11,7 +11,7 @@ import { ElOption } from 'element-ui/types/option'
 import { ElSelect } from 'element-ui/types/select'
 import { ElTimePicker } from 'element-ui/types/time-picker'
 import { ElTimeSelect, TimeSelectOptions } from 'element-ui/types/time-select'
-import { VNode } from 'vue'
+
 import { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
 import { FormRuleItem } from './form'
 import { ElSwitch } from 'element-ui/types/switch'
@@ -27,9 +27,7 @@ import {
   ElCascader
 } from 'element-ui/types/cascader'
 import { FnbUpload } from './upload'
-
-/** 渲染函数返回值 */
-export type Render = JSX.Element | VNode | string | number | undefined | null
+import { Render } from './common'
 
 /** 提取出 除ElementUIComponent 的属性 */
 export type GetElementProps<T> = Partial<

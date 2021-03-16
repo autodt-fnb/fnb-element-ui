@@ -1,5 +1,5 @@
 import { FnbTableColumn } from '@autodt/fnb-element-ui/types/table'
-import { sortBy } from 'lodash-es'
+import { sortBy } from 'lodash'
 
 /**
  * 列表排序

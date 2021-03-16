@@ -15,7 +15,7 @@ import {
   Watch,
   Ref
 } from 'vue-property-decorator'
-import { camelCase, cloneDeep, isEqual, mapKeys, pick } from 'lodash-es'
+import { camelCase, cloneDeep, isEqual, mapKeys, pick } from 'lodash'
 import {
   ElForm,
   ValidateCallback,

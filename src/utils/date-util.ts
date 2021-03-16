@@ -12,7 +12,7 @@ import {
   PickEventHandler,
   Shortcut
 } from 'element-ui/types/date-picker'
-import { pick } from 'lodash-es'
+import { pick } from 'lodash'
 dayjs.extend(isoWeek)
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)

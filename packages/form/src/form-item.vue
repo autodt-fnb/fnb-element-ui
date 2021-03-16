@@ -11,7 +11,7 @@ import {
   FormItemProps,
   InputPorps
 } from '@autodt/fnb-element-ui/types/form-item'
-import { camelCase, isArray, mapKeys, pick, trimStart } from 'lodash-es'
+import { camelCase, isArray, mapKeys, pick, trimStart } from 'lodash'
 import {
   Vue,
   Component,

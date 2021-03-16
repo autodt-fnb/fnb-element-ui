@@ -17,7 +17,7 @@ import { debounce } from 'throttle-debounce'
 import { FnbTable, FnbTableColumn } from '../../../types/table'
 import { ElTooltip } from 'element-ui/types/tooltip'
 import { VNode } from 'vue'
-import { camelCase, kebabCase } from 'lodash-es'
+import { camelCase, kebabCase } from 'lodash'
 
 /** 格式化table字段 */
 function formatTable(table: FnbTableColumn[]) {

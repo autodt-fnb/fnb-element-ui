@@ -22,7 +22,6 @@ import {
   CascaderProps,
   UploadProps
 } from '@autodt/fnb-element-ui/types/form-item'
-import { VNode } from 'vue/types/umd'
 import {
   camelCase,
   isArray,
@@ -30,10 +29,11 @@ import {
   mapKeys,
   pickBy,
   trimStart
-} from 'lodash-es'
+} from 'lodash'
 import { pickerOptions } from '@autodt/fnb-element-ui/src/utils/date-util'
 import dayjs from 'dayjs'
 import { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
+import { Render } from '@autodt/fnb-element-ui/types/common'
 
 export const elFormItemAttributes = [
   'prop',
@@ -74,7 +74,7 @@ function wrapProps(attrs: Record<string, any>) {
 }
 
 const itemContent: {
-  [i in FormItemType]: (this: FnbFormItem, e: any) => VNode | null | undefined
+  [i in FormItemType]: (this: FnbFormItem, e: any) => Render
 } = {
   [FormItemType.RENDER_FORM_CONTENT](this, attrs: RenderFormContentProps) {
     return attrs.render?.(this.form)

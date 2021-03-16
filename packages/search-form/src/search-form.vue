@@ -21,7 +21,7 @@ import Form from '~/form'
 import FormItem from '~/form-item'
 import { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
 import SearchContainer from '~/search-container'
-import { isArray } from 'lodash-es'
+import { isArray } from 'lodash'
 
 @Component({
   name: 'FnbSearchForm',
