@@ -370,6 +370,11 @@ export default class App extends Vue {
         label: '姓名'
       },
       {
+        prop: 'name2',
+        minWidth: 500,
+        label: '姓名2'
+      },
+      {
         prop: 'address',
         minWidth: 500,
         label: '地址',

@@ -13,9 +13,13 @@ import {
 } from '@autodt/fnb-element-ui/node_modules/element-ui/types/tree'
 import { FnbTableColumn } from '@autodt/fnb-element-ui/types/table'
 import { sortList } from './utils'
+import ScrollContainer from '~/scroll-container'
+import IndexedDB from './indexedDB'
 
 type Tree = ElTree<string, FnbTableColumn>
 type TreeNode = ElTreeNode<string, FnbTableColumn>
+
+const db = new IndexedDB('remote-table-sort')
 
 @Component({ name: 'FnbTableHeader' })
 export default class TableHeadera extends Vue {
@@ -29,19 +33,17 @@ export default class TableHeadera extends Vue {
 
   @PropSync('checkedKeys', Array) checkedKeysComputed!: string[]
 
+  allChecked = false
+
+  indeterminate = false
+
+  treeList: FnbTableColumn[] = []
+
+  /** 默认选中 */
+  defaultCheckedKeys: string[] = []
+
   get sortClomunKey() {
     return this.storageSortKey ?? `sort-clomun-${(this as any).$route.name}`
-  }
-
-  get defaultCheckedKeys() {
-    return this.table?.filter(v => !v.hidden && !v.type).map(v => v.prop!)
-  }
-
-  get treeList() {
-    return sortList(
-      this.table?.filter(v => !v.hidden && !v.type) ?? [],
-      this.sortKeysComputed
-    )
   }
 
   /** 是否有选择项 */
@@ -49,11 +51,20 @@ export default class TableHeadera extends Vue {
     return this.table.findIndex(v => v.type === 'selection') >= 0
   }
 
+  get scrollHeight() {
+    const size = this.treeList.length
+    if (size > 10) {
+      return 10 * 26 + 13
+    } else {
+      return size * 26
+    }
+  }
+
+  get tableList() {
+    return this.table?.filter(v => !v.hidden && !v.type) ?? []
+  }
+
   @Ref('dropdownTree') readonly dropdownTreeRef!: Tree
-
-  allChecked = false
-
-  indeterminate = false
 
   @Watch('checkedKeysComputed')
   watchcheckedKeysComputed() {
@@ -73,31 +84,53 @@ export default class TableHeadera extends Vue {
     })
   }
 
-  created() {
-    const keys = JSON.parse(localStorage.getItem(this.sortClomunKey) ?? '[]')
-    const getKeys = [...(keys.length === 0 ? this.defaultCheckedKeys : keys)]
-    this.checkedKeysComputed = getKeys
-    this.sortKeysComputed = getKeys
-    console.log(this.$scopedSlots)
+  @Watch('tableList')
+  watchTableList() {}
+
+  async created() {
+    try {
+      await db.open()
+      const dbRes = await db.get(this.sortClomunKey)
+
+      if (dbRes) {
+        const { checkedKeys, sortKeys } = dbRes
+        this.defaultCheckedKeys = checkedKeys
+        this.checkedKeysComputed = checkedKeys
+        this.sortKeysComputed = sortKeys
+      } else {
+        throw 'no cache data'
+      }
+    } catch (error) {
+      console.log(error)
+      this.defaultCheckedKeys = this.tableList.map(v => v.prop!)
+      this.checkedKeysComputed = [...this.defaultCheckedKeys]
+      this.sortKeysComputed = [...this.defaultCheckedKeys]
+    }
+    this.$nextTick().then(() => {
+      this.treeList = sortList(this.tableList, this.sortKeysComputed)
+    })
   }
 
   handleCheckChange() {
-    this.checkedKeysComputed = this.dropdownTreeRef?.getCheckedKeys() ?? []
+    const checkedKeys = this.dropdownTreeRef?.getCheckedKeys() ?? []
+    this.checkedKeysComputed = checkedKeys
+
+    // 更新数据库中的 缓存 列显示
+    db.put({
+      key: this.sortClomunKey,
+      checkedKeys,
+      sortKeys: this.sortKeysComputed
+    })
   }
 
-  async handleAllChange(val: boolean) {
-    try {
-      this.sortKeysComputed.forEach(key => {
-        this.dropdownTreeRef.setChecked(key, val, false)
-      })
-    } catch (error) {
-      console.log(error)
-    }
+  handleAllChange(val: boolean) {
+    this.sortKeysComputed.forEach(key => {
+      this.dropdownTreeRef.setChecked(key, val, false)
+    })
   }
 
   /** 节点拖拽完成 */
   handleTreeNodeDrop(draggingNode: TreeNode, dropNode: TreeNode) {
-    console.log(6666, this.sortKeysComputed)
     this.dropdownTreeRef?.setChecked(
       draggingNode.data.prop!,
       draggingNode.checked,
@@ -106,14 +139,16 @@ export default class TableHeadera extends Vue {
     const keys = [...this.sortKeysComputed]
     const fIndex = keys.findIndex(v => v === draggingNode.data.prop)
     const sIndex = keys.findIndex(v => v === dropNode.data.prop)
-    ;[keys[fIndex], keys[sIndex]] = [keys[sIndex], keys[fIndex]]
+
+    keys.splice(sIndex, 0, ...keys.splice(fIndex, 1))
 
     this.sortKeysComputed = keys
-
-    localStorage.setItem(
-      this.sortClomunKey,
-      JSON.stringify(this.sortKeysComputed)
-    )
+    // 更新数据库中的 缓存 排序
+    db.put({
+      key: this.sortClomunKey,
+      checkedKeys: this.checkedKeysComputed,
+      sortKeys: keys
+    })
   }
 
   handleClearSelection() {
@@ -168,23 +203,25 @@ export default class TableHeadera extends Vue {
                   全/反选
                 </el-checkbox>
               </div>
-              <el-tree
-                check-on-click-node
-                default-expand-all
-                draggable
-                show-checkbox
-                allow-drop={(_1: any, _2: any, type: string) =>
-                  type !== 'inner'
-                }
-                class="dropdown-tree"
-                data={this.treeList}
-                defaultCheckedKeys={this.defaultCheckedKeys}
-                indent={10}
-                nodeKey="prop"
-                on-check-change={this.handleCheckChange}
-                on-node-drop={this.handleTreeNodeDrop}
-                ref="dropdownTree"
-              />
+              <ScrollContainer height={this.scrollHeight}>
+                <el-tree
+                  check-on-click-node
+                  default-expand-all
+                  draggable
+                  show-checkbox
+                  allow-drop={(_1: any, _2: any, type: string) =>
+                    type !== 'inner'
+                  }
+                  class="dropdown-tree"
+                  data={this.treeList}
+                  defaultCheckedKeys={this.defaultCheckedKeys}
+                  indent={10}
+                  nodeKey="prop"
+                  on-check-change={this.handleCheckChange}
+                  on-node-drop={this.handleTreeNodeDrop}
+                  ref="dropdownTree"
+                />
+              </ScrollContainer>
             </el-dropdown-menu>
           </el-dropdown>
         </el-row>

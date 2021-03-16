@@ -1,15 +1,9 @@
 import { FnbTableColumn } from '@autodt/fnb-element-ui/types/table'
+import { sortBy } from 'lodash-es'
 
 /**
  * 列表排序
  */
 export function sortList(list: FnbTableColumn[], keys: string[]) {
-  return list.sort((firstEl, secondEl) => {
-    const firstIndex = keys.findIndex(v => v === firstEl.prop)
-    const secondIndex = keys.findIndex(v => v === secondEl.prop)
-    if (firstIndex === -1 || secondIndex === -1) {
-      return 0
-    }
-    return firstIndex - secondIndex
-  })
+  return sortBy(list, o => keys.findIndex(v => v === o.prop))
 }
