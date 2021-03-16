@@ -3,7 +3,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:49:41
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-13 20:59:05
+ * @Last Modified time: 2021-03-16 22:40:07
  */
 import { FormRuleItem } from '@autodt/fnb-element-ui/types/form'
 import {
@@ -154,6 +154,7 @@ export default class FormItem extends Vue {
               pull={item.colPull}
               push={item.colPush}
               span={this.computedSpan(index, item.colSpan)}
+              style={{ clear: item.clearfix ? 'both' : undefined }}
               v-show={!item.invisible}
             >
               <el-form-item

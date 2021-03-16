@@ -92,6 +92,9 @@ export interface ItemCommon extends ElFormItemProps {
   /** 当前 栅格向左移动格数 */
   colPull?: number
 
+  /** 清除浮动，使当前 form-item 在下一行显示 */
+  clearfix?: boolean
+
   class?: string | (string | undefined)[] | Record<string, boolean>
   style?: string | Record<string, string | number | undefined> | any[]
 }

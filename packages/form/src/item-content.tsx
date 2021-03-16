@@ -2,7 +2,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:51:13
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-16 14:41:13
+ * @Last Modified time: 2021-03-16 22:40:35
  */
 import {
   AutocompletePorps,
@@ -66,6 +66,7 @@ function wrapProps(attrs: Record<string, any>) {
         'colSpan',
         'colPush',
         'colPull',
+        'clearfix',
         ...elFormItemAttributes
       ].includes(key)
   )

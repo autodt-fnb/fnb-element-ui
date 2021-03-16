@@ -139,7 +139,6 @@ export default class TableHeadera extends Vue {
     dropNode: TreeNode,
     type: 'before' | 'after'
   ) {
-    console.log(draggingNode.data.prop, dropNode.data.prop, type)
     this.dropdownTreeRef?.setChecked(
       draggingNode.data.prop!,
       draggingNode.checked,
