@@ -28,6 +28,9 @@ import {
 } from 'element-ui/types/cascader'
 import { FnbUpload } from './upload'
 
+/** 渲染函数返回值 */
+export type Render = JSX.Element | VNode | string | number | undefined | null
+
 /** 提取出 除ElementUIComponent 的属性 */
 export type GetElementProps<T> = Partial<
   Pick<T, Exclude<keyof T, keyof ElementUIComponent>>
@@ -50,7 +53,7 @@ export interface ElFormItemProps {
   itemSize?: ElementUIComponentSize
 
   /** label下方的描述文字 */
-  itemLabelDesc?: string | (() => VNode)
+  itemLabelDesc?: string | (() => Render)
 
   /** Whether the field is required or not, will be determined by validation rules if omitted */
   required?: boolean
@@ -68,10 +71,10 @@ export interface ElFormItemProps {
   inlineMessage?: boolean
 
   /** slot label */
-  renderItemLabel?: () => VNode
+  renderItemLabel?: () => Render
 
   /** slot error */
-  renderItemError?: (e: { error: any }) => VNode
+  renderItemError?: (e: { error: any }) => Render
 }
 
 export interface ItemCommon extends ElFormItemProps {
@@ -101,7 +104,7 @@ export interface RenderFormContentProps extends Omit<ItemCommon, 'field'> {
 
   field?: string | string[]
   /** 自定义内容 */
-  render?: (form: unknown) => VNode
+  render?: (form: unknown) => Render
 }
 
 /**
@@ -113,13 +116,13 @@ export interface InputPorps extends Omit<GetCommonProps<ElInput>, 'type'> {
   /** 输入框类型 */
   type?: InputType | 'phone'
   /** 输入框头部内容 */
-  renderPrefix?: () => VNode
+  renderPrefix?: () => Render
   /** 输入框尾部内容 */
-  renderSuffix?: () => VNode
+  renderSuffix?: () => Render
   /** 输入框前置内容 */
-  renderPrepend?: () => VNode
+  renderPrepend?: () => Render
   /** 输入框后置内容 */
-  renderAppend?: () => VNode
+  renderAppend?: () => Render
   /** 在 Input 失去焦点时触发 */
   onBlur?: (event: Event) => void
   /** 在 Input 获得焦点时触发 */
@@ -153,13 +156,13 @@ export interface AutocompletePorps extends GetCommonProps<ElAutocomplete> {
   /** 表单控件类型 */
   formType: FormItemType.AUTOCOMPLETE
   /** 输入框头部内容 */
-  renderPrefix?: () => VNode
+  renderPrefix?: () => Render
   /** 输入框尾部内容 */
-  renderSuffix?: () => VNode
+  renderSuffix?: () => Render
   /** 输入框前置内容 */
-  renderPrepend?: () => VNode
+  renderPrepend?: () => Render
   /** 输入框后置内容 */
-  renderAppend?: () => VNode
+  renderAppend?: () => Render
   /** 点击选中建议项时触发 */
   onSelect?: (e?: any) => void
   /** 在 Input 值改变时触发 */
@@ -168,7 +171,7 @@ export interface AutocompletePorps extends GetCommonProps<ElAutocomplete> {
 
 export interface OptionProps extends GetElementProps<ElOption> {
   /** 自定义内容 */
-  render?: (label: unknown, value: unknown) => VNode
+  render?: (label: unknown, value: unknown) => Render
 }
 
 export interface SelectProps extends GetCommonProps<ElSelect> {
@@ -199,9 +202,9 @@ export interface SelectProps extends GetCommonProps<ElSelect> {
 
   onFocus?: (event: Event) => void
   /** Select 组件头部内容 */
-  renderPrefix?: () => VNode
+  renderPrefix?: () => Render
   /** 无选项时的列表 */
-  renderEmpty?: () => VNode
+  renderEmpty?: () => Render
 }
 
 /**
@@ -310,7 +313,7 @@ export interface CheckboxProps extends GetCommonProps<ElCheckbox> {
   formType: FormItemType.CHECKBOX
 
   /** 默认显示内容 */
-  render?: () => VNode | string | number
+  render?: () => Render
 
   /** 当绑定值变化时触发的事件 */
   onChange?: (e: unknown) => void
@@ -318,7 +321,7 @@ export interface CheckboxProps extends GetCommonProps<ElCheckbox> {
 
 export interface CheckboxButtonProps extends GetCommonProps<ElCheckboxButton> {
   /** 默认显示内容 */
-  render: () => VNode
+  render: () => Render
 
   /** 当绑定值变化时触发的事件 */
   onChange?: (e: unknown) => void
@@ -352,7 +355,7 @@ export interface RadioProps extends GetCommonProps<ElRadio> {
   formType: FormItemType.RADIO
 
   /** 默认显示内容 */
-  render?: () => VNode | string | number
+  render?: () => Render
 
   /** 当绑定值变化时触发的事件 */
   onChange?: (e: unknown) => void
@@ -360,7 +363,7 @@ export interface RadioProps extends GetCommonProps<ElRadio> {
 
 export interface RadioButtonProps extends GetCommonProps<ElRadioButton> {
   /** 默认显示内容 */
-  render: () => VNode
+  render: () => Render
 
   /** 当绑定值变化时触发的事件 */
   onChange?: (e: unknown) => void
@@ -418,10 +421,10 @@ export interface CascaderProps<V = any, D = CascaderOption>
   ) => void
 
   /** 自定义内容 */
-  render?: (e: { node: CascaderNode<V, D>; data: D[] }) => VNode
+  render?: (e: { node: CascaderNode<V, D>; data: D[] }) => Render
 
   /** 无匹配选项时的内容 */
-  renderEmpty?: () => VNode
+  renderEmpty?: () => Render
 }
 
 export interface UploadProps extends GetCommonProps<FnbUpload> {
