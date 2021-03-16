@@ -134,18 +134,25 @@ export default class TableHeadera extends Vue {
   }
 
   /** 节点拖拽完成 */
-  handleTreeNodeDrop(draggingNode: TreeNode, dropNode: TreeNode) {
+  handleTreeNodeDrop(
+    draggingNode: TreeNode,
+    dropNode: TreeNode,
+    type: 'before' | 'after'
+  ) {
+    console.log(draggingNode.data.prop, dropNode.data.prop, type)
     this.dropdownTreeRef?.setChecked(
       draggingNode.data.prop!,
       draggingNode.checked,
       false
     )
     const keys = [...this.sortKeysComputed]
+
     const fIndex = keys.findIndex(v => v === draggingNode.data.prop)
+    const sIndex = keys.findIndex(v => v === dropNode.data.prop)
+
     const curKey = keys.splice(fIndex, 1)
 
-    const sIndex = keys.findIndex(v => v === dropNode.data.prop)
-    keys.splice(sIndex + 1, 0, ...curKey)
+    keys.splice(type === 'after' ? sIndex + 1 : sIndex, 0, ...curKey)
 
     this.sortKeysComputed = keys
     // 更新数据库中的 缓存 排序
