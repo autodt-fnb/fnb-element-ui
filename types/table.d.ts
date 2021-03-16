@@ -1,3 +1,4 @@
+import { Render } from './common.d'
 import { CreateElement, VNode } from 'vue'
 import {
   TableColumnType,
@@ -67,11 +68,7 @@ export interface FnbTableColumn<R = object> {
    * }
    * ```
    */
-  render?: (data: {
-    row: R
-    column: TableColumn
-    index: number
-  }) => VNode | string | number | null
+  render?: (data: { row: R; column: TableColumn; index: number }) => Render
 
   /** Whether to hide extra content and show them in a tooltip when hovering on the cell */
   showOverflowTooltip?: boolean
