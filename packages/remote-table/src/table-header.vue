@@ -145,7 +145,7 @@ export default class TableHeadera extends Vue {
     const curKey = keys.splice(fIndex, 1)
 
     const sIndex = keys.findIndex(v => v === dropNode.data.prop)
-    keys.splice(sIndex, 0, ...curKey)
+    keys.splice(sIndex + 1, 0, ...curKey)
 
     this.sortKeysComputed = keys
     // 更新数据库中的 缓存 排序
