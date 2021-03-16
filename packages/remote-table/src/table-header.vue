@@ -15,6 +15,7 @@ import { FnbTableColumn } from '@autodt/fnb-element-ui/types/table'
 import { sortList } from './utils'
 import ScrollContainer from '~/scroll-container'
 import IndexedDB from './indexedDB'
+import { difference } from 'lodash'
 
 type Tree = ElTree<string, FnbTableColumn>
 type TreeNode = ElTreeNode<string, FnbTableColumn>
@@ -91,9 +92,12 @@ export default class TableHeadera extends Vue {
     try {
       await db.open()
       const dbRes = await db.get(this.sortClomunKey)
-
+      const tableKeys = this.tableList.map(v => v.prop!)
       if (dbRes) {
         const { checkedKeys, sortKeys } = dbRes
+        if (difference(sortKeys, tableKeys).length > 0) {
+          throw 'keys 数量改变重新获取'
+        }
         this.defaultCheckedKeys = checkedKeys
         this.checkedKeysComputed = checkedKeys
         this.sortKeysComputed = sortKeys
