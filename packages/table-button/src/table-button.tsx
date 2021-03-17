@@ -2,7 +2,7 @@
  * @Author: 陈超
  * @Date: 2021-03-17 13:08:04
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-17 15:16:11
+ * @Last Modified time: 2021-03-17 16:34:30
  */
 
 import { Vue, Component, Prop } from 'vue-property-decorator'
@@ -17,14 +17,22 @@ export default class TableButton extends Vue {
   /** 字体颜色 */
   @Prop(String) readonly color!: string
 
+  /** 相邻的上一个元素是否是 TableButton 组件 */
+  isPrevTableButton = false
+
   mounted() {
-    console.log(this)
+    const sameLevelEl = [...(this.$el.parentElement?.children ?? [])]
+    const elIndex = sameLevelEl.findIndex(el => el === this.$el)
+
+    this.isPrevTableButton =
+      elIndex > 0 &&
+      sameLevelEl[elIndex - 1].classList.contains('js-table-button')
   }
 
   render() {
     return (
-      <span>
-        {this.divider === 'before' && (
+      <span class="js-table-button">
+        {(this.divider === 'before' || this.isPrevTableButton) && (
           <el-divider direction="vertical" key="divider" />
         )}
         <el-button
