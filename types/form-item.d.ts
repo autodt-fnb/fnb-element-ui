@@ -106,7 +106,7 @@ export interface RenderFormContentProps extends Omit<ItemCommon, 'field'> {
 
   field?: string | string[]
   /** 自定义内容 */
-  render?: (form: unknown) => Render
+  render?: (form: any) => Render
 }
 
 /**
