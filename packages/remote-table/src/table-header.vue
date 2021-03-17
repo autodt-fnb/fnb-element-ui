@@ -86,17 +86,14 @@ export default class TableHeadera extends Vue {
   }
 
   @Watch('tableList')
-  watchTableList() {}
-
-  async created() {
+  async watchTableList() {
     try {
-      await db.open()
       const dbRes = await db.get(this.sortClomunKey)
       const tableKeys = this.tableList.map(v => v.prop!)
       if (dbRes) {
         const { checkedKeys, sortKeys } = dbRes
         if (xor(sortKeys, tableKeys).length > 0) {
-          throw 'keys 数量改变重新获取'
+          throw 'keys 值已改变，重新获取'
         }
         this.defaultCheckedKeys = checkedKeys
         this.checkedKeysComputed = checkedKeys
@@ -109,9 +106,30 @@ export default class TableHeadera extends Vue {
       this.defaultCheckedKeys = this.tableList.map(v => v.prop!)
       this.checkedKeysComputed = [...this.defaultCheckedKeys]
       this.sortKeysComputed = [...this.defaultCheckedKeys]
+      // 更新数据库中的 缓存 列显示
+      this.saveIndexedDb()
     }
     this.$nextTick().then(() => {
       this.treeList = sortList(this.tableList, this.sortKeysComputed)
+    })
+  }
+
+  async created() {
+    try {
+      await db.open()
+      this.watchTableList()
+    } catch (error) {
+      this.treeList = sortList(this.tableList, this.sortKeysComputed)
+    }
+  }
+
+  saveIndexedDb() {
+    this.$nextTick().then(() => {
+      db.put({
+        key: this.sortClomunKey,
+        checkedKeys: this.checkedKeysComputed,
+        sortKeys: this.sortKeysComputed
+      })
     })
   }
 
@@ -120,11 +138,7 @@ export default class TableHeadera extends Vue {
     this.checkedKeysComputed = checkedKeys
 
     // 更新数据库中的 缓存 列显示
-    db.put({
-      key: this.sortClomunKey,
-      checkedKeys,
-      sortKeys: this.sortKeysComputed
-    })
+    this.saveIndexedDb()
   }
 
   handleAllChange(val: boolean) {
@@ -155,11 +169,7 @@ export default class TableHeadera extends Vue {
 
     this.sortKeysComputed = keys
     // 更新数据库中的 缓存 排序
-    db.put({
-      key: this.sortClomunKey,
-      checkedKeys: this.checkedKeysComputed,
-      sortKeys: keys
-    })
+    this.saveIndexedDb()
   }
 
   handleClearSelection() {
