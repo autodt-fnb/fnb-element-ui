@@ -20,8 +20,9 @@
         <template v-slot:append> <div>656565656</div> </template>
         <template v-slot:paginationAppend> <div>656565656</div> </template>
         <template #headerActions>
-          <el-button>545headerActions</el-button>
-          <el-button>545headerActions</el-button>
+          <fnb-table-button divider="after">545headerActions</fnb-table-button>
+          <fnb-table-button divider="after">545headerActions</fnb-table-button>
+          <fnb-table-button>545headerActions</fnb-table-button>
         </template>
       </FnbRemoteTable>
       <FnbUpload

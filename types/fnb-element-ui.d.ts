@@ -10,6 +10,7 @@ import { FnbFormItem } from './form-item'
 import { FnbRemoteTable } from './remote-table'
 import { FnbSearchForm } from './search-form'
 import { FnbAmountInput } from './amount-input'
+import { FnbTableBotton } from './table-button'
 
 export { FormItemType } from '../src/enum/form-item'
 
@@ -44,3 +45,6 @@ export class RemoteTable extends FnbRemoteTable {}
 
 /** 搜索 表单 */
 export class SearchForm extends FnbSearchForm {}
+
+/** 表格 操作按钮 */
+export class TableButton extends FnbTableBotton {}

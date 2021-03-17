@@ -2,7 +2,7 @@
  * @Author: 陈超
  * @Date: 2021-02-21 00:04:09
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-13 20:57:45
+ * @Last Modified time: 2021-03-17 14:10:06
  */
 import Vue from 'vue'
 import VueCompositionApi from '@vue/composition-api'
@@ -27,6 +27,7 @@ import FormItem from '~/form-item'
 import { FormItemType } from './enum/form-item'
 import SearchForm from '~/search-form'
 import RemoteTable from '~/remote-table'
+import TableButton from '~/table-button'
 
 const components = [
   Table,
@@ -42,7 +43,8 @@ const components = [
   Form,
   FormItem,
   SearchForm,
-  RemoteTable
+  RemoteTable,
+  TableButton
 ]
 
 const directives = [Clipboard]
@@ -77,5 +79,6 @@ export default {
   FormItem,
   FormItemType,
   SearchForm,
-  RemoteTable
+  RemoteTable,
+  TableButton
 }

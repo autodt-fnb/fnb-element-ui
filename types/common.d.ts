@@ -8,4 +8,5 @@ export type Render =
   | number
   | undefined
   | null
+  | boolean
   | Render[]
