@@ -2,7 +2,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:51:13
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-17 00:12:16
+ * @Last Modified time: 2021-03-18 09:32:59
  */
 import {
   AutocompletePorps,
@@ -92,11 +92,10 @@ const itemContent: {
       ...props
     } = attrs
     let inputType = type
-    if (type !== 'text' && type !== 'textarea') {
-      inputType = 'text'
-    }
+
     if (type === 'phone') {
       props.maxlength = 11
+      inputType = 'tel'
     }
     props.placeholder ??= '请输入'
     return (
@@ -149,17 +148,11 @@ const itemContent: {
     )
   },
   [FormItemType.INPUT_NUMBER](this, attrs: InputNumberProps) {
-    const { type, field, ...props } = attrs
+    const { field, ...props } = attrs
     props.placeholder ??= '请输入'
-    if (type === 'amount') {
-      props.min ??= 0
-      props.precision ??= 2
-      props.controls = false
-      props.textLeft ??= true
-    }
     return (
       <el-input-number
-        class={{ 'text-left': props.textLeft }}
+        style={{ textAlign: props.textAlign }}
         v-model={this.form[field!]}
         {...wrapProps(props)}
       />

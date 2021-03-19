@@ -3,7 +3,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:58:00
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-15 14:15:49
+ * @Last Modified time: 2021-03-18 10:40:05
  */
 
 import {
@@ -21,6 +21,7 @@ import {
   ValidateCallback,
   ValidateFieldCallback
 } from 'element-ui/types/form'
+import { FormRules } from '@autodt/fnb-element-ui/types/form'
 
 const formAttributes = [
   'rules',
@@ -62,9 +63,14 @@ export default class Form extends Vue {
   /** 是否在 `rules` 属性改变后立即触发一次验证 */
   @Prop(Boolean) readonly validateOnRuleChange!: boolean
 
+  @Prop() readonly rules!: FormRules
+
   @Provide() getForm() {
     return this
   }
+
+  @ProvideReactive()
+  formRules: FormRules = this.rules
 
   @ProvideReactive()
   form: Record<string, unknown> = {}

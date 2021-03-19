@@ -39,6 +39,7 @@ module.exports = {
           ['/component/layout', '布局容器'],
           ['/component/select-goods', 'SelectGoods 商品搜索选择'],
           ['/component/table', 'Table 表格'],
+          ['/component/table-button', 'TableButton 表格操作按钮'],
           {
             title: 'Form 表单',
             path: '/component/form/index',

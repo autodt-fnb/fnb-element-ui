@@ -3,15 +3,23 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:49:41
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-16 22:40:07
+ * @Last Modified time: 2021-03-18 11:19:18
  */
-import { FormRuleItem } from '@autodt/fnb-element-ui/types/form'
+import { FormRuleItem, FormRules } from '@autodt/fnb-element-ui/types/form'
 import {
   ElFormItemProps,
   FormItemProps,
   InputPorps
 } from '@autodt/fnb-element-ui/types/form-item'
-import { camelCase, isArray, mapKeys, pick, trimStart } from 'lodash'
+import {
+  camelCase,
+  isArray,
+  isPlainObject,
+  mapKeys,
+  pick,
+  trimEnd,
+  trimStart
+} from 'lodash'
 import {
   Vue,
   Component,
@@ -29,6 +37,8 @@ export default class FormItem extends Vue {
   @Prop(Array) readonly listItems!: FormItemProps[]
 
   @InjectReactive() form!: Record<string, any>
+
+  @InjectReactive() formRules!: FormRules
 
   get fnbForm() {
     return this.getForm()
@@ -53,13 +63,35 @@ export default class FormItem extends Vue {
         }
 
         props.colOffset ??= this.fnbFormOffset
-        if (required) {
+
+        if (Reflect.has(this.formRules ?? {}, props.prop!)) {
+          const propRules = this.formRules[props.prop!]
+          // 如果rules 是对象的话，变成数组
+          if (isPlainObject(rules)) {
+            rules = [rules as FormRuleItem]
+          }
+          if (isArray(propRules)) {
+            ;((rules ??= []) as FormRuleItem[]).push(...propRules)
+          } else {
+            ;((rules ??= []) as FormRuleItem[]).push(propRules)
+          }
+        }
+
+        // 如果rules 中已经定义的 required 属性，则不添加自定义 required rule
+        const isRequired =
+          (isArray(rules) && rules.some(v => v.required)) ||
+          (isPlainObject(rules) && (rules as FormRuleItem).required)
+
+        if (required && !isRequired) {
           const addRules = {
             required: true,
-            message: `${props.itemLabel ?? '此项'}是必填项！`,
+            message: `${trimEnd(
+              trimEnd(props.itemLabel ?? '此项', '：'),
+              ':'
+            )}是必填项！`,
             trigger: [
               FormItemType.INPUT,
-              FormItemType.INPUT_NUMBER,
+              FormItemType.AMOUNT_INPUT,
               FormItemType.AUTOCOMPLETE
             ].includes(props.formType)
               ? 'blur'
@@ -70,7 +102,7 @@ export default class FormItem extends Vue {
             rules = [addRules, ...rules]
           } else if (!Reflect.has((rules ?? {}) as FormRuleItem, 'required')) {
             if (!rules) {
-              rules = addRules
+              rules = [addRules]
             } else {
               rules = [addRules, rules as FormRuleItem]
             }

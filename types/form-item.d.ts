@@ -116,7 +116,7 @@ export interface InputPorps extends Omit<GetCommonProps<ElInput>, 'type'> {
   /** 表单控件类型 */
   formType: FormItemType.INPUT
   /** 输入框类型 */
-  type?: InputType | 'phone'
+  type?: InputType | 'phone' | string
   /** 输入框头部内容 */
   renderPrefix?: () => Render
   /** 输入框尾部内容 */
@@ -167,9 +167,7 @@ export interface AmountInputPorps extends GetCommonProps<FnbAmountInput> {
 export interface InputNumberProps extends GetCommonProps<ElInputNumber> {
   formType: FormItemType.INPUT_NUMBER
   /** 文字居左显示 */
-  textLeft?: boolean
-  /** 输入类型，金额 */
-  type?: 'amount'
+  textAlign?: 'left' | 'center' | 'right'
   /** 占位符 */
   placeholder?: string
   /** 在 Input 失去焦点时触发 */

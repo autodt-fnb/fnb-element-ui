@@ -81,6 +81,8 @@ export default {
         {
           formType: FormItemType.SELECT,
           itemLabel: '选择框',
+          placeholder: '添加了clearfix 属性，换行了',
+          clearfix: true,
           prop: 'select',
           optionList: [
             {

@@ -20,6 +20,7 @@
     "vuepress-plugin-container": "^2.1.5"
   },
   "dependencies": {
+    "@autodt/fnb-element-ui": "^1.6.1-beta.26",
     "core-js": "2"
   }
 }
