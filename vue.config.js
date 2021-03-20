@@ -8,7 +8,7 @@ module.exports = {
     hot: true
   },
   configureWebpack: {
-    // devtool: 'cheap-eval-source-map'
+    devtool: 'eval-cheap-source-map'
   },
   chainWebpack: config => {
     // @ 默认指向 src 目录，这里要改成 examples

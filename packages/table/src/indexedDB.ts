@@ -1,6 +1,6 @@
 export default class IndexedDB {
   /** 数据表名称 */
-  dbName: string = 'remote-table-sort'
+  dbName!: string
 
   objectStore!: any
 

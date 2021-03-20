@@ -26,7 +26,6 @@ import Form from '~/form'
 import FormItem from '~/form-item'
 import { FormItemType } from './enum/form-item'
 import SearchForm from '~/search-form'
-import RemoteTable from '~/remote-table'
 import TableButton from '~/table-button'
 
 const components = [
@@ -43,7 +42,6 @@ const components = [
   Form,
   FormItem,
   SearchForm,
-  RemoteTable,
   TableButton
 ]
 
@@ -79,6 +77,5 @@ export default {
   FormItem,
   FormItemType,
   SearchForm,
-  RemoteTable,
   TableButton
 }

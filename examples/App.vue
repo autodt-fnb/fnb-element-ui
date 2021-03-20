@@ -3,11 +3,13 @@
     <FnbAppContainer>
       <FormDemo />
       <FnbSearchForm :listItems="formItems" v-model="form" />
-      <FnbRemoteTable
+      <FnbTable
         ref="table"
         :table="table"
         row-key="date"
+        autoMaxHeight
         storageSortKey="storageSortKey3333"
+        @cell-mouse-enter="cellMouseEnter"
         :fetchApi="getList"
       >
         <template v-slot:date="{ row }">
@@ -24,7 +26,30 @@
           <fnb-table-button>545headerActions</fnb-table-button>
           <fnb-table-button>545headerActions</fnb-table-button>
         </template>
-      </FnbRemoteTable>
+      </FnbTable>
+      <FnbTable
+        :table="table"
+        :data="tableData"
+        row-key="date"
+        :total="66"
+        storageSortKey="storageSortKey33"
+        show-table-top
+      >
+        <template v-slot:date="{ row }">
+          <el-input v-model="row.date" />
+        </template>
+        <template v-slot:name="{ row }">
+          <el-input v-model="row.name" />
+        </template>
+        <template v-slot:nameHeader> {{ 'row.name' }} </template>
+        <template v-slot:append> <div>656565656</div> </template>
+        <template v-slot:paginationAppend> <div>656565656</div> </template>
+        <template #headerActions>
+          <fnb-table-button>545headerActions</fnb-table-button>
+          <fnb-table-button>545headerActions</fnb-table-button>
+          <fnb-table-button>545headerActions</fnb-table-button>
+        </template>
+      </FnbTable>
       <FnbUpload
         accept="image/png,image/jpeg"
         :limit="1"
@@ -331,6 +356,10 @@ export default class App extends Vue {
       //   fileList: this.fileList
       // }
     ]
+  }
+
+  cellMouseEnter() {
+    console.log('cellMouseEnter')
   }
 
   async getList() {

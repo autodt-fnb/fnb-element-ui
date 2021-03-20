@@ -23,7 +23,7 @@ type TreeNode = ElTreeNode<string, FnbTableColumn>
 const db = new IndexedDB('remote-table-sort')
 
 @Component({ name: 'FnbTableHeader' })
-export default class TableHeadera extends Vue {
+export default class TableHeader extends Vue {
   @Prop(Number) readonly total!: number
   @Prop(Array) readonly table!: FnbTableColumn[]
   @Prop(String) readonly storageSortKey!: string
@@ -160,13 +160,13 @@ export default class TableHeadera extends Vue {
     )
     const keys = [...this.sortKeysComputed]
 
-    const fIndex = keys.findIndex(v => v === draggingNode.data.prop)
+    const curKey = keys.splice(
+      keys.findIndex(v => v === draggingNode.data.prop),
+      1
+    )
+
     const sIndex = keys.findIndex(v => v === dropNode.data.prop)
-
-    const curKey = keys.splice(fIndex, 1)
-
     keys.splice(type === 'after' ? sIndex + 1 : sIndex, 0, ...curKey)
-
     this.sortKeysComputed = keys
     // 更新数据库中的 缓存 排序
     this.saveIndexedDb()

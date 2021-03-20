@@ -3,7 +3,7 @@
  * @Author: 陈超
  * @Date: 2021-02-21 00:03:27
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-14 17:54:20
+ * @Last Modified time: 2021-03-21 00:58:41
  */
 import {
   Vue,
@@ -11,38 +11,16 @@ import {
   Prop,
   Emit,
   Ref,
-  PropSync
+  PropSync,
+  Watch
 } from 'vue-property-decorator'
-import { debounce } from 'throttle-debounce'
+
 import { FnbTable, FnbTableColumn } from '../../../types/table'
 import { ElTooltip } from 'element-ui/types/tooltip'
 import { VNode } from 'vue'
-import { camelCase, kebabCase } from 'lodash'
-
-/** 格式化table字段 */
-function formatTable(table: FnbTableColumn[]) {
-  return Array.isArray(table) && table.length > 0
-    ? table.map((v: any) => {
-        v.align = v.align || 'center' // 默认居中
-        if (v.slot) {
-          // 如slot是boolean值。则slot名称为prop，否则就是slot值
-          if (v.slot === true) {
-            v.slotName = v.prop
-          } else {
-            v.slotName = v.slot
-          }
-        }
-        if (v.table) {
-          v.table = formatTable(v.table)
-        }
-        v.showTooltip = v.showOverflowTooltip
-        // 防止将slot绑定到 tableColumn上
-        Reflect.deleteProperty(v, 'slot')
-        Reflect.deleteProperty(v, 'showOverflowTooltip')
-        return v
-      })
-    : []
-}
+import { camelCase, debounce, kebabCase } from 'lodash'
+import TableHeader from './table-header.vue'
+import { formatTable, sortList } from './utils'
 
 @Component({
   name: 'FnbTable',
@@ -52,7 +30,7 @@ export default class Table extends Vue {
   /**
    * 表格字段
    */
-  @Prop({ default: () => [] }) readonly table!: FnbTableColumn[]
+  @Prop({ type: Array, default: () => [] }) readonly table!: FnbTableColumn[]
 
   /**
    * 是都显示分页组件
@@ -80,14 +58,43 @@ export default class Table extends Vue {
    */
   @Prop() readonly total!: number
 
+  /** 显示表格顶部 */
+  @Prop(Boolean) readonly showTableTop!: boolean
+
+  /** 请求的api方法 */
+  @Prop({ type: Function })
+  readonly fetchApi!: (...arg: any[]) => Promise<any>
+
+  /** 请求的参数 */
+  @Prop({ type: Object, default: () => {} }) readonly params!: Record<
+    string,
+    any
+  >
+
+  /** 后端需要的分页参数名称 */
+  @Prop({
+    type: Object,
+    default: () => ({ pageSize: 'pageSize', pageNum: 'pageNum' })
+  })
+  readonly pageProp!: { pageSize: string; pageNum: string }
+
+  /** 后端返回的参数名称 */
+  @Prop({
+    type: Object,
+    default: () => ({ total: 'total', records: 'records' })
+  })
+  readonly dataProp!: { total: string; records: string }
+
+  /** 自定义存储排序 localStorage key值 */
+  @Prop(String) storageSortKey!: string
+
   /**
    * 是否显示外层的card组件
    */
   @Prop({ default: false, type: Boolean }) readonly noCard!: boolean
 
   /** 分页 layou 参数 */
-  @Prop({ default: 'total, sizes, prev, pager, next, jumper' })
-  readonly paginationLayout!: string
+  @Prop(String) readonly paginationLayout!: string
 
   /** table组件ref */
   @Ref('table') readonly tableRef!: FnbTable
@@ -100,12 +107,46 @@ export default class Table extends Vue {
 
   maxHeight: string | number = 0
 
+  /** 当前组件状态参数 */
+  state = {
+    pageSize: 10,
+    pageNum: 1,
+    list: [] as any[],
+    listLoading: false,
+    total: 0,
+    selectionSize: 0,
+    checkedKeys: [] as string[],
+    sortKeys: [] as string[]
+  }
+
+  /** 分页layout参数 */
+  get paginationLayoutProps() {
+    const layout = ['total', 'sizes', 'prev', 'pager', 'next', 'jumper']
+    if (this.showTableTop) {
+      layout.shift()
+    }
+    return this.paginationLayout ?? layout.join()
+  }
+
+  /** 过滤 hidden 为 true 的表格 */
+  get filterHiddenTable() {
+    return this.table?.filter(v => !v.hidden) ?? []
+  }
+
   /** tableColumn 组件的属性 */
   get tableColumn() {
-    if (!Array.isArray(this.table)) {
-      return []
+    if (!this.showTableTop) {
+      return formatTable(this.filterHiddenTable)
     }
-    return formatTable(this.table)
+    return sortList(
+      formatTable(this.filterHiddenTable).map(v => {
+        return {
+          ...v,
+          hidden: v.prop ? !this.state.checkedKeys.includes(v.prop) : false
+        }
+      }),
+      this.state.sortKeys
+    )
   }
 
   /** table attributes */
@@ -114,6 +155,10 @@ export default class Table extends Vue {
     for (const key in this.$attrs) {
       props[camelCase(key)] = this.$attrs[key]
     }
+    if (this.isFetchApi) {
+      props.data = this.state.list
+    }
+
     // 纵向边框
     props.border = props.border ?? true
 
@@ -139,35 +184,75 @@ export default class Table extends Vue {
         events[name] = this.$listeners[key]
       }
     }
-    if (!Reflect.has(events, 'cell-mouse-enter')) {
-      events['cell-mouse-enter'] = this.handlePopover
-    }
-    if (!Reflect.has(events, 'cell-mouse-leave')) {
-      events['cell-mouse-leave'] = this.handlePopover
-    }
     return events
+  }
+
+  /** fetchapi 是否存在 */
+  get isFetchApi() {
+    return typeof this.fetchApi === 'function'
+  }
+
+  @Watch('params')
+  watchParams() {
+    this.state.pageNum = 1
+    this.getList()
   }
 
   /** 显示tooltip文字弹窗 */
   activateTooltip!: Function
 
+  /** 监听窗口变化 */
+  windowSizeListener!: () => void
+
   created() {
-    this.activateTooltip = debounce(50, (tooltip: any) =>
-      tooltip.handleShowPopper()
+    this.activateTooltip = debounce(
+      (tooltip: any) => tooltip.handleShowPopper(),
+      50
     )
+    this.getList()
+    console.log(66)
   }
 
   mounted() {
     if (this.autoMaxHeight) {
-      window.addEventListener('resize', this.updateMaxHeight)
-      this.updateMaxHeight()
+      this.windowSizeListener = debounce(this.updateMaxHeight, 200)
+      window.addEventListener('resize', this.windowSizeListener)
+      this.windowSizeListener()
     }
   }
 
   beforeDestroy() {
     if (this.autoMaxHeight) {
-      window.removeEventListener('resize', this.updateMaxHeight)
+      window.removeEventListener('resize', this.windowSizeListener)
     }
+  }
+
+  async getList() {
+    if (this.isFetchApi) {
+      try {
+        this.state.listLoading = true
+        const { data, total } =
+          (await this.fetchApi?.({
+            [this.pageProp.pageSize]: this.state.pageSize,
+            [this.pageProp.pageNum]: this.state.pageNum,
+            ...this.params
+          })) ?? {}
+        if (data) {
+          this.state.list =
+            (this.dataProp.records ? data[this.dataProp.records] : data) ?? []
+          this.state.total =
+            (this.dataProp.total ? data[this.dataProp.total] : total) ?? 0
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.state.listLoading = false
+      }
+    }
+  }
+
+  handleSelectionChange(list: any[] = []) {
+    this.state.selectionSize = list.length
   }
 
   /** 处理显示 popover */
@@ -178,7 +263,7 @@ export default class Table extends Vue {
     event: MouseEvent
   ) {
     // 如不是 需要隐藏文字 单元，不显示tooltips
-    if (!new Set(cell.classList.values()).has('tow-line')) {
+    if (!cell.classList.contains('tow-line')) {
       return
     }
 
@@ -230,7 +315,7 @@ export default class Table extends Vue {
 
       this.maxHeight =
         window.innerHeight -
-        (this.tableRef.$el as HTMLElement).getBoundingClientRect().top -
+        ((this.tableRef?.$el as HTMLElement).getBoundingClientRect().top ?? 0) -
         10 -
         (this.showPagination ? paginationHeight : 0) -
         (this.noCard ? 0 : 2)
@@ -284,14 +369,18 @@ export default class Table extends Vue {
 
   @Emit('size-change')
   handleSizeChange(size: number) {
+    this.state.pageSize = size
     this.pageSizeProp = size
     this.currentPageProp = 1
+    this.getList()
     return size
   }
 
   @Emit('current-change')
   handleCurrentChange(page: number) {
+    this.state.pageNum = page
     this.currentPageProp = page
+    this.getList()
     return page
   }
 
@@ -356,11 +445,33 @@ export default class Table extends Vue {
       <div class={!this.noCard ? 'el-card is-always-shadow' : ''}>
         {this.$scopedSlots.TABLE_CARD_HEADER?.(null) ??
           this.$slots.TABLE_CARD_HEADER}
+        {this.showTableTop && (
+          <TableHeader
+            checkedKeys={this.state.checkedKeys}
+            on={{
+              'update:checkedKeys': (val: string[]) =>
+                (this.state.checkedKeys = val),
+              'update:sortKeys': (val: string[]) => (this.state.sortKeys = val)
+            }}
+            on-clear-selection={() => this.$emit('clear-selection')}
+            scopedSlots={{
+              headerActions: this.$scopedSlots.headerActions
+            }}
+            selectionSize={this.state.selectionSize}
+            sortKeys={this.state.sortKeys}
+            storageSortKey={this.storageSortKey}
+            table={this.filterHiddenTable}
+            total={this.total}
+          />
+        )}
         <el-table
+          on={this.tableEvents}
+          on-cell-mouse-enter={this.handlePopover}
+          on-cell-mouse-leave={this.handlePopover}
+          on-selection-change={this.handleSelectionChange}
           ref="table"
-          onCellMouseEnter={this.handlePopover}
-          onCellMouseLeave={this.handlePopover}
-          {...{ attrs: this.tableProps, on: this.tableEvents }}
+          v-loading={this.state.listLoading}
+          {...{ attrs: this.tableProps }}
         >
           {this.renderTableColumn(this.tableColumn)}
           <template slot="append">
@@ -372,17 +483,13 @@ export default class Table extends Vue {
         this.tableProps.data.length > 0 ? (
           <div class="pagination-wrapper">
             <el-pagination
-              class="pagination"
-              {...{
-                on: {
-                  ['size-change']: this.handleSizeChange,
-                  ['current-change']: this.handleCurrentChange
-                }
-              }}
               small
-              current-page={this.currentPageProp}
-              layout={this.paginationLayout}
-              page-size={this.pageSizeProp}
+              class="pagination"
+              current-page={this.currentPageProp ?? this.state.pageNum}
+              layout={this.paginationLayoutProps}
+              on-current-change={this.handleCurrentChange}
+              on-size-change={this.handleSizeChange}
+              page-size={this.pageSizeProp ?? this.state.pageSize}
               page-sizes={[10, 30, 50, 100]}
               total={this.total}
             />
@@ -489,7 +596,7 @@ export default class Table extends Vue {
     background: #fff;
     min-width: 150px;
     border-radius: 4px;
-    border: 1px solid #ebeef5;
+    border: 1px solid #ebeef5 !important;
     padding: 12px;
     z-index: 2000;
     color: #606266;
@@ -503,7 +610,7 @@ export default class Table extends Vue {
   &.el-popper {
     .popper__arrow {
       border-width: 6px;
-      filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03));
+      filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03)) !important;
     }
     .popper__arrow,
     .popper__arrow:after {
@@ -511,23 +618,22 @@ export default class Table extends Vue {
       display: block;
       width: 0;
       height: 0;
-      border-color: transparent;
-      border-style: solid;
+      border-style: solid !important;
     }
 
     &[x-placement^='bottom'] .popper__arrow {
       top: -6px;
       left: 50%;
       margin-right: 3px;
-      border-top-width: 0;
-      border-bottom-color: #ebeef5;
+      border-top-width: 0 !important;
+      border-bottom-color: #ebeef5 !important;
     }
     &[x-placement^='top'] .popper__arrow {
       bottom: -6px;
       left: 50%;
       margin-right: 3px;
-      border-top-color: #ebeef5;
-      border-bottom-width: 0;
+      border-top-color: #ebeef5 !important;
+      border-bottom-width: 0 !important;
     }
   }
 }

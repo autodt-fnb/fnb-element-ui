@@ -7,7 +7,6 @@ import { FnbPlateNumber } from './plate-number'
 import { FnbUpload } from './upload'
 import { FnbForm } from './form'
 import { FnbFormItem } from './form-item'
-import { FnbRemoteTable } from './remote-table'
 import { FnbSearchForm } from './search-form'
 import { FnbAmountInput } from './amount-input'
 import { FnbTableBotton } from './table-button'
@@ -39,9 +38,6 @@ export class Form extends FnbForm {}
 
 /** FormItem 组件 */
 export class FormItem extends FnbFormItem {}
-
-/** RemoteTable 组件 */
-export class RemoteTable extends FnbRemoteTable {}
 
 /** 搜索 表单 */
 export class SearchForm extends FnbSearchForm {}
