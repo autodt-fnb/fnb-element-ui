@@ -146,11 +146,14 @@ export declare class FnbTable extends ElTable {
    */
   noCard: boolean
 
+  /** 是否显示表格顶部 统计 和 列筛选排序 */
+  showTableTop: boolean
+
   /** 需要请求数据api方法 */
   fetchApi(...arg: any[]): Promise<any>
 
   /** 数据请求的参数 */
-  params: Record<string, any>
+  fetchParams: Record<string, any>
 
   /** 自定义 后端需要的 分页参数名称 */
   pageProp: { pageSize: string; pageNum: string }
@@ -158,11 +161,14 @@ export declare class FnbTable extends ElTable {
   /** 自定义后端返回参数的名称 */
   dataProp: { total: string; records: string }
 
-  /** 自定义存储排序 localStorage key值，默认用 路由 name（当一个路由有多个table时，必须自定义定义一个唯一的key值） */
+  /** 自定义存储排序 key值，默认用 路由 name（当一个路由有多个table时，必须自定义定义一个唯一的key值） */
   storageSortKey: string
 
   clearFilter(columnKey?: string[]): void
 
   /** 自动高度调用事件 */
   updateMaxHeight(): void
+
+  /** 获取fetch-api接口数据，手动调用此方法时，不更改分页数据 */
+  getList(): void
 }

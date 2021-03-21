@@ -10959,7 +10959,7 @@ vue-jest@^4.0.1:
     extract-from-css "^0.4.4"
     source-map "0.5.6"
 
-"vue-loader-v15@npm:vue-loader@^15.9.6":
+"vue-loader-v15@npm:vue-loader@^15.9.6", vue-loader@^15.9.6:
   version "15.9.6"
   resolved "https://registry.npmjs.org/vue-loader/-/vue-loader-15.9.6.tgz#f4bb9ae20c3a8370af3ecf09b8126d38ffdb6b8b"
   integrity sha512-j0cqiLzwbeImIC6nVIby2o/ABAWhlppyL/m5oJ67R5MloP0hj/DtFgb0Zmq3J9CG7AJ+AXIvHVnJAPBvrLyuDg==

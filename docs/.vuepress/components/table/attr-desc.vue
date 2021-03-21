@@ -64,6 +64,40 @@ const attrData = [
     type: 'array'
   },
   {
+    name: 'show-table-top',
+    desc: '是否显示表格顶部 统计 和 列筛选排序',
+    type: 'boolean',
+    default: 'false'
+  },
+  {
+    name: 'fetch-api',
+    desc: '需要请求数据api方法',
+    type: 'function'
+  },
+  {
+    name: 'fetch-params',
+    desc: 'fetch-api请求的参数',
+    type: 'object'
+  },
+  {
+    name: 'page-prop',
+    desc: `自定义fetch-api需要的分页参数名称，如api参数是<code>size</code>表示每页多少条数据，<code表示每页多少条数据，>num</code表示每页多少条数据，>表示页码，则可这么写 <code>{ pageSize: 'size', pageNum: 'num' }</code>`,
+    type: 'object',
+    default: `<code>{ pageSize: 'pageSize', pageNum: 'pageNum' }</code>`
+  },
+  {
+    name: 'data-prop',
+    desc: `自定义fetch-api返回结果的参数名，一般后端分页接口会在data里面返回 <code>records</code> 列表数据，<code>total</code> 数据总数。如果data直接返回列表数据（一个数组），则直接使用data里面的数据作为列表数据，data的长度作为total。`,
+    type: 'object',
+    default: `<code>{ records: 'records', total: 'total' }</code>`
+  },
+  {
+    name: 'storageSortKey',
+    desc:
+      '自定义排序存储indexedDB key值，默认使用路由name（当一个路由有多个table时，必须自定义定义一个唯一的key值）',
+    type: 'string'
+  },
+  {
     name: 'show-pagination',
     desc: '是否显示分页',
     type: 'boolean',
@@ -91,6 +125,12 @@ const attrData = [
     desc: '是否设置表格最大高度为，当前视图剩余高度，表格一屏显示',
     type: 'boolean',
     default: 'false'
+  },
+  {
+    name: 'no-card',
+    desc: '是否显示外层阴影样式',
+    type: 'boolean',
+    default: 'true'
   }
 ]
 
@@ -144,6 +184,10 @@ const tableAttrData = [
 /** slot */
 const slotData = [
   {
+    name: 'headerActions',
+    desc: '表格顶部添加操作按钮'
+  },
+  {
     name: 'append',
     desc:
       '插入至表格最后一行之后的内容，如果需要对表格的内容进行无限滚动操作，可能需要用到这个 slot。若表格有合计行，该 slot 会位于合计行之上。'
@@ -159,6 +203,10 @@ const methodsData = [
     name: 'updateMaxHeight',
     desc:
       '更新表格的最大高度，当表格顶部区域的高度变化时，需要同步调整表格的最大高度，可以调用此方法，需要 <code>auto-max-height</code> 参数为 <code>true</code>'
+  },
+  {
+    name: 'getList',
+    desc: `调用 <code>fetch-api</code> 接口，参数不变，重新请求。`
   }
 ]
 

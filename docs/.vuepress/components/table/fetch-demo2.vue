@@ -1,25 +1,41 @@
 <template>
-  <fnb-table
-    row-key="date"
-    :table="table"
-    :show-pagination="false"
-    :data="tableData"
-  ></fnb-table>
+  <div>
+    <fnb-table
+      ref="table"
+      row-key="date"
+      :table="table"
+      :fetch-api="getList"
+      :fetch-params="params"
+      :data-prop="dataProp"
+      show-table-top
+      storage-sort-key="fetch-demo2"
+    ></fnb-table>
+
+    <el-button :style="{ marginTop: '20px' }" @click="handleRefresh"
+      >刷新数据</el-button
+    >
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      params: {
+        date: ''
+      },
+      dataProp: {
+        total: 'num',
+        records: 'list'
+      },
       table: [
-        {
-          type: 'selection',
-          width: '80'
-        },
         {
           prop: 'date',
           label: '日期',
-          width: '180'
+          width: '180',
+          render: ({ row }) => {
+            return <span style="color: red">{row.date}</span>
+          }
         },
         {
           prop: 'name',
@@ -53,6 +69,18 @@ export default {
           address: '上海市普陀区金沙江路 1516 弄'
         }
       ]
+    }
+  },
+  methods: {
+    getList() {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve({ data: { list: this.tableData, num: 10 } })
+        }, 1500)
+      })
+    },
+    handleRefresh() {
+      this.$refs.table.getList()
     }
   }
 }

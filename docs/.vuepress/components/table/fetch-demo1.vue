@@ -2,8 +2,10 @@
   <fnb-table
     row-key="date"
     :table="table"
-    :show-pagination="false"
-    :data="tableData"
+    :fetch-api="getList"
+    :fetch-params="params"
+    show-table-top
+    storage-sort-key="fetch-demo1"
   ></fnb-table>
 </template>
 
@@ -11,15 +13,17 @@
 export default {
   data() {
     return {
+      params: {
+        date: ''
+      },
       table: [
-        {
-          type: 'selection',
-          width: '80'
-        },
         {
           prop: 'date',
           label: '日期',
-          width: '180'
+          width: '180',
+          render: ({ row }) => {
+            return <span style="color: red">{row.date}</span>
+          }
         },
         {
           prop: 'name',
@@ -29,6 +33,19 @@ export default {
         {
           prop: 'address',
           label: '地址'
+        },
+        {
+          prop: 'operate',
+          label: '操作',
+          render: () => {
+            return (
+              <span>
+                <fnb-table-button>查看</fnb-table-button>
+                <fnb-table-button>编辑</fnb-table-button>
+                <fnb-table-button>确认</fnb-table-button>
+              </span>
+            )
+          }
         }
       ],
       tableData: [
@@ -53,6 +70,15 @@ export default {
           address: '上海市普陀区金沙江路 1516 弄'
         }
       ]
+    }
+  },
+  methods: {
+    getList() {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve({ data: { records: this.tableData, total: 10 } })
+        }, 1500)
+      })
     }
   }
 }

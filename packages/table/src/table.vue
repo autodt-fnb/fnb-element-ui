@@ -3,7 +3,7 @@
  * @Author: 陈超
  * @Date: 2021-02-21 00:03:27
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-21 00:58:41
+ * @Last Modified time: 2021-03-21 12:54:04
  */
 import {
   Vue,
@@ -18,7 +18,7 @@ import {
 import { FnbTable, FnbTableColumn } from '../../../types/table'
 import { ElTooltip } from 'element-ui/types/tooltip'
 import { VNode } from 'vue'
-import { camelCase, debounce, kebabCase } from 'lodash'
+import { camelCase, debounce, isArray, kebabCase } from 'lodash'
 import TableHeader from './table-header.vue'
 import { formatTable, sortList } from './utils'
 
@@ -56,7 +56,7 @@ export default class Table extends Vue {
   /**
    * 数据总数
    */
-  @Prop() readonly total!: number
+  @Prop(Number) readonly total!: number
 
   /** 显示表格顶部 */
   @Prop(Boolean) readonly showTableTop!: boolean
@@ -66,7 +66,7 @@ export default class Table extends Vue {
   readonly fetchApi!: (...arg: any[]) => Promise<any>
 
   /** 请求的参数 */
-  @Prop({ type: Object, default: () => {} }) readonly params!: Record<
+  @Prop({ type: Object, default: () => {} }) readonly fetchParams!: Record<
     string,
     any
   >
@@ -192,7 +192,31 @@ export default class Table extends Vue {
     return typeof this.fetchApi === 'function'
   }
 
-  @Watch('params')
+  /** 分页 total */
+  get paginationTotal() {
+    if (this.isFetchApi) {
+      return this.state.total
+    }
+    return this.total
+  }
+
+  /** 分页 current-page */
+  get paginationCurrentPage() {
+    if (this.isFetchApi) {
+      return this.state.pageNum
+    }
+    return this.currentPageProp
+  }
+
+  /** 分页 page-size */
+  get paginationPageSize() {
+    if (this.isFetchApi) {
+      return this.state.pageSize
+    }
+    return this.pageSizeProp
+  }
+
+  @Watch('fetchParams')
   watchParams() {
     this.state.pageNum = 1
     this.getList()
@@ -210,7 +234,6 @@ export default class Table extends Vue {
       50
     )
     this.getList()
-    console.log(66)
   }
 
   mounted() {
@@ -231,17 +254,23 @@ export default class Table extends Vue {
     if (this.isFetchApi) {
       try {
         this.state.listLoading = true
-        const { data, total } =
-          (await this.fetchApi?.({
-            [this.pageProp.pageSize]: this.state.pageSize,
-            [this.pageProp.pageNum]: this.state.pageNum,
-            ...this.params
-          })) ?? {}
-        if (data) {
-          this.state.list =
-            (this.dataProp.records ? data[this.dataProp.records] : data) ?? []
-          this.state.total =
-            (this.dataProp.total ? data[this.dataProp.total] : total) ?? 0
+
+        const params = { ...this.fetchParams }
+        if (!this.showPagination || this.pageProp?.pageSize) {
+          params[this.pageProp.pageSize] = this.state.pageSize
+        }
+        if (!this.showPagination || this.pageProp?.pageNum) {
+          params[this.pageProp.pageNum] = this.state.pageNum
+        }
+
+        const { data, total } = (await this.fetchApi?.(params)) ?? {}
+
+        if (isArray(data)) {
+          this.state.list = data
+          this.state.total = total ?? data.length
+        } else if (Reflect.has(data ?? {}, this.dataProp.records)) {
+          this.state.list = data[this.dataProp.records] ?? []
+          this.state.total = data[this.dataProp.total] ?? total ?? 0
         }
       } catch (error) {
         console.log(error)
@@ -251,8 +280,11 @@ export default class Table extends Vue {
     }
   }
 
+  /** 表格选择项改变事件 */
   handleSelectionChange(list: any[] = []) {
-    this.state.selectionSize = list.length
+    if (this.showTableTop) {
+      this.state.selectionSize = list.length
+    }
   }
 
   /** 处理显示 popover */
@@ -263,9 +295,7 @@ export default class Table extends Vue {
     event: MouseEvent
   ) {
     // 如不是 需要隐藏文字 单元，不显示tooltips
-    if (!cell.classList.contains('tow-line')) {
-      return
-    }
+    if (!cell.classList.contains('tow-line')) return
 
     const type = event.type
     if (type === 'mouseenter') {
@@ -461,7 +491,7 @@ export default class Table extends Vue {
             sortKeys={this.state.sortKeys}
             storageSortKey={this.storageSortKey}
             table={this.filterHiddenTable}
-            total={this.total}
+            total={this.total ?? this.state.total}
           />
         )}
         <el-table
@@ -485,13 +515,13 @@ export default class Table extends Vue {
             <el-pagination
               small
               class="pagination"
-              current-page={this.currentPageProp ?? this.state.pageNum}
+              current-page={this.paginationCurrentPage}
               layout={this.paginationLayoutProps}
               on-current-change={this.handleCurrentChange}
               on-size-change={this.handleSizeChange}
-              page-size={this.pageSizeProp ?? this.state.pageSize}
+              page-size={this.paginationPageSize}
               page-sizes={[10, 30, 50, 100]}
-              total={this.total}
+              total={this.paginationTotal}
             />
             {this.$scopedSlots.paginationAppend?.(null) ??
               this.$slots.paginationAppend}
@@ -513,7 +543,6 @@ export default class Table extends Vue {
 <style lang="scss" scoped>
 ::v-deep {
   .el-table {
-    font-size: 12px;
     .cell {
       line-height: 1.25;
     }
