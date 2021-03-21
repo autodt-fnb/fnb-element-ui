@@ -2,7 +2,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:51:13
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-18 09:32:59
+ * @Last Modified time: 2021-03-21 17:48:27
  */
 import {
   AutocompletePorps,
@@ -223,7 +223,7 @@ const itemContent: {
     )
   },
   [FormItemType.DATE_PICKER](this, attrs: DatePickerProps) {
-    const { field, ...props } = attrs
+    const { field, valueTime, ...props } = attrs
 
     const isTime = (attrs.type ?? 'date').includes('time')
     if ((attrs.type ?? 'date').includes('range')) {
@@ -232,6 +232,10 @@ const itemContent: {
       props.defaultTime ??= ['00:00:00', '23:59:59']
     } else {
       props.placeholder ??= isTime ? '选择时间' : '选择日期'
+    }
+
+    if (valueTime) {
+      props.valueFormat = 'yyyy-MM-dd HH:mm:ss'
     }
 
     // 默认格式化日期
@@ -300,7 +304,7 @@ const itemContent: {
     )
   },
   [FormItemType.TIME_SELECT](this, attrs: TimeSelectProps) {
-    const { field, onChange } = attrs
+    const { field, onChange, rangeSeparator } = attrs
     if (attrs.isRange) {
       attrs.startPlaceholder ??= '开始时间'
       attrs.endPlaceholder ??= '结束时间'
@@ -325,7 +329,7 @@ const itemContent: {
           ? this.form[field[1]]
           : this.form[field as string][1]
       return (
-        <el-row align="center" type="flex">
+        <el-row align="middle" type="flex">
           <el-time-select
             maxTime={endTime}
             pickerOptions={attrs.startPickerOptions}
@@ -337,7 +341,10 @@ const itemContent: {
             onInput={(val: string) => {
               Array.isArray(field) && field.length === 2
                 ? (this.form[field[0]] = val)
-                : (this.form[field as string][0] = val)
+                : (this.form[field as string] = [
+                    val,
+                    this.form[field as string][1]
+                  ])
               if (
                 !!endTime &&
                 dayjs(`2000-01-01 ${val}`).isSameOrAfter(
@@ -350,6 +357,7 @@ const itemContent: {
               }
             }}
           />
+          <span style={{ margin: '0 5px' }}>{rangeSeparator ?? '-'}</span>
           <el-time-select
             pickerOptions={{
               minTime: startTime,
@@ -364,7 +372,10 @@ const itemContent: {
             onInput={(val: string) => {
               Array.isArray(field) && field.length === 2
                 ? (this.form[field[1]] = val)
-                : (this.form[field as string][1] = val)
+                : (this.form[field as string] = [
+                    this.form[field as string][0],
+                    val
+                  ])
             }}
           />
         </el-row>
@@ -492,10 +503,10 @@ const itemContent: {
     } = attrs
 
     const cascaderProps = {
-      multiple: multiple ?? false,
-      checkStrictly: checkStrictly ?? false,
-      emitPath: emitPath ?? true,
-      ...(props ?? {})
+      ...(props ?? {}),
+      multiple: multiple ?? props?.multiple ?? false,
+      checkStrictly: checkStrictly ?? props?.checkStrictly ?? false,
+      emitPath: emitPath ?? props?.emitPath ?? true
     }
 
     //多选模式下默认折叠Tag

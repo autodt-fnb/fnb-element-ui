@@ -73,12 +73,12 @@ export default {
         },
         {
           name: 'onBlur',
-          desc: `当 input 失去焦点时触发, 原 el-select <code>select</code> event`,
+          desc: `当 input 失去焦点时触发, 原 el-select <code>blur</code> event`,
           type: '(event: Event) => void'
         },
         {
           name: 'onFocus',
-          desc: `当 input 获得焦点时触发, 原 el-select <code>select</code> event`,
+          desc: `当 input 获得焦点时触发, 原 el-select <code>focus</code> event`,
           type: '(event: Event) => void'
         },
         {

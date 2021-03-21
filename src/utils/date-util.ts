@@ -108,7 +108,6 @@ function shortcuts(config: DatePickerProps['pickerShortcuts']) {
       }
     }
   }
-
   if (typeof config === 'boolean' && config) {
     return Object.values(
       pick(date, ['week', 'oneMonth', 'threeMonth', 'halfAYear', 'year'])
@@ -124,9 +123,10 @@ export function pickerOptions({
   dateLimit,
   endToday,
   startToday,
-  isExcludeToDay,
+  isExcludeToday,
   pickerOptions,
-  pickerShortcuts
+  pickerShortcuts,
+  type
 }: DatePickerProps) {
   /** 记录日期选择最小值 */
   let minDate!: Date | null
@@ -165,11 +165,11 @@ export function pickerOptions({
           '[]'
         )) ||
       (!!endToday &&
-        (!!isExcludeToDay
+        (!!isExcludeToday
           ? dayjs().isSameOrBefore(time, 'd')
           : dayjs().isBefore(time, 'd'))) ||
       (!!startToday &&
-        (!!isExcludeToDay
+        (!!isExcludeToday
           ? dayjs().isSameOrAfter(time, 'd')
           : dayjs().isAfter(time, 'd')))
     )
@@ -188,6 +188,8 @@ export function pickerOptions({
   return {
     onPick: onPickEvent,
     disabledDate: pickerOptions?.disabledDate ?? disabledDate,
-    shortcuts: pickerOptions?.shortcuts ?? shortcuts(pickerShortcuts)
+    shortcuts:
+      pickerOptions?.shortcuts ??
+      (type?.includes('range') ? shortcuts(pickerShortcuts) : undefined)
   }
 }

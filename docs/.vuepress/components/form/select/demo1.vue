@@ -65,8 +65,8 @@ export default {
           optionList,
           outputType: 'string',
           itemLabel: '输出字符串',
-          onChange(val) {
-            console.log('输出字符串：', val)
+          onChange: () => {
+            console.log('输出字符串：', this.form.input5)
           }
         },
         {
@@ -77,8 +77,8 @@ export default {
           outputType: 'string',
           outputSeparator: '@',
           itemLabel: '输出@分割字符串',
-          onChange(val) {
-            console.log('输出@分割字符串：', val)
+          onChange: () => {
+            console.log('输出字符串：', this.form.input6)
           }
         },
         {

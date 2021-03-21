@@ -197,7 +197,7 @@ export interface AutocompletePorps extends GetCommonProps<ElAutocomplete> {
 
 export interface OptionProps extends GetElementProps<ElOption> {
   /** 自定义内容 */
-  render?: (label: unknown, value: unknown) => Render
+  render?: (label: any, value: any) => Render
 }
 
 export interface SelectProps extends GetCommonProps<ElSelect> {
@@ -216,11 +216,11 @@ export interface SelectProps extends GetCommonProps<ElSelect> {
   /** 输出字符串 分割符, 默认英文逗号 */
   outputSeparator?: string
 
-  onChange?: (v: unknown) => void
+  onChange?: (v: any) => void
 
   onVisibleChange?: (v: boolean) => void
 
-  onRemoveTag?: (v: unknown) => void
+  onRemoveTag?: (v: any) => void
 
   onClear?: () => void
 
@@ -260,8 +260,12 @@ export interface DatePickerProps
   unlinkPanels?: boolean
 
   /** 选中日期后的默认具体时刻 */
-  defaultTime?: string | string[]
+  defaultTime?: [string, string]
 
+  /** 日期范围选择时，value值是否加上 时分秒，即 `valueFormat="yyyy-MM-dd HH:mm:ss"`（valueFormat值会被覆盖） */
+  valueTime?: boolean
+
+  /** 日期范围选择 限制，默认单位天，可通过type传入时间单位 */
   dateLimit?: number | { limit: number; type?: OpUnitType }
 
   /** 是否不能选择超过今天 */
@@ -271,7 +275,7 @@ export interface DatePickerProps
   startToday?: boolean
 
   /** 当 `endToday` 或 `startToday` 为 `true` 时，默认是可以选择今天的，`isExcludeToDay` 为true，不可以选中今天 */
-  isExcludeToDay?: boolean
+  isExcludeToday?: boolean
 
   pickerShortcuts?: boolean | PickerShortcuts[]
 
@@ -313,13 +317,16 @@ export interface TimeSelectProps
   endPlaceholder?: string
 
   /** start Additional options, check the table below */
-  startPickerOptions?: string
+  startPickerOptions?: TimeSelectOptions
 
   /** end Additional options, check the table below */
   endPickerOptions?: TimeSelectOptions
 
   /** Whether to pick a time range */
   isRange?: boolean
+
+  /** 选择范围时的分隔符 */
+  rangeSeparator?: string
 
   onChange?: (e?: string | string[]) => void
 
@@ -332,7 +339,7 @@ export interface SwitchProps extends GetCommonProps<ElSwitch> {
   formType: FormItemType.SWITCH
 
   /** switch 状态发生变化时的回调函数 */
-  onChange?: (e: unknown) => void
+  onChange?: (e: any) => void
 }
 
 export interface CheckboxProps extends GetCommonProps<ElCheckbox> {
@@ -342,7 +349,7 @@ export interface CheckboxProps extends GetCommonProps<ElCheckbox> {
   render?: () => Render
 
   /** 当绑定值变化时触发的事件 */
-  onChange?: (e: unknown) => void
+  onChange?: (e: any) => void
 }
 
 export interface CheckboxButtonProps extends GetCommonProps<ElCheckboxButton> {
@@ -350,7 +357,7 @@ export interface CheckboxButtonProps extends GetCommonProps<ElCheckboxButton> {
   render: () => Render
 
   /** 当绑定值变化时触发的事件 */
-  onChange?: (e: unknown) => void
+  onChange?: (e: any) => void
 }
 
 export interface CheckboxGroupProps extends GetCommonProps<ElCheckboxGroup> {
@@ -374,7 +381,7 @@ export interface CheckboxGroupProps extends GetCommonProps<ElCheckboxGroup> {
   checkboxList?: (Omit<CheckboxProps, 'formType'> | CheckboxButtonProps)[]
 
   /** 当绑定值变化时触发的事件 */
-  onChange?: (e: unknown) => void
+  onChange?: (e: any) => void
 }
 
 export interface RadioProps extends GetCommonProps<ElRadio> {
@@ -384,7 +391,7 @@ export interface RadioProps extends GetCommonProps<ElRadio> {
   render?: () => Render
 
   /** 当绑定值变化时触发的事件 */
-  onChange?: (e: unknown) => void
+  onChange?: (e: any) => void
 }
 
 export interface RadioButtonProps extends GetCommonProps<ElRadioButton> {
@@ -392,7 +399,7 @@ export interface RadioButtonProps extends GetCommonProps<ElRadioButton> {
   render: () => Render
 
   /** 当绑定值变化时触发的事件 */
-  onChange?: (e: unknown) => void
+  onChange?: (e: any) => void
 }
 
 export interface RadioGroupProps extends GetCommonProps<ElRadioGroup> {
@@ -410,7 +417,7 @@ export interface RadioGroupProps extends GetCommonProps<ElRadioGroup> {
   radioList?: (Omit<RadioProps, 'formType'> | RadioButtonProps)[]
 
   /** 当绑定值变化时触发的事件 */
-  onChange?: (e: unknown) => void
+  onChange?: (e: any) => void
 }
 
 /**
@@ -445,6 +452,9 @@ export interface CascaderProps<V = any, D = CascaderOption>
       | undefined
     )[]
   ) => void
+
+  /** 当绑定值变化时触发的事件 */
+  onChange?: (e: any) => void
 
   /** 自定义内容 */
   render?: (e: { node: CascaderNode<V, D>; data: D[] }) => Render

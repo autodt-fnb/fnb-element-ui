@@ -11,7 +11,7 @@
  * @Author: 陈超
  * @Date: 2021-03-09 17:52:30
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-15 14:20:54
+ * @Last Modified time: 2021-03-22 00:19:45
  */
 import { FnbForm } from '@autodt/fnb-element-ui/types/form'
 import { FormItemProps } from '@autodt/fnb-element-ui/types/form-item'
@@ -106,10 +106,11 @@ export default class SearchForm extends Vue {
   handleVisible() {
     this.visible = !this.visible
     const table = this.$parent?.$children.find(
-      v =>
-        (v.$options.name === 'FnbTable' && (v as FnbTable).autoMaxHeight) ||
-        v.$options.name === 'FnbRemoteTable'
+      v => v?.$options.name === 'FnbTable' && (v as FnbTable).autoMaxHeight
     ) as FnbTable
+
+    if (!table) return
+
     if (table.$options.name === 'FnbTable') {
       table?.updateMaxHeight()
     } else {

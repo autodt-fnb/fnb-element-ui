@@ -72,6 +72,7 @@ module.exports = {
               ['/component/form/upload', 'UPLOAD 媒体上传']
             ]
           },
+          ['/component/search-form', 'SearchForm 搜索表单'],
           ['/component/iconfont', 'Iconfont 字体图标'],
           ['/component/plate-number', 'PlateNumber 车牌号'],
           ['/component/amount-input', 'AmountInput 金额输入框'],
