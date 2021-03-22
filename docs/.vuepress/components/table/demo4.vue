@@ -14,7 +14,6 @@ export default {
       table: [
         {
           type: 'selection',
-          label: '序号',
           width: '80'
         },
         {

@@ -11,27 +11,13 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": [
-      "webpack-env",
-      "jest"
-    ],
+    "types": ["webpack-env", "jest"],
     "paths": {
-      "@/*": [
-        "examples/*"
-      ],
-      "~/*": [
-        "packages/*"
-      ],
-      "fnb-element-ui/*": [
-        "./*"
-      ]
+      "@/*": ["examples/*"],
+      "~/*": ["packages/*"],
+      "fnb-element-ui/*": ["./*"]
     },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
   "include": [
     "examples/**/*.ts",
@@ -46,8 +32,5 @@
     "tests/**/*.ts",
     "tests/**/*.tsx"
   ],
-  "exclude": [
-    "node_modules",
-    "lib"
-  ]
+  "exclude": ["node_modules", "lib"]
 }

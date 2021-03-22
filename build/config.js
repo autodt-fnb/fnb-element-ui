@@ -15,7 +15,8 @@ exports.alias = {
   src: path.resolve(__dirname, '../src'),
   '~': path.resolve(__dirname, '../packages'),
   '@': path.resolve(__dirname, '../examples'),
-  'fnb-element-ui': path.resolve(__dirname, '../')
+  'fnb-element-ui': path.resolve(__dirname, '../'),
+  types: path.resolve(__dirname, '../types')
 }
 
 exports.vue = {

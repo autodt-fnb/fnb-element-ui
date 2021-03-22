@@ -8,10 +8,10 @@
     :current-page.sync="pageNum"
   >
     <template v-slot:date="{ row }">
-      <span style="color: red;">{{ row.date }}</span>
+      <span style="color: red">{{ row.date }}</span>
     </template>
     <template v-slot:name="{ row }">
-      <span style="color: green;">{{ row.name }}</span>
+      <span style="color: green">{{ row.name }}</span>
     </template>
   </fnb-table>
 </template>

@@ -11,11 +11,30 @@ module.exports = {
     'plugin:vue/essential',
     '@vue/typescript',
     '@vue/prettier',
-    'prettier/@typescript-eslint'
+    'prettier/@typescript-eslint',
+    'prettier/react'
   ],
-
+  plugins: ['react'],
   rules: {
     'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+    'react/jsx-key': 2,
+    'react/jsx-no-duplicate-props': 2,
+    'react/jsx-sort-props': [
+      2,
+      {
+        shorthandFirst: true,
+        callbacksLast: true,
+        ignoreCase: true
+      }
+    ],
+    'react/self-closing-comp': [
+      2,
+      {
+        component: true,
+        html: true
+      }
+    ],
+    'react/jsx-no-undef': 2,
     'vue/name-property-casing': [2, 'PascalCase'],
     'vue/html-self-closing': [
       2,

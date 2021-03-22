@@ -1,4 +1,10 @@
-import Upload from './src/main.vue'
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-21 00:04:01
+ * @Last Modified by:   陈超
+ * @Last Modified time: 2021-02-21 00:04:01
+ */
+import Upload from './src/upload.vue'
 
 /* istanbul ignore next */
 Upload.install = function (Vue: typeof Upload) {

@@ -1,7 +1,16 @@
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-21 00:04:09
+ * @Last Modified by: 陈超
+ * @Last Modified time: 2021-03-17 14:10:06
+ */
 import Vue from 'vue'
+import VueCompositionApi from '@vue/composition-api'
 
 import './styles/common.scss'
 import './styles/reset-element-ui.scss'
+
+import Clipboard from './directives/clipboard'
 
 import Table from '~/table/index'
 import SelectGoods from '~/select-goods'
@@ -13,7 +22,11 @@ import SearchContainer from '~/search-container'
 import ScrollConatiner from '~/scroll-container'
 import AmountInput from '~/amount-input'
 import Upload from '~/upload'
-import Clipboard from './directives/clipboard'
+import Form from '~/form'
+import FormItem from '~/form-item'
+import { FormItemType } from './enum/form-item'
+import SearchForm from '~/search-form'
+import TableButton from '~/table-button'
 
 const components = [
   Table,
@@ -25,7 +38,11 @@ const components = [
   SearchContainer,
   ScrollConatiner,
   AmountInput,
-  Upload
+  Upload,
+  Form,
+  FormItem,
+  SearchForm,
+  TableButton
 ]
 
 const directives = [Clipboard]
@@ -40,6 +57,8 @@ const install = function (vue: typeof Vue, options: Record<string, unknown>) {
   directives.forEach(directive => {
     vue.directive(directive.name, directive)
   })
+
+  vue.use(VueCompositionApi)
 }
 
 export default {
@@ -53,5 +72,10 @@ export default {
   SearchContainer,
   ScrollConatiner,
   AmountInput,
-  Upload
+  Upload,
+  Form,
+  FormItem,
+  FormItemType,
+  SearchForm,
+  TableButton
 }

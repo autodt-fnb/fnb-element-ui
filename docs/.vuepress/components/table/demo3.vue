@@ -1,5 +1,10 @@
 <template>
-  <fnb-table row-key="date" :table="table" :data="tableData"></fnb-table>
+  <fnb-table
+    row-key="date"
+    :table="table"
+    show-table-top
+    :data="tableData"
+  ></fnb-table>
 </template>
 
 <script>
@@ -9,7 +14,6 @@ export default {
       table: [
         {
           type: 'selection',
-          label: '序号',
           width: '80'
         },
         {

@@ -28,7 +28,7 @@ export default ({
       vue
     }
   })
-  Vue.use(ElementUI)
+  Vue.use(ElementUI, { size: 'small' })
   Vue.use(FnbElementUI, {
     UPLOAD_URL: ''
   })

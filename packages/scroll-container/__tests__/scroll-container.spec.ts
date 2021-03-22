@@ -1,6 +1,12 @@
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-21 00:02:11
+ * @Last Modified by:   陈超
+ * @Last Modified time: 2021-02-21 00:02:11
+ */
 import { mount, createLocalVue } from '@vue/test-utils'
 import { Scrollbar } from 'element-ui'
-import ScrollContainer from '../src/main.vue'
+import ScrollContainer from '../src/scroll-container.vue'
 const localVue = createLocalVue()
 localVue.use(Scrollbar)
 const _mount = (propsData?: any) =>

@@ -1,3 +1,4 @@
+import { Render } from './common.d'
 import { CreateElement, VNode } from 'vue'
 import {
   TableColumnType,
@@ -54,6 +55,21 @@ export interface FnbTableColumn<R = object> {
   /** Function that formats content */
   formatter?: (row: R, column: TableColumn) => any
 
+  /**
+   * 自定义渲染内容，代替slot 插入内容，必须要使用箭头函数的写法
+   *
+   * @example
+   * ```ts
+   * {
+   *   prop: 'example',
+   *   render: ({ row, column, index }) => {
+   *     return <div>自定义</div>
+   *   }
+   * }
+   * ```
+   */
+  render?: (data: { row: R; column: TableColumn; index: number }) => Render
+
   /** Whether to hide extra content and show them in a tooltip when hovering on the cell */
   showOverflowTooltip?: boolean
 
@@ -107,6 +123,9 @@ export declare class FnbTable extends ElTable {
    */
   showPagination: boolean
 
+  /** 是否自动最大高度 */
+  autoMaxHeight: boolean
+
   /**
    * 每页显示数
    */
@@ -127,5 +146,29 @@ export declare class FnbTable extends ElTable {
    */
   noCard: boolean
 
+  /** 是否显示表格顶部 统计 和 列筛选排序 */
+  showTableTop: boolean
+
+  /** 需要请求数据api方法 */
+  fetchApi(...arg: any[]): Promise<any>
+
+  /** 数据请求的参数 */
+  fetchParams: Record<string, any>
+
+  /** 自定义 后端需要的 分页参数名称 */
+  pageProp: { pageSize: string; pageNum: string }
+
+  /** 自定义后端返回参数的名称 */
+  dataProp: { total: string; records: string }
+
+  /** 自定义存储排序 key值，默认用 路由 name（当一个路由有多个table时，必须自定义定义一个唯一的key值） */
+  storageSortKey: string
+
   clearFilter(columnKey?: string[]): void
+
+  /** 自动高度调用事件 */
+  updateMaxHeight(): void
+
+  /** 获取fetch-api接口数据，手动调用此方法时，不更改分页数据 */
+  getList(): void
 }

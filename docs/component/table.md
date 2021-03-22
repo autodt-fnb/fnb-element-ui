@@ -9,6 +9,27 @@
   </highlight-code>
 </common-democode>
 
+<common-democode title="请求远程数据" description="从服务端请求数据。">
+  <table-fetch-demo1></table-fetch-demo1>
+  <highlight-code slot="codeText" lang="vue">
+<<< @/docs/.vuepress/components/table/fetch-demo1.vue
+  </highlight-code>
+</common-democode>
+
+<common-democode title="请求远程数据，自定义远程返回参数" description="从服务端请求数据，自定义服务端返回参数名称。">
+  <table-fetch-demo2></table-fetch-demo2>
+  <highlight-code slot="codeText" lang="vue">
+<<< @/docs/.vuepress/components/table/fetch-demo2.vue
+  </highlight-code>
+</common-democode>
+
+<common-democode title="顶部操作按钮" description="自定义顶部额外内容">
+  <table-fetch-demo3></table-fetch-demo3>
+  <highlight-code slot="codeText" lang="vue">
+<<< @/docs/.vuepress/components/table/fetch-demo3.vue
+  </highlight-code>
+</common-democode>
+
 <common-democode title="无阴影table">
   <table-demo2></table-demo2>
   <highlight-code slot="codeText" lang="vue">
@@ -34,6 +55,13 @@
   <table-demo5></table-demo5>
   <highlight-code slot="codeText" lang="vue">
 <<< @/docs/.vuepress/components/table/demo5.vue
+  </highlight-code>
+</common-democode>
+
+<common-democode title="自定义列内容，render 函数" description="自定义列的显示内容，可组合其他组件使用。">
+  <table-demo7></table-demo7>
+  <highlight-code slot="codeText" lang="vue">
+<<< @/docs/.vuepress/components/table/demo7.vue
   </highlight-code>
 </common-democode>
 

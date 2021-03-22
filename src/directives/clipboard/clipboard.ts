@@ -1,3 +1,9 @@
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-21 00:04:14
+ * @Last Modified by:   陈超
+ * @Last Modified time: 2021-02-21 00:04:14
+ */
 // Inspired by https://github.com/Inndy/vue-clipboard2
 import Clipboard from 'clipboard'
 import { VNode } from 'vue'

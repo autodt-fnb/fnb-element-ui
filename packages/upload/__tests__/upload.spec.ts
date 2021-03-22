@@ -1,6 +1,12 @@
+/*
+ * @Author: 陈超
+ * @Date: 2021-02-21 00:03:39
+ * @Last Modified by:   陈超
+ * @Last Modified time: 2021-02-21 00:03:39
+ */
 import { createLocalVue, mount } from '@vue/test-utils'
 import ElementUI from 'element-ui'
-import Upload from '../src/main.vue'
+import Upload from '../src/upload.vue'
 
 const localVue = createLocalVue()
 localVue.use(ElementUI)
