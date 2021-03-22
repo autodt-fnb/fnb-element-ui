@@ -12,7 +12,7 @@ import { ElSelect } from 'element-ui/types/select'
 import { ElTimePicker } from 'element-ui/types/time-picker'
 import { ElTimeSelect, TimeSelectOptions } from 'element-ui/types/time-select'
 
-import { FormItemType } from 'fnb-element-ui/src/enum/form-item'
+import { FormItemType } from '../src/enum/form-item'
 import { FormRuleItem } from './form'
 import { ElSwitch } from 'element-ui/types/switch'
 import { ElCheckbox } from 'element-ui/types/checkbox'
