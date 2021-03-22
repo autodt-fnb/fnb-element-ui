@@ -94,6 +94,9 @@ module.exports = {
     ]
   ],
   chainWebpack: (config, isServer) => {
-    config.resolve.alias.set('fnb-element-ui', path.join(__dirname, '../../'))
+    config.resolve.alias.set(
+      '@autodt/fnb-element-ui',
+      path.join(__dirname, '../../lib')
+    )
   }
 }

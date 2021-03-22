@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { FormItemType } from 'fnb-element-ui/lib'
+import { FormItemType } from '@autodt/fnb-element-ui'
 export default {
   components: {},
   data() {
