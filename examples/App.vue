@@ -112,9 +112,9 @@
 </template>
 
 <script lang="tsx">
-import { FormItemProps } from 'fnb-element-ui/types/form-item'
+import { FormItemProps } from '@autodt/fnb-element-uitypes/form-item'
 import { Component, Vue, Ref } from 'vue-property-decorator'
-import { FormItemType } from 'fnb-element-ui/src/enum/form-item'
+import { FormItemType } from '@autodt/fnb-element-uisrc/enum/form-item'
 import RemoteTable from '~/remote-table'
 import { FnbTable, FnbTableColumn } from '../types/table'
 import FormDemo from './components/FormDemo.vue'

@@ -70,7 +70,7 @@
  * @Author: 陈超
  * @Date: 2021-02-21 00:03:50
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-14 22:22:03
+ * @Last Modified time: 2021-03-22 16:37:53
  */
 import { Vue, Component, Prop, Ref, Watch, Emit } from 'vue-property-decorator'
 import { ElUpload, ElUploadInternalFileDetail } from 'element-ui/types/upload'
@@ -79,7 +79,7 @@ import {
   Remove,
   Success,
   Preview
-} from 'fnb-element-ui/types/upload'
+} from '@autodt/fnb-element-ui/types/upload'
 
 @Component({ name: 'FnbUpload', components: {}, inheritAttrs: false })
 export default class Upload extends Vue {

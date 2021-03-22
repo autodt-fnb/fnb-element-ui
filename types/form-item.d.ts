@@ -427,6 +427,14 @@ export interface CascaderProps<V = any, D = CascaderOption>
   extends Omit<GetCommonProps<ElCascader<V>>, 'field'> {
   formType: FormItemType.CASCADER
 
+  options?: any[]
+
+  /** 输出的值是逗号分割的字符串，还是保持数组形式 */
+  outputType?: 'string' | 'array'
+
+  /** 输出字符串 分割符, 默认英文逗号 */
+  outputSeparator?: string
+
   /** 字段名称 */
   field?: string | string[]
 

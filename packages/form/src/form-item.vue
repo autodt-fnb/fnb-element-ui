@@ -3,14 +3,14 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:49:41
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-18 11:19:18
+ * @Last Modified time: 2021-03-22 16:31:11
  */
-import { FormRuleItem, FormRules } from 'fnb-element-ui/types/form'
+import { FormRuleItem, FormRules } from '@autodt/fnb-element-ui/types/form'
 import {
   ElFormItemProps,
   FormItemProps,
   InputPorps
-} from 'fnb-element-ui/types/form-item'
+} from '@autodt/fnb-element-ui/types/form-item'
 import {
   camelCase,
   isArray,
@@ -28,7 +28,7 @@ import {
   InjectReactive
 } from 'vue-property-decorator'
 import itemContent, { elFormItemAttributes } from './item-content'
-import { FormItemType } from 'fnb-element-ui/src/enum/form-item'
+import { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
 
 @Component({ name: 'FnbFormItem', components: {}, inheritAttrs: false })
 export default class FormItem extends Vue {
