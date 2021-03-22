@@ -1,6 +1,6 @@
 {
   "name": "@autodt/fnb-element-ui",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "private": false,
   "description": "基于Element UI 组件封装的适用于本公司业务逻辑通用组件",
   "author": {
