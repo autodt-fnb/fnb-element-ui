@@ -3,7 +3,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:58:00
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-18 10:40:05
+ * @Last Modified time: 2021-03-22 16:31:13
  */
 
 import {
@@ -21,7 +21,7 @@ import {
   ValidateCallback,
   ValidateFieldCallback
 } from 'element-ui/types/form'
-import { FormRules } from 'fnb-element-ui/types/form'
+import { FormRules } from '@autodt/fnb-element-ui/types/form'
 
 const formAttributes = [
   'rules',

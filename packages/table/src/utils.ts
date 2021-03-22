@@ -1,4 +1,4 @@
-import { FnbTableColumn } from 'fnb-element-ui/types/table'
+import { FnbTableColumn } from '@autodt/fnb-element-ui/types/table'
 import { isArray, sortBy } from 'lodash'
 
 /**

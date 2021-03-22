@@ -10,8 +10,8 @@ import {
 import {
   ElTree,
   TreeNode as ElTreeNode
-} from 'fnb-element-ui/node_modules/element-ui/types/tree'
-import { FnbTableColumn } from 'fnb-element-ui/types/table'
+} from '@autodt/fnb-element-ui/node_modules/element-ui/types/tree'
+import { FnbTableColumn } from '@autodt/fnb-element-ui/types/table'
 import { sortList } from './utils'
 import ScrollContainer from '~/scroll-container'
 import IndexedDB from './indexedDB'
