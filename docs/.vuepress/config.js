@@ -4,7 +4,6 @@ module.exports = {
   title: 'fnb-element-ui',
   description: 'Vue 组件库',
   port: '8379',
-  base: '/fnb-element-ui/',
   head: [
     [
       'link',
