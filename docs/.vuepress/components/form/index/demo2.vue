@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { FormItemType } from '@autodt/fnb-element-ui'
+import { FormItemType } from 'fnb-element-ui/lib'
 
 export default {
   components: {},

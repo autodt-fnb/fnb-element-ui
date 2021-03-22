@@ -16,7 +16,7 @@ module.exports = {
     config.resolve.alias
       .set('@', path.resolve('examples'))
       .set('~', path.resolve('packages'))
-      .set('@autodt/fnb-element-ui', path.resolve('.'))
+      .set('fnb-element-ui', path.resolve('.'))
       .set('types', path.resolve('types'))
 
     config.when(process.env.NODE_ENV === 'development', config => {

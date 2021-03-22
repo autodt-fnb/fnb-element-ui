@@ -1,4 +1,5 @@
 const merge = require('merge')
+const path = require('path')
 
 module.exports = {
   title: 'fnb-element-ui',
@@ -92,17 +93,7 @@ module.exports = {
       }
     ]
   ],
-  configureWebpack: {
-    devtool: 'cheap-eval-source-map'
-  },
   chainWebpack: (config, isServer) => {
-    config.module
-      .rule('js') // Find the rule.
-      .use('babel-loader') // Find the loader
-      .tap(options => {
-        options.presets[0][1].jsx = true
-        console.log(options.presets)
-        return options
-      })
+    config.resolve.alias.set('fnb-element-ui', path.join(__dirname, '../../'))
   }
 }
