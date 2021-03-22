@@ -10,7 +10,7 @@
 </template>
 
 <script lang="tsx">
-import { FnbForm } from '@autodt/fnb-element-ui/types/form'
+import { FnbForm } from 'fnb-element-ui/types/form'
 import { Vue, Component, Ref } from 'vue-property-decorator'
 
 @Component({ name: 'FormDemo', components: {} })

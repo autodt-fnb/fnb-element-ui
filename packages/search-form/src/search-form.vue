@@ -13,13 +13,13 @@
  * @Last Modified by: 陈超
  * @Last Modified time: 2021-03-22 00:19:45
  */
-import { FnbForm } from '@autodt/fnb-element-ui/types/form'
-import { FormItemProps } from '@autodt/fnb-element-ui/types/form-item'
-import { FnbTable } from '@autodt/fnb-element-ui/types/table'
+import { FnbForm } from 'fnb-element-ui/types/form'
+import { FormItemProps } from 'fnb-element-ui/types/form-item'
+import { FnbTable } from 'fnb-element-ui/types/table'
 import { Vue, Component, Prop, Ref } from 'vue-property-decorator'
 import Form from '~/form'
 import FormItem from '~/form-item'
-import { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
+import { FormItemType } from 'fnb-element-ui/src/enum/form-item'
 import SearchContainer from '~/search-container'
 import { isArray } from 'lodash'
 

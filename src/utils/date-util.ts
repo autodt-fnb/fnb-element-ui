@@ -2,7 +2,7 @@ import dayjs, { ConfigType, OpUnitType } from 'dayjs'
 import {
   DatePickerProps,
   PickerShortcuts
-} from '@autodt/fnb-element-ui/types/form-item'
+} from 'fnb-element-ui/types/form-item'
 import isoWeek from 'dayjs/plugin/isoWeek'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'

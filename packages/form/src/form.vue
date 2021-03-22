@@ -21,7 +21,7 @@ import {
   ValidateCallback,
   ValidateFieldCallback
 } from 'element-ui/types/form'
-import { FormRules } from '@autodt/fnb-element-ui/types/form'
+import { FormRules } from 'fnb-element-ui/types/form'
 
 const formAttributes = [
   'rules',

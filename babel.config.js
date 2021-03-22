@@ -3,10 +3,7 @@ module.exports = {
     [
       '@vue/app',
       {
-        useBuiltIns: 'entry',
-        jsx: {
-          compositionAPI: true
-        }
+        useBuiltIns: 'entry'
       }
     ]
   ]

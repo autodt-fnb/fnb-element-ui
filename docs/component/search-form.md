@@ -3,7 +3,7 @@
 <common-democode title="基础用法">
   <search-form-demo1></search-form-demo1>
   <highlight-code slot="codeText" lang="vue">
-<<< @/.vuepress/components/search-form/demo1.vue
+<<< @/docs/.vuepress/components/search-form/demo1.vue
   </highlight-code>
 </common-democode>
 

@@ -3,7 +3,7 @@
 <common-democode title="基础用法">
   <form-time-picker-demo1></form-time-picker-demo1>
   <highlight-code slot="codeText" lang="vue">
-<<< @/.vuepress/components/form/time-picker/demo1.vue
+<<< @/docs/.vuepress/components/form/time-picker/demo1.vue
   </highlight-code>
 </common-democode>
 

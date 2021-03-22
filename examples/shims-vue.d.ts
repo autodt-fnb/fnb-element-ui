@@ -4,4 +4,4 @@ declare module '*.vue' {
   export default Vue
 }
 
-declare module '@autodt/fnb-element-ui/lib'
+declare module 'fnb-element-ui/lib'

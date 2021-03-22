@@ -3,7 +3,7 @@
 <common-democode title="基础用法">
   <form-switch-demo1></form-switch-demo1>
   <highlight-code slot="codeText" lang="vue">
-<<< @/.vuepress/components/form/switch/demo1.vue
+<<< @/docs/.vuepress/components/form/switch/demo1.vue
   </highlight-code>
 </common-democode>
 

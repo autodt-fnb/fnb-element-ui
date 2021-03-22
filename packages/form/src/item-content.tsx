@@ -22,7 +22,7 @@ import {
   CascaderProps,
   UploadProps,
   AmountInputPorps
-} from '@autodt/fnb-element-ui/types/form-item'
+} from 'fnb-element-ui/types/form-item'
 import {
   camelCase,
   isArray,
@@ -31,10 +31,10 @@ import {
   pickBy,
   trimStart
 } from 'lodash'
-import { pickerOptions } from '@autodt/fnb-element-ui/src/utils/date-util'
+import { pickerOptions } from 'fnb-element-ui/src/utils/date-util'
 import dayjs from 'dayjs'
-import { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
-import { Render } from '@autodt/fnb-element-ui/types/common'
+import { FormItemType } from 'fnb-element-ui/src/enum/form-item'
+import { Render } from 'fnb-element-ui/types/common'
 import AmountInput from '~/amount-input'
 
 export const elFormItemAttributes = [

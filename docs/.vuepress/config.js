@@ -4,6 +4,7 @@ module.exports = {
   title: 'fnb-element-ui',
   description: 'Vue 组件库',
   port: '8379',
+  base: '/fnb-element-ui/',
   head: [
     [
       'link',
@@ -41,7 +42,7 @@ module.exports = {
           ['/component/table-button', 'TableButton 表格操作按钮'],
           {
             title: 'Form 表单',
-            path: '/component/form/index',
+            path: '/component/form/index.html',
             collapsable: true,
             children: [
               [
@@ -98,10 +99,10 @@ module.exports = {
     config.module
       .rule('js') // Find the rule.
       .use('babel-loader') // Find the loader
-      .tap(options =>
-        merge(options, {
-          presets: [['@vue/app']]
-        })
-      )
+      .tap(options => {
+        options.presets[0][1].jsx = true
+        console.log(options.presets)
+        return options
+      })
   }
 }
