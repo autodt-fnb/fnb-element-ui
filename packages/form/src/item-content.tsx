@@ -532,7 +532,10 @@ const itemContent: {
         value = this.form[attrs.field!] ??= []
       }
     }
-    value = value.filter(v => !!v)
+    if (isArray(value)) {
+      value = value.filter(v => !!v)
+    }
+
     return (
       <el-cascader
         ref={refName}
