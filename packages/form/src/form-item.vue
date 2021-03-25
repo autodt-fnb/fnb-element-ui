@@ -25,7 +25,8 @@ import {
   Component,
   Inject,
   Prop,
-  InjectReactive
+  InjectReactive,
+  Watch
 } from 'vue-property-decorator'
 import itemContent, { elFormItemAttributes } from './item-content'
 import { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
@@ -61,6 +62,8 @@ export default class FormItem extends Vue {
         ) {
           console.error('[prop]和[field]两个字段至少填写一个！')
         }
+
+        props.field ??= props.prop
 
         props.colOffset ??= this.fnbFormOffset
 
@@ -135,8 +138,9 @@ export default class FormItem extends Vue {
   }
 
   /** 初始化form字段 */
+  @Watch('items.length')
   initForm() {
-    this.listItems.forEach(item => {
+    this.items.forEach(item => {
       const prop = item.field ?? item.prop
       if (prop) {
         if (isArray(prop)) {
@@ -151,10 +155,7 @@ export default class FormItem extends Vue {
   }
 
   createContent(item: FormItemProps) {
-    return itemContent[item.formType!]?.call(this, {
-      ...item,
-      field: item.field ?? item.prop
-    })
+    return itemContent[item.formType!]?.call(this, { ...item })
   }
 
   /** 计算 span */
