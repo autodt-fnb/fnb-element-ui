@@ -1,46 +1,34 @@
 <template>
-  <div>
-    <!-- <FnbForm ref="form" :cols="[6]" v-model="form">
-      <FnbFormItem :listItems="formItems" />
-    </FnbForm> -->
-
-    <el-checkbox-button v-model="checkbox">23</el-checkbox-button>
-    <el-button @click="handleValid">验证</el-button>
-  </div>
+  <FnbSearchForm :listItems="formItems" />
 </template>
 
 <script lang="tsx">
-import { FnbForm } from '@autodt/fnb-element-ui/types/form'
-import { Vue, Component, Ref } from 'vue-property-decorator'
+import { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
+import { FormItemProps } from '@autodt/fnb-element-ui/types/form-item'
+import { computed, defineComponent } from '@vue/composition-api'
 
-@Component({ name: 'FormDemo', components: {} })
-export default class FormDemo extends Vue {
-  form: any = { edit: '', select: '222' }
-  checkbox = false
+const FormDemo = defineComponent({
+  name: 'FormDemo',
+  components: {},
+  setup() {
+    const formItems = computed<FormItemProps[]>(() => {
+      return [
+        {
+          formType: FormItemType.RENDER_FORM_CONTENT,
+          prop: 'render',
+          itemLabel: '自定义',
+          render: () => {
+            return <el-input />
+          }
+        }
+      ]
+    })
 
-  fileList = [
-    {
-      url:
-        'https://syautodt.oss-cn-shanghai.aliyuncs.com/test/image/1c1299c2-b137-4e59-8b91-d8ce8e54b5c4.jpg',
-      type: 'image'
-    },
-    {
-      url:
-        'https://syautodt.oss-cn-shanghai.aliyuncs.com/test/image/ec2de6b5-26a0-4154-a49d-8fbfcd7aa72b.png'
-    }
-  ]
-
-  @Ref('form') readonly formRef!: FnbForm
-
-  async handleValid() {
-    try {
-      const res = await this.formRef.validate()
-      console.log('444', res)
-    } catch (error) {
-      console.log(333, error)
-    }
+    return { formItems }
   }
-}
+})
+
+export default FormDemo
 </script>
 
 <style lang="scss" scoped></style>

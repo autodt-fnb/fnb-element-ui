@@ -3,7 +3,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:49:41
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-22 16:31:11
+ * @Last Modified time: 2021-04-02 09:20:56
  */
 import { FormRuleItem, FormRules } from '@autodt/fnb-element-ui/types/form'
 import {
@@ -17,6 +17,7 @@ import {
   isPlainObject,
   mapKeys,
   pick,
+  set,
   trimEnd,
   trimStart
 } from 'lodash'
@@ -140,18 +141,23 @@ export default class FormItem extends Vue {
   /** 初始化form字段 */
   @Watch('items.length')
   initForm() {
+    const form = { ...this.form }
     this.items.forEach(item => {
       const prop = item.field ?? item.prop
       if (prop) {
         if (isArray(prop)) {
           prop.forEach(v => {
-            this.$set(this.form, v, this.form[v])
+            set(form, v, form[v])
           })
         } else {
-          this.$set(this.form, prop, this.form[prop])
+          set(form, prop, form[prop])
         }
       }
     })
+
+    for (const key in form) {
+      this.$set(this.form, key, form[key])
+    }
   }
 
   createContent(item: FormItemProps) {
