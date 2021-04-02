@@ -5,7 +5,7 @@ module.exports = {
       {
         useBuiltIns: 'entry',
         jsx: {
-          compositonAPI: true
+          compositionAPI: true
         }
       }
     ]

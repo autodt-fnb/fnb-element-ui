@@ -274,7 +274,7 @@ export interface DatePickerProps
   /** 是否不能小于今天 */
   startToday?: boolean
 
-  /** 当 `endToday` 或 `startToday` 为 `true` 时，默认是可以选择今天的，`isExcludeToDay` 为true，不可以选中今天 */
+  /** 当 `endToday` 或 `startToday` 为 `true` 时，默认是可以选择今天的，`isExcludeToday` 为true，不可以选中今天 */
   isExcludeToday?: boolean
 
   pickerShortcuts?: boolean | PickerShortcuts[]

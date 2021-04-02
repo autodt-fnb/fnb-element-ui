@@ -2,14 +2,16 @@
   <div id="app">
     <FnbAppContainer>
       <FormDemo />
-      <FnbSearchForm :listItems="formItems" v-model="form" />
+      <!-- <FnbSearchForm :listItems="formItems" /> -->
+      <FnbForm v-model="form" :cols="3">
+        <FnbFormItem :listItems="formItems" />
+      </FnbForm>
       <FnbTable
         ref="table"
         :table="table"
         row-key="date"
         autoMaxHeight
         storageSortKey="storageSortKey3333"
-        @cell-mouse-enter="cellMouseEnter"
         :fetchApi="getList"
       >
         <template v-slot:date="{ row }">
@@ -112,17 +114,17 @@
 </template>
 
 <script lang="tsx">
-import { FormItemProps } from '@autodt/fnb-element-uitypes/form-item'
+import { FormItemProps } from '@autodt/fnb-element-ui/types/form-item'
 import { Component, Vue, Ref } from 'vue-property-decorator'
-import { FormItemType } from '@autodt/fnb-element-uisrc/enum/form-item'
-import RemoteTable from '~/remote-table'
+import { FormItemType } from '../src/enum/form-item'
+
 import { FnbTable, FnbTableColumn } from '../types/table'
 import FormDemo from './components/FormDemo.vue'
+// import { set } from 'lodash'
 
 @Component({
   components: {
-    FormDemo,
-    RemoteTable
+    FormDemo
   }
 })
 export default class App extends Vue {
@@ -171,7 +173,7 @@ export default class App extends Vue {
         type: 'phone',
         itemLabel: '陈超',
         itemLabelDesc: '不能选择今天',
-        prop: 'edit1',
+        prop: 'edit1.edit',
         prefixIcon: 'el-icon-edit',
         onInput(e) {
           console.log(e)
@@ -196,8 +198,8 @@ export default class App extends Vue {
         formType: FormItemType.RENDER_FORM_CONTENT,
         prop: 'render',
         itemLabel: '66666',
-        render: () => {
-          return <div>2222</div>
+        render: form => {
+          return <el-input v-model={form.render} />
         }
       },
       {
@@ -229,7 +231,7 @@ export default class App extends Vue {
         itemLabel: '小于今天',
         pickerShortcuts: true,
         unlinkPanels: true,
-        isExcludeToDay: true
+        isExcludeToday: true
       },
       {
         formType: FormItemType.DATE_PICKER,
@@ -363,6 +365,7 @@ export default class App extends Vue {
   }
 
   async getList() {
+    console.log(this)
     return new Promise(resolve => {
       setTimeout(() => {
         resolve({
@@ -457,6 +460,7 @@ export default class App extends Vue {
   @Ref('table') readonly tableRef!: FnbTable
 
   mounted() {
+    this.$set(this.tableData, '[0].name', '4')
     console.log(this.$refs)
     setTimeout(() => {
       this.tableData.push({
@@ -476,6 +480,7 @@ export default class App extends Vue {
             'https://syautodt.oss-cn-shanghai.aliyuncs.com/test/image/ec2de6b5-26a0-4154-a49d-8fbfcd7aa72b.png'
         }
       ]
+      this.form.edit1.edit = 365
     }, 3000)
   }
 

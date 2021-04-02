@@ -2,7 +2,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:51:13
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-22 17:20:38
+ * @Last Modified time: 2021-04-02 02:09:27
  */
 import {
   AutocompletePorps,
@@ -25,10 +25,12 @@ import {
 } from '@autodt/fnb-element-ui/types/form-item'
 import {
   camelCase,
+  get,
   isArray,
   isObject,
   mapKeys,
   pickBy,
+  set,
   trimStart
 } from 'lodash'
 import { pickerOptions } from '@autodt/fnb-element-ui/src/utils/date-util'
@@ -48,6 +50,18 @@ export const elFormItemAttributes = [
   'showMessage',
   'inlineMessage'
 ]
+
+const proxyForm = (form: any) =>
+  new Proxy(form, {
+    get(target, propertyKey) {
+      console.log('propertyKey: ', propertyKey)
+      return get(target, propertyKey)
+    },
+    set(target, propertyKey, value) {
+      set(target, propertyKey, value)
+      return true
+    }
+  })
 
 function wrapProps(attrs: Record<string, any>) {
   const listeners = mapKeys(
@@ -98,10 +112,11 @@ const itemContent: {
       inputType = 'tel'
     }
     props.placeholder ??= '请输入'
+    const form = proxyForm(this.form)
     return (
       <el-input
         type={inputType}
-        value={this.form[props.field!]}
+        value={form[props.field!]}
         onInput={(val?: string) => {
           if (type === 'phone') {
             if (
@@ -112,7 +127,7 @@ const itemContent: {
               return
             }
           }
-          this.form[props.field!] = val
+          form[props.field!] = val
         }}
         {...wrapProps(props)}
       >
@@ -136,8 +151,10 @@ const itemContent: {
 
     props.placeholder ??= '请输入'
 
+    const form = proxyForm(this.form)
+
     return (
-      <AmountInput v-model={this.form[props.field!]} {...wrapProps(props)}>
+      <AmountInput v-model={form[props.field!]} {...wrapProps(props)}>
         {!!renderPrefix && <template slot="prefix">{renderPrefix()}</template>}
         {!!renderSuffix && <template slot="suffix">{renderSuffix()}</template>}
         {!!renderPrepend && (
@@ -150,10 +167,11 @@ const itemContent: {
   [FormItemType.INPUT_NUMBER](this, attrs: InputNumberProps) {
     const { field, ...props } = attrs
     props.placeholder ??= '请输入'
+    const form = proxyForm(this.form)
     return (
       <el-input-number
         style={{ textAlign: props.textAlign }}
-        v-model={this.form[field!]}
+        v-model={form[field!]}
         {...wrapProps(props)}
       />
     )
@@ -162,10 +180,12 @@ const itemContent: {
     const { renderPrefix, renderSuffix, renderPrepend, renderAppend } = attrs
 
     attrs.placeholder ??= '请输入'
+
+    const form = proxyForm(this.form)
     return (
       <el-autocomplete
         {...wrapProps(attrs)}
-        vModel={this.form[attrs.field as string]}
+        vModel={form[attrs.field as string]}
       >
         {!!renderPrefix && <template slot="prefix">{renderPrefix()}</template>}
         {!!renderSuffix && <template slot="suffix">{renderSuffix()}</template>}
@@ -186,7 +206,10 @@ const itemContent: {
       ...props
     } = attrs
     props.placeholder ??= '请选择'
-    let value = this.form[props.field!]
+
+    const form = proxyForm(this.form)
+
+    let value = form[props.field!]
     if (props.multiple) {
       props.collapseTags ??= true
       if (outputType === 'string' && typeof value === 'string') {
@@ -206,7 +229,7 @@ const itemContent: {
               val = ''
             }
           }
-          this.form[props.field!] = val
+          form[props.field!] = val
         }}
         {...wrapProps(props)}
       >
@@ -251,6 +274,8 @@ const itemContent: {
       ...pickerOptions(attrs)
     }
 
+    const form = proxyForm(this.form)
+
     if (
       ['datetimerange', 'daterange'].includes(attrs.type!) &&
       isArray(field) &&
@@ -258,19 +283,16 @@ const itemContent: {
     ) {
       return (
         <el-date-picker
-          value={[this.form[field[0]], this.form[field[1]]].filter(v => !!v)}
+          value={[form[field[0]], form[field[1]]].filter(v => !!v)}
           onInput={(date: string[] | null) => {
-            ;[this.form[field[0]], this.form[field[1]]] = date ?? []
+            ;[form[field[0]], form[field[1]]] = date ?? []
           }}
           {...wrapProps(props)}
         />
       )
     }
     return (
-      <el-date-picker
-        {...wrapProps(props)}
-        vModel={this.form[field as string]}
-      />
+      <el-date-picker {...wrapProps(props)} vModel={form[field as string]} />
     )
   },
   [FormItemType.TIME_PICKER](this, attrs: TimePickerProps) {
@@ -282,14 +304,15 @@ const itemContent: {
     } else {
       attrs.placeholder ??= '选择时间'
     }
+    const form = proxyForm(this.form)
 
     if (attrs.isRange && Array.isArray(field) && field.length === 2) {
       return (
         <el-time-picker
           format={attrs.valueFormat}
-          value={[this.form[field[0]], this.form[field[1]]].filter(v => !!v)}
+          value={[form[field[0]], form[field[1]]].filter(v => !!v)}
           onInput={(date: string[] | null) => {
-            ;[this.form[field[0]], this.form[field[1]]] = date ?? []
+            ;[form[field[0]], form[field[1]]] = date ?? []
           }}
           {...wrapProps(attrs)}
         />
@@ -299,7 +322,7 @@ const itemContent: {
       <el-time-picker
         format={attrs.valueFormat}
         {...wrapProps(attrs)}
-        vModel={this.form[field as string]}
+        vModel={form[field as string]}
       />
     )
   },
@@ -311,9 +334,10 @@ const itemContent: {
     } else {
       attrs.placeholder ??= '选择时间'
     }
+    const form = proxyForm(this.form)
     if (attrs.isRange) {
-      if (!Array.isArray(field) && !Array.isArray(this.form[field as string])) {
-        this.form[field as string] = []
+      if (!Array.isArray(field) && !Array.isArray(form[field as string])) {
+        form[field as string] = []
       }
       if (Array.isArray(field) && field.length !== 2) {
         console.error('[field] 字段必须是两个元素的数组')
@@ -321,13 +345,13 @@ const itemContent: {
 
       const startTime =
         Array.isArray(field) && field.length === 2
-          ? this.form[field[0]]
-          : this.form[field as string][0]
+          ? form[field[0]]
+          : form[field as string][0]
 
       const endTime =
         Array.isArray(field) && field.length === 2
-          ? this.form[field[1]]
-          : this.form[field as string][1]
+          ? form[field[1]]
+          : form[field as string][1]
       return (
         <el-row align="middle" type="flex">
           <el-time-select
@@ -340,11 +364,8 @@ const itemContent: {
             }}
             onInput={(val: string) => {
               Array.isArray(field) && field.length === 2
-                ? (this.form[field[0]] = val)
-                : (this.form[field as string] = [
-                    val,
-                    this.form[field as string][1]
-                  ])
+                ? (form[field[0]] = val)
+                : (form[field as string] = [val, form[field as string][1]])
               if (
                 !!endTime &&
                 dayjs(`2000-01-01 ${val}`).isSameOrAfter(
@@ -352,8 +373,8 @@ const itemContent: {
                 )
               ) {
                 Array.isArray(field) && field.length === 2
-                  ? (this.form[field[1]] = undefined)
-                  : (this.form[field as string][1] = undefined)
+                  ? (form[field[1]] = undefined)
+                  : (form[field as string][1] = undefined)
               }
             }}
           />
@@ -371,30 +392,26 @@ const itemContent: {
             }}
             onInput={(val: string) => {
               Array.isArray(field) && field.length === 2
-                ? (this.form[field[1]] = val)
-                : (this.form[field as string] = [
-                    this.form[field as string][0],
-                    val
-                  ])
+                ? (form[field[1]] = val)
+                : (form[field as string] = [form[field as string][0], val])
             }}
           />
         </el-row>
       )
     }
     return (
-      <el-time-select
-        {...wrapProps(attrs)}
-        vModel={this.form[field as string]}
-      />
+      <el-time-select {...wrapProps(attrs)} vModel={form[field as string]} />
     )
   },
   [FormItemType.SWITCH](this, attrs: SwitchProps) {
-    return <el-switch v-model={this.form[attrs.field!]} {...wrapProps(attrs)} />
+    const form = proxyForm(this.form)
+    return <el-switch v-model={form[attrs.field!]} {...wrapProps(attrs)} />
   },
   [FormItemType.CHECKBOX](this, attrs: CheckboxProps) {
     const { render } = attrs
+    const form = proxyForm(this.form)
     return (
-      <el-checkbox v-model={this.form[attrs.field!]} {...wrapProps(attrs)}>
+      <el-checkbox v-model={form[attrs.field!]} {...wrapProps(attrs)}>
         {render?.()}
       </el-checkbox>
     )
@@ -410,10 +427,13 @@ const itemContent: {
       ...props
     } = attrs
     const Tag = isCheckboxButton ? 'el-checkbox-button' : 'el-checkbox'
-    if (this.form[field!] === undefined) {
-      this.form[field!] = outputType === 'string' ? '' : []
+
+    const form = proxyForm(this.form)
+
+    if (form[field!] === undefined) {
+      form[field!] = outputType === 'string' ? '' : []
     }
-    let value = this.form[field!]
+    let value = form[field!]
 
     if (outputType === 'string' && typeof value === 'string') {
       value = value
@@ -437,7 +457,7 @@ const itemContent: {
           if (isArray(val) && outputType === 'string') {
             val = val.join(outputSeparator ?? ',')
           }
-          this.form[field!] = val
+          form[field!] = val
         }}
         {...wrapProps(props)}
       >
@@ -464,8 +484,9 @@ const itemContent: {
   },
   [FormItemType.RADIO](this, attrs: RadioProps) {
     const { render } = attrs
+    const form = proxyForm(this.form)
     return (
-      <el-radio v-model={this.form[attrs.field!]} {...wrapProps(attrs)}>
+      <el-radio v-model={form[attrs.field!]} {...wrapProps(attrs)}>
         {render?.()}
       </el-radio>
     )
@@ -473,9 +494,10 @@ const itemContent: {
   [FormItemType.RADIO_GROUP](this, attrs: RadioGroupProps) {
     const { isRadioButton, key, radioList, ...props } = attrs
     const Tag = isRadioButton ? 'el-radio-button' : 'el-radio'
+    const form = proxyForm(this.form)
 
     return (
-      <el-radio-group v-model={this.form[props.field!]} {...wrapProps(props)}>
+      <el-radio-group v-model={form[props.field!]} {...wrapProps(props)}>
         {radioList?.map((item, index) => (
           <Tag
             key={
@@ -519,17 +541,18 @@ const itemContent: {
       refName =
         ref ?? attrs.prop ?? (!isArray(attrs.field) ? attrs.field : undefined)
     }
+    const form = proxyForm(this.form)
 
     let value: any[] = []
     if (isArray(attrs.field)) {
       attrs.field.forEach((key: string, index: number) => {
-        value[index] = this.form[key]
+        value[index] = form[key]
       })
     } else {
       if (outputType === 'string') {
-        value = (this.form[attrs.field!] ??= '').split(outputSeparator ?? ',')
+        value = (form[attrs.field!] ??= '').split(outputSeparator ?? ',')
       } else {
-        value = this.form[attrs.field!] ??= []
+        value = form[attrs.field!] ??= []
       }
     }
     if (isArray(value)) {
@@ -549,13 +572,13 @@ const itemContent: {
         onInput={(val: any[]) => {
           if (isArray(attrs.field)) {
             attrs.field.forEach((key: string, index: number) => {
-              this.form[key] = val[index]
+              form[key] = val[index]
             })
           } else {
             if (outputType === 'string') {
-              this.form[attrs.field!] = val?.join(outputSeparator ?? ',')
+              form[attrs.field!] = val?.join(outputSeparator ?? ',')
             } else {
-              this.form[attrs.field!] = val ?? []
+              form[attrs.field!] = val ?? []
             }
           }
         }}
@@ -564,9 +587,8 @@ const itemContent: {
     )
   },
   [FormItemType.UPLOAD](this, attrs: UploadProps) {
-    return (
-      <fnb-upload v-model={this.form[attrs.field!]} {...{ attrs: attrs }} />
-    )
+    const form = proxyForm(this.form)
+    return <fnb-upload v-model={form[attrs.field!]} {...{ attrs: attrs }} />
   }
 }
 

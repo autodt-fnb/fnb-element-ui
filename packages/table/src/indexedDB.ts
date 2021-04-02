@@ -27,7 +27,8 @@ export default class IndexedDB {
       }
 
       request.onblocked = (ev: any) => {
-        this.db = ev.target?.result as IDBDatabase
+        console.log('onblocked: ', ev)
+        this.db = (ev.target?.result as IDBDatabase) ?? this.db
         resolve(this.db)
       }
 

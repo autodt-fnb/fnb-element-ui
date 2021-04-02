@@ -29,6 +29,10 @@ label.el-form-item__label {
 
 // 时间范围选择器样式
 .el-form-item__content {
+  .el-input {
+    vertical-align: top;
+  }
+
   .el-input-number {
     vertical-align: top;
   }
