@@ -165,14 +165,14 @@ const itemContent: {
     )
   },
   [FormItemType.INPUT_NUMBER](this, attrs: InputNumberProps) {
-    const { field, ...props } = attrs
+    const { field, textAlign, ...props } = attrs
     props.placeholder ??= '请输入'
     const form = proxyForm(this.form)
     return (
       <el-input-number
         class={{
-          'text-left': props.textAlign === 'left',
-          'text-right': props.textAlign === 'right'
+          'text-left': textAlign === 'left',
+          'text-right': textAlign === 'right'
         }}
         v-model={form[field!]}
         {...wrapProps(props)}
