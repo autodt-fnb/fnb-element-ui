@@ -41,6 +41,14 @@ label.el-form-item__label {
     vertical-align: top;
   }
 
+  .el-input-number.text-left .el-input__inner {
+    text-align: left;
+  }
+
+  .el-input-number.text-right .el-input__inner {
+    text-align: right;
+  }
+
   .el-date-editor--daterange {
     &.el-input__inner {
       width: 100%;
