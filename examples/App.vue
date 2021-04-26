@@ -195,6 +195,12 @@ export default class App extends Vue {
         formType: FormItemType.AUTOCOMPLETE
       },
       {
+        field: 'edit3',
+        itemLabel: '陈超234',
+        textAlign: 'left',
+        formType: FormItemType.INPUT_NUMBER
+      },
+      {
         formType: FormItemType.RENDER_FORM_CONTENT,
         prop: 'render',
         itemLabel: '66666',
