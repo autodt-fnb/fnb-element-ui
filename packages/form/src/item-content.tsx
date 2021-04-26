@@ -170,7 +170,10 @@ const itemContent: {
     const form = proxyForm(this.form)
     return (
       <el-input-number
-        style={{ textAlign: props.textAlign }}
+        class={{
+          'text-left': props.textAlign === 'left',
+          'text-right': props.textAlign === 'right'
+        }}
         v-model={form[field!]}
         {...wrapProps(props)}
       />
