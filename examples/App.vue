@@ -54,7 +54,7 @@
       </FnbTable>
       <FnbUpload
         accept="image/png,image/jpeg"
-        :limit="1"
+        :limit="2"
         v-model="urlList.url"
         :beforeUpload="handleUploadBefore"
         :fileList="fileListB"
@@ -128,7 +128,7 @@ import FormDemo from './components/FormDemo.vue'
   }
 })
 export default class App extends Vue {
-  form = {}
+  form: any = {}
   disabled = false
   date = []
   pageNum = 1

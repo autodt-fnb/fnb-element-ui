@@ -54,7 +54,6 @@ export const elFormItemAttributes = [
 const proxyForm = (form: any) =>
   new Proxy(form, {
     get(target, propertyKey) {
-      console.log('propertyKey: ', propertyKey)
       return get(target, propertyKey)
     },
     set(target, propertyKey, value) {
