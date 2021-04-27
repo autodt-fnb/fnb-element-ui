@@ -8,9 +8,10 @@
     :on-remove="handleOnRemove"
     :on-success="handleOnSuccess"
     :on-preview="onPreview"
+    :on-progress="handleProgress"
     :file-list="fileList"
     :name="name"
-    :limit="limit"
+    :limit="reUploadIndex > -1 ? limit + 1 : limit"
     v-bind="$attrs"
     list-type="picture-card"
   >
@@ -39,8 +40,8 @@
       </label>
       <el-progress
         v-if="file.status === 'uploading'"
-        :style="{ width: `${width * 0.8}px` }"
-        :width="width * 0.8"
+        :style="{ width: `${progressWidth * 0.8}px` }"
+        :width="progressWidth * 0.8"
         :type="'circle'"
         :stroke-width="6"
         :percentage="parsePercentage(file.percentage)"
@@ -51,6 +52,13 @@
             class="el-icon-zoom-in"
             title="预览"
             @click="handlePreview(file)"
+          />
+        </span>
+        <span v-if="!disabled" class="el-upload-list__item-preview">
+          <i
+            class="el-icon-refresh"
+            title="替换"
+            @click="handleReUpload(file)"
           />
         </span>
         <span v-if="!disabled" class="el-upload-list__item-delete">
@@ -121,6 +129,9 @@ export default class Upload extends Vue {
   /** 已上传数量 */
   uploadedLength = 0
 
+  /** 重新上传的索引 */
+  reUploadIndex = -1
+
   @Watch('fileList', { immediate: true })
   onFileList(list: FileDetail[]) {
     const value = Array.isArray(this.value)
@@ -135,6 +146,11 @@ export default class Upload extends Vue {
 
   get contentStyle() {
     return { width: `${this.width}px`, height: `${this.height}px` }
+  }
+
+  /** 进度 圆的宽度 */
+  get progressWidth() {
+    return Math.min(this.height, this.width)
   }
 
   get uploadUrl() {
@@ -177,18 +193,14 @@ export default class Upload extends Vue {
       this.onPreview(file)
       return
     }
-    const style = {
-      display: 'block',
-      margin: '0 auto',
-      maxWidth: '100%',
-      maxHeight: 'calc(100vh - 137.6px)'
-    }
-    let message = <img src={file.url} style={style} />
+    const style =
+      'display:block; margin:0 auto; max-width:100%; max-height:calc(100vh - 137.6px)'
+    let message = `<img src="${file.url}" style="${style}" />`
     const type = this.formatterMediaType(file)
     if (type === 'video') {
-      message = <video autoplay controls src={file.url} style={style} />
+      message = `<video autoplay controls src="${file.url}" style="${style}" />`
     } else if (type === 'audio') {
-      message = <audio autoplay controls src={file.url} style={style} />
+      message = `<audio autoplay controls src="${file.url}" style="${style}" />`
     }
     this.$msgbox({
       title: '预览',
@@ -196,6 +208,23 @@ export default class Upload extends Vue {
       dangerouslyUseHTMLString: true,
       showConfirmButton: false
     })
+  }
+
+  /** 处理重新上传 */
+  handleReUpload(file: any) {
+    this.reUploadIndex = this.fileList.findIndex(v => v.uid === file.uid)
+    const fileEl = this.uploadRef.$el.querySelector(
+      'input[name="image"]'
+    ) as HTMLInputElement
+    fileEl?.click()
+  }
+
+  /** 处理上传进度 */
+  handleProgress(event: any, file: any) {
+    if (this.reUploadIndex > -1) {
+      this.fileList.splice(this.reUploadIndex, 1, file)
+      this.reUploadIndex = -1
+    }
   }
 
   parsePercentage(val: string) {
