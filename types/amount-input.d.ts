@@ -16,7 +16,7 @@ export declare class FnbAmountInput extends ElementUIComponent {
   /**
    * 是否禁用
    */
-  disabled: number
+  disabled: boolean
 
   /**
    * 输入框占位文本
