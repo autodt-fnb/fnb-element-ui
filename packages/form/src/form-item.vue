@@ -197,18 +197,38 @@ export default class FormItem extends Vue {
               v-show={!item.invisible}
             >
               <el-form-item
+                class={{
+                  'fnb-form-item__label-top': item.itemLabelPosition === 'top'
+                }}
                 {...{ attrs: { ...elFormItemProps } }}
+                label={item.itemLabelPosition ? undefined : item.itemLabel}
+                label-width={item.itemLabelPosition ? '0' : item.itemLabelWidth}
                 scopedSlots={{ error: item.renderItemError }}
               >
-                {(!!item.renderItemLabel || !!item.itemLabelDesc) && (
-                  <template slot="label">
+                {item.itemLabelPosition === 'top' ? (
+                  <label class="el-form-item__label">
                     {item.renderItemLabel?.() ?? item.itemLabel}
-                    <div class="form-label-desc">
-                      {typeof item.itemLabelDesc === 'string'
-                        ? item.itemLabelDesc
-                        : item.itemLabelDesc?.()}
-                    </div>
-                  </template>
+                    {!!item.itemLabelDesc && (
+                      <span class="fnb-form-item__label-top-desc">
+                        {typeof item.itemLabelDesc === 'string'
+                          ? item.itemLabelDesc
+                          : item.itemLabelDesc()}
+                      </span>
+                    )}
+                  </label>
+                ) : (
+                  (!!item.renderItemLabel || !!item.itemLabelDesc) && (
+                    <template slot="label">
+                      {item.renderItemLabel?.() ?? item.itemLabel}
+                      {!!item.itemLabelDesc && (
+                        <div class="fnb-form-item__label-desc">
+                          {typeof item.itemLabelDesc === 'string'
+                            ? item.itemLabelDesc
+                            : item.itemLabelDesc()}
+                        </div>
+                      )}
+                    </template>
+                  )
                 )}
                 {this.createContent(item)}
               </el-form-item>
@@ -221,8 +241,15 @@ export default class FormItem extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-::v-deep {
+<style lang="scss">
+.fnb-form {
+  .fnb-form-item__label-top .el-form-item__label {
+    float: none;
+    display: block;
+    text-align: left;
+    padding: 0 0 10px;
+  }
+
   .el-form-item__label {
     position: relative;
   }
@@ -231,18 +258,19 @@ export default class FormItem extends Vue {
     width: 100%;
   }
 
-  .text-left.el-input-number .el-input__inner {
-    text-align: left;
+  .fnb-form-item__label-desc {
+    position: absolute;
+    top: 100%;
+    right: 12px;
+    left: 0;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.15;
   }
-}
 
-.form-label-desc {
-  position: absolute;
-  top: 100%;
-  right: 12px;
-  left: 0;
-  font-size: 12px;
-  font-weight: normal;
-  line-height: 1.15;
+  .fnb-form-item__label-top-desc {
+    font-size: 12px;
+    font-weight: normal;
+  }
 }
 </style>

@@ -104,6 +104,13 @@ const listItemsAttrData = [
     type: 'string'
   },
   {
+    name: 'itemLabelPosition',
+    desc:
+      '使 label 显示在上方，类似 el-form label-position 属性，但是只有 top 一个选项',
+    optional: 'top',
+    type: 'string'
+  },
+  {
     name: 'itemSize',
     desc: '原 el-form-item 的 size 属性',
     type: 'string'

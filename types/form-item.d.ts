@@ -48,6 +48,9 @@ export interface ElFormItemProps {
   /** Width of label, e.g. '50px' */
   itemLabelWidth?: string
 
+  /** Position of label */
+  itemLabelPosition?: 'top'
+
   /** Controls the size of components in this form */
   itemSize?: ElementUIComponentSize
 

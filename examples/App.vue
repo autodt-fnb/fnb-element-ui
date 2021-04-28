@@ -183,7 +183,9 @@ export default class App extends Vue {
       },
       {
         formType: FormItemType.AMOUNT_INPUT,
-        itemLabel: '陈超',
+        itemLabel: '不能选择今天',
+        itemLabelDesc: '（不能选择今天不能选择今天不能选择今天不能选择今天）',
+        itemLabelPosition: 'top',
         prop: 'amount',
         renderSuffix() {
           return '万元'
