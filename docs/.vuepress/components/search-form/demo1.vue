@@ -1,5 +1,5 @@
 <template>
-  <FnbSearchForm :listItems="listItems"></FnbSearchForm>
+  <FnbSearchForm :listItems="listItems" @search="handleSearch"></FnbSearchForm>
 </template>
 
 <script>
@@ -48,6 +48,10 @@ export default {
       ]
     }
   },
-  methods: {}
+  methods: {
+    handleSearch(form) {
+      console.log('当前搜索表单项数据：', form)
+    }
+  }
 }
 </script>

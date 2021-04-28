@@ -184,6 +184,13 @@ export default {
           formType: FormItemType.UPLOAD,
           itemLabel: '上传',
           prop: 'upload'
+        },
+        {
+          formType: FormItemType.INPUT,
+          itemLabel: 'label 在上面',
+          itemLabelDesc: '（我是label的说明）',
+          itemLabelPosition: 'top',
+          prop: 'labelTop'
         }
       ]
     }
