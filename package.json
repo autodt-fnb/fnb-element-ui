@@ -38,7 +38,6 @@
     "vue-property-decorator": "9.1.2"
   },
   "devDependencies": {
-    "@vue/composition-api": "^1.0.0-rc.5",
     "@intervolga/optimize-cssnano-plugin": "^1.0.6",
     "@types/clipboard": "^2.0.1",
     "@types/jest": "^26.0.21",

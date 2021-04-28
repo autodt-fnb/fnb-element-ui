@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <FnbAppContainer>
-      <FormDemo />
+      <!-- <FormDemo /> -->
       <!-- <FnbSearchForm :listItems="formItems" /> -->
       <FnbForm v-model="form" :cols="3">
         <FnbFormItem :listItems="formItems" />
@@ -119,13 +119,11 @@ import { Component, Vue, Ref } from 'vue-property-decorator'
 import { FormItemType } from '../src/enum/form-item'
 
 import { FnbTable, FnbTableColumn } from '../types/table'
-import FormDemo from './components/FormDemo.vue'
+// import FormDemo from './components/FormDemo.vue'
 // import { set } from 'lodash'
 
 @Component({
-  components: {
-    FormDemo
-  }
+  components: {}
 })
 export default class App extends Vue {
   form: any = {}
