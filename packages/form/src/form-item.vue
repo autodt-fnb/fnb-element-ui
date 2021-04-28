@@ -3,7 +3,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:49:41
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-04-02 09:20:56
+ * @Last Modified time: 2021-04-28 17:43:15
  */
 import { FormRuleItem, FormRules } from '@autodt/fnb-element-ui/types/form'
 import {
@@ -206,16 +206,18 @@ export default class FormItem extends Vue {
                 scopedSlots={{ error: item.renderItemError }}
               >
                 {item.itemLabelPosition === 'top' ? (
-                  <label class="el-form-item__label">
-                    {item.renderItemLabel?.() ?? item.itemLabel}
-                    {!!item.itemLabelDesc && (
-                      <span class="fnb-form-item__label-top-desc">
-                        {typeof item.itemLabelDesc === 'string'
-                          ? item.itemLabelDesc
-                          : item.itemLabelDesc()}
-                      </span>
-                    )}
-                  </label>
+                  <div class="el-form-item__label-wrap" style="float: none">
+                    <label class="el-form-item__label">
+                      {item.renderItemLabel?.() ?? item.itemLabel}
+                      {!!item.itemLabelDesc && (
+                        <span class="fnb-form-item__label-top-desc">
+                          {typeof item.itemLabelDesc === 'string'
+                            ? item.itemLabelDesc
+                            : item.itemLabelDesc()}
+                        </span>
+                      )}
+                    </label>
+                  </div>
                 ) : (
                   (!!item.renderItemLabel || !!item.itemLabelDesc) && (
                     <template slot="label">
