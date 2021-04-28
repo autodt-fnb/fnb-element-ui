@@ -43,7 +43,11 @@ export declare class FnbUpload extends _Upload {
    */
   preview: boolean
 
-  /** 重置 fileList 类型 */
+  /**
+   * 重置 fileList 类型
+   *
+   * @deprecated 会根据 value 值自动填入，不推荐使用
+   */
   fileList: (Partial<FileListItem> & { type?: string })[]
 
   /**

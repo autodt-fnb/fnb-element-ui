@@ -1,5 +1,6 @@
 <template>
   <el-upload
+    v-bind="$attrs"
     ref="upload"
     class="uploader"
     :class="{ 'hide-upload-btn': uploadedLength >= limit }"
@@ -9,10 +10,9 @@
     :on-success="handleOnSuccess"
     :on-preview="onPreview"
     :on-progress="handleProgress"
-    :file-list="fileList"
+    :file-list="uploadFileList"
     :name="name"
     :limit="reUploadIndex > -1 ? limit + 1 : limit"
-    v-bind="$attrs"
     list-type="picture-card"
   >
     <el-row
@@ -88,6 +88,7 @@ import {
   Success,
   Preview
 } from '@autodt/fnb-element-ui/types/upload'
+import { difference, isEqual } from 'lodash'
 
 @Component({ name: 'FnbUpload', components: {}, inheritAttrs: false })
 export default class Upload extends Vue {
@@ -132,17 +133,8 @@ export default class Upload extends Vue {
   /** 重新上传的索引 */
   reUploadIndex = -1
 
-  @Watch('fileList', { immediate: true })
-  onFileList(list: FileDetail[]) {
-    const value = Array.isArray(this.value)
-      ? this.value
-      : (this.value || null)?.split(',') ?? []
-    const urlSet = new Set<string>([
-      ...list.map(v => v.response?.data?.url ?? v.url!).filter(v => !!v),
-      ...value
-    ])
-    this.emitInput([...urlSet])
-  }
+  /** 文件上传 */
+  uploadFileList: FileDetail[] = []
 
   get contentStyle() {
     return { width: `${this.width}px`, height: `${this.height}px` }
@@ -159,6 +151,51 @@ export default class Upload extends Vue {
 
   @Ref('upload') readonly uploadRef!: ElUpload
 
+  @Watch('fileList', { immediate: true })
+  onFileList(list: FileDetail[]) {
+    this.uploadFileList = [...list]
+    const value = Array.isArray(this.value)
+      ? this.value
+      : (this.value || null)?.split(',') ?? []
+    const urlSet = new Set<string>([
+      ...list.map(v => v.response?.data?.url ?? v.url!).filter(v => !!v),
+      ...value
+    ])
+    this.emitInput([...urlSet])
+  }
+
+  @Watch('value', { immediate: true })
+  watchValue(val: string | string[]) {
+    const list = Array.isArray(val) ? val : val.split(',').filter(v => !!v)
+    const oldList = this.uploadFileList.map(
+      v => v?.response?.data?.url ?? v.url
+    )
+    if (!isEqual(list, oldList)) {
+      if (list.length < oldList.length) {
+        const diffList = difference(oldList, list)
+        oldList.forEach((v, index) => {
+          if (diffList.includes(v)) {
+            this.uploadFileList.splice(index, 1)
+          }
+        })
+      } else if (list.length > oldList.length) {
+        const diffList = difference(list, oldList)
+        list.forEach(v => {
+          if (diffList.includes(v)) {
+            this.uploadFileList.push({ url: v } as FileDetail)
+          }
+        })
+      } else {
+        const diffList = difference(list, oldList)
+        list.forEach((v, index) => {
+          if (diffList.includes(v)) {
+            this.uploadFileList.splice(index, 0, { url: v } as FileDetail)
+          }
+        })
+      }
+    }
+  }
+
   @Emit('input')
   emitInput(list: string[]) {
     list = list.filter(v => !!v)
@@ -166,10 +203,35 @@ export default class Upload extends Vue {
     return Array.isArray(this.value) ? list : list.join()
   }
 
+  /** 是否是图片 */
+  testImage(url: string) {
+    return /^.*(\.(png|jpg|jpeg|gif))$/i.test(url)
+  }
+
+  /** 是否是视频 */
+  testVideo(url: string) {
+    return /^.*(\.(avi|rmvb|mp4|rm|wmv))$/i.test(url)
+  }
+
+  /** 是否是音频*/
+  testAudio(url: string) {
+    return /^.*(\.(mp3|ape|flac|wma))$/i.test(url)
+  }
+
   /** 判断媒体类型 */
   formatterMediaType(file: any) {
     const type = file.type ?? file.raw?.type
-    return type?.split('/')?.[0]
+    if (type) {
+      return type?.split('/')?.[0]
+    }
+    const url = file?.response?.data?.url ?? file.url
+    if (this.testImage(url)) {
+      return 'image'
+    } else if (this.testVideo(url)) {
+      return 'video'
+    } else if (this.testAudio(url)) {
+      return 'audio'
+    }
   }
 
   handleRemove(file: any, raw: any) {
@@ -177,11 +239,13 @@ export default class Upload extends Vue {
   }
 
   handleOnSuccess(response: any, file: FileDetail, fileList: FileDetail[]) {
+    this.uploadFileList = fileList
     this.emitInput(fileList.map(v => v?.response?.data?.url ?? v.url!))
     this.onSuccess?.(response, file, fileList)
   }
 
   handleOnRemove(file: FileDetail, fileList: FileDetail[]) {
+    this.uploadFileList = fileList
     this.emitInput(fileList.map(v => v?.response?.data?.url ?? v.url!))
     this.onRemove?.(file, fileList)
   }
@@ -212,7 +276,7 @@ export default class Upload extends Vue {
 
   /** 处理重新上传 */
   handleReUpload(file: any) {
-    this.reUploadIndex = this.fileList.findIndex(v => v.uid === file.uid)
+    this.reUploadIndex = this.uploadFileList.findIndex(v => v.uid === file.uid)
     const fileEl = this.uploadRef.$el.querySelector(
       'input[name="image"]'
     ) as HTMLInputElement
@@ -222,7 +286,7 @@ export default class Upload extends Vue {
   /** 处理上传进度 */
   handleProgress(event: any, file: any) {
     if (this.reUploadIndex > -1) {
-      this.fileList.splice(this.reUploadIndex, 1, file)
+      this.uploadFileList.splice(this.reUploadIndex, 1, file)
       this.reUploadIndex = -1
     }
   }

@@ -590,7 +590,7 @@ const itemContent: {
   },
   [FormItemType.UPLOAD](this, attrs: UploadProps) {
     const form = proxyForm(this.form)
-    return <fnb-upload v-model={form[attrs.field!]} {...{ attrs: attrs }} />
+    return <fnb-upload v-model={form[attrs.field!]} {...wrapProps(attrs)} />
   }
 }
 

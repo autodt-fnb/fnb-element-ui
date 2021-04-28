@@ -238,8 +238,9 @@ export default class FormItem extends Vue {
 
 .form-label-desc {
   position: absolute;
-  bottom: 10px;
-  transform: translateY(100%);
+  top: 100%;
+  right: 12px;
+  left: 0;
   font-size: 12px;
   font-weight: normal;
   line-height: 1.15;

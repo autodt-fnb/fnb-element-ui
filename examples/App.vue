@@ -54,7 +54,7 @@
       </FnbTable>
       <FnbUpload
         accept="image/png,image/jpeg"
-        :limit="2"
+        :limit="4"
         v-model="urlList.url"
         :beforeUpload="handleUploadBefore"
         :fileList="fileListB"
