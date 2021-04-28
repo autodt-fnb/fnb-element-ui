@@ -590,7 +590,18 @@ const itemContent: {
   },
   [FormItemType.UPLOAD](this, attrs: UploadProps) {
     const form = proxyForm(this.form)
-    return <fnb-upload v-model={form[attrs.field!]} {...wrapProps(attrs)} />
+    const props = wrapProps(attrs)
+    return (
+      <fnb-upload
+        v-model={form[attrs.field!]}
+        {...{
+          attrs: {
+            ...props.attrs,
+            ...pickBy(attrs, (_, key) => key.startsWith('on'))
+          }
+        }}
+      />
+    )
   }
 }
 
