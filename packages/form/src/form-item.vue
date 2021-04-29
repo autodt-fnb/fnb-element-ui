@@ -3,7 +3,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:49:41
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-04-28 17:43:15
+ * @Last Modified time: 2021-04-29 14:20:49
  */
 import { FormRuleItem, FormRules } from '@autodt/fnb-element-ui/types/form'
 import {
@@ -185,10 +185,13 @@ export default class FormItem extends Vue {
             pick(item, elFormItemAttributes),
             (_, key) => camelCase(trimStart(key, 'item'))
           ) as ElFormItemProps
-
+          const prop =
+            item.prop ??
+            (Array.isArray(item.field) ? item.field[0] : item.field) ??
+            ''
           return (
             <el-col
-              key={index}
+              key={index + '-' + prop}
               offset={item.colOffset}
               pull={item.colPull}
               push={item.colPush}

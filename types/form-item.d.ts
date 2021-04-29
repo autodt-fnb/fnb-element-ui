@@ -99,6 +99,9 @@ export interface ItemCommon extends ElFormItemProps {
   /** 清除浮动，使当前 form-item 在下一行显示 */
   clearfix?: boolean
 
+  /** vue key */
+  key?: any
+
   class?: string | (string | undefined)[] | Record<string, boolean>
   style?: string | Record<string, string | number | undefined> | any[]
 }

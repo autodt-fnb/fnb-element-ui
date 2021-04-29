@@ -2,7 +2,7 @@
  * @Author: 陈超
  * @Date: 2021-02-20 23:51:13
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-04-02 02:09:27
+ * @Last Modified time: 2021-04-29 14:14:41
  */
 import {
   AutocompletePorps,
@@ -86,7 +86,11 @@ function wrapProps(attrs: Record<string, any>) {
       ].includes(key)
   )
 
-  return { attrs: props, on: listeners }
+  const p: Record<string, any> = { attrs: props, on: listeners }
+  if (Reflect.has(attrs, 'key')) {
+    p.key = attrs.key
+  }
+  return p
 }
 
 const itemContent: {

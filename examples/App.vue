@@ -171,6 +171,7 @@ export default class App extends Vue {
         type: 'phone',
         itemLabel: '陈超',
         itemLabelDesc: '不能选择今天',
+        key: '666',
         prop: 'edit1.edit',
         prefixIcon: 'el-icon-edit',
         onInput(e) {
@@ -202,7 +203,7 @@ export default class App extends Vue {
       },
       {
         formType: FormItemType.RENDER_FORM_CONTENT,
-        prop: 'render',
+        field: 'render',
         itemLabel: '66666',
         render: form => {
           return <el-input v-model={form.render} />
