@@ -78,7 +78,7 @@
  * @Author: 陈超
  * @Date: 2021-02-21 00:03:50
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-22 16:37:53
+ * @Last Modified time: 2021-04-29 13:33:16
  */
 import { Vue, Component, Prop, Ref, Watch, Emit } from 'vue-property-decorator'
 import { ElUpload, ElUploadInternalFileDetail } from 'element-ui/types/upload'
@@ -166,11 +166,15 @@ export default class Upload extends Vue {
 
   @Watch('value', { immediate: true })
   watchValue(val: string | string[]) {
-    const list = Array.isArray(val) ? val : val.split(',').filter(v => !!v)
+    const list = Array.isArray(val)
+      ? val
+      : val?.split(',').filter(v => !!v) ?? []
     const oldList = this.uploadFileList.map(
       v => v?.response?.data?.url ?? v.url
     )
-    if (!isEqual(list, oldList)) {
+    if (list.length === 0 && oldList.length !== 0) {
+      this.uploadFileList = []
+    } else if (!isEqual(list, oldList)) {
       if (list.length < oldList.length) {
         const diffList = difference(oldList, list)
         oldList.forEach((v, index) => {
