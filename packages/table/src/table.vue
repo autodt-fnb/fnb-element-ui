@@ -142,7 +142,8 @@ export default class Table extends Vue {
       formatTable(this.filterHiddenTable).map(v => {
         return {
           ...v,
-          hidden: v.prop ? !this.state.checkedKeys.includes(v.prop) : false
+          hidden:
+            v.prop && !v.type ? !this.state.checkedKeys.includes(v.prop) : false
         }
       }),
       this.state.sortKeys
