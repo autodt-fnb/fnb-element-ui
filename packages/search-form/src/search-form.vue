@@ -34,6 +34,9 @@ export default class SearchForm extends Vue {
   /** 是否是默认展开 */
   @Prop({ type: Boolean, default: true }) defaultExpand!: boolean
 
+  /** 初始form值 */
+  @Prop({ type: Object, default: () => ({}) }) initForm!: Record<string, any>
+
   get list(): FormItemProps[] {
     return [
       ...this.listItems.map((item, index) => {
@@ -95,6 +98,7 @@ export default class SearchForm extends Vue {
 
   created() {
     this.visible = this.defaultExpand
+    this.form = { ...this.form, ...this.initForm }
   }
 
   handleReset() {

@@ -21,17 +21,22 @@ export default {
     return {
       attrData: [
         {
-          name: 'listItems',
+          name: 'list-items',
           desc:
             'form item 列表，参考 <a target="_blank" href="/fnb-element-ui/component/form/#Form%20Item%20listItems%20props">fnb-form-item 的 listItems 属性</a>',
           optional: `<code>CHECKBOX</code>`,
           type: 'array'
         },
         {
-          name: 'defaultExpand',
+          name: 'default-expand',
           desc: '默认是否展开搜索',
           type: 'boolean',
           default: 'true'
+        },
+        {
+          name: 'init-form',
+          desc: '初始form值',
+          type: 'object'
         }
       ],
       eventData: [
