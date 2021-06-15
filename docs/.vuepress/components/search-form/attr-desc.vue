@@ -12,6 +12,12 @@
       type="event"
       :data="eventData"
     ></common-attribute>
+
+    <common-attribute
+      title="Methods"
+      type="methods"
+      :data="methodsData"
+    ></common-attribute>
   </div>
 </template>
 
@@ -54,6 +60,12 @@ export default {
           name: 'expand',
           desc: '点击展开/收起按钮事件',
           params: '是否展开，true 展开，false：收起'
+        }
+      ],
+      methodsData: [
+        {
+          name: 'resetFields',
+          desc: '手动重置表单项，返回被重置后的参数'
         }
       ]
     }
