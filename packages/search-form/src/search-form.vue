@@ -11,7 +11,7 @@
  * @Author: 陈超
  * @Date: 2021-03-09 17:52:30
  * @Last Modified by: 陈超
- * @Last Modified time: 2021-03-22 16:31:06
+ * @Last Modified time: 2021-06-15 16:24:45
  */
 import { FnbForm } from '@autodt/fnb-element-ui/types/form'
 import { FormItemProps } from '@autodt/fnb-element-ui/types/form-item'
@@ -61,15 +61,7 @@ export default class SearchForm extends Vue {
               >
                 搜索
               </el-button>
-              <el-button
-                onClick={() => {
-                  this.handleReset()
-                  this.formRef.resetFields()
-                  this.$emit('reset', form)
-                }}
-              >
-                重置
-              </el-button>
+              <el-button onClick={this.resetFields}>重置</el-button>
               {list.length > 2 && (
                 <el-button
                   icon={
@@ -102,10 +94,13 @@ export default class SearchForm extends Vue {
     this.form = { ...this.form, ...this.initForm }
   }
 
-  handleReset() {
+  resetFields() {
+    this.formRef.resetFields()
     Object.keys(this.form).forEach(key => {
       this.form[key] = isArray(this.form[key]) ? [] : undefined
     })
+    this.$emit('reset', this.form)
+    return this.form
   }
 
   handleVisible() {

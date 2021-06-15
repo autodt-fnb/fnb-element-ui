@@ -13,4 +13,7 @@ export class FnbSearchForm<F = Record<string, any>> extends ElementUIComponent {
 
   /** 表单数据 */
   form: F
+
+  /** 重置表单数据 */
+  resetFields(): F
 }
