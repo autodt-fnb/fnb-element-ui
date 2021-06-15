@@ -38,8 +38,9 @@ export default class SearchForm extends Vue {
   @Prop({ type: Object, default: () => ({}) }) initForm!: Record<string, any>
 
   get list(): FormItemProps[] {
+    const list = this.listItems.filter(v => !v.hidden)
     return [
-      ...this.listItems.map((item, index) => {
+      ...list.map((item, index) => {
         const props = { ...item }
         ;(props as any).clearable ??= true
         if (index > 1) {
@@ -69,7 +70,7 @@ export default class SearchForm extends Vue {
               >
                 重置
               </el-button>
-              {this.listItems.length > 2 && (
+              {list.length > 2 && (
                 <el-button
                   icon={
                     this.visible ? 'el-icon-arrow-up' : 'el-icon-arrow-down'
