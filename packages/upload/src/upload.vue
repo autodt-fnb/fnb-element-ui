@@ -193,7 +193,7 @@ export default class Upload extends Vue {
         const diffList = difference(list, oldList)
         list.forEach((v, index) => {
           if (diffList.includes(v)) {
-            this.uploadFileList.splice(index, 0, { url: v } as FileDetail)
+            this.uploadFileList.splice(index, 1, { url: v } as FileDetail)
           }
         })
       }
