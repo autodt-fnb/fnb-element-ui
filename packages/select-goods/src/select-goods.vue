@@ -69,25 +69,23 @@
                 </template>
                 <slot slot="append" name="append" />
               </ElTable>
-              <div>
-                <!-- <div
+              <div class="bettwen">
+                <div
                   class="pagination-wrapper"
-                  v-if="
-                    tableData.length > 0 && this.showPagination
-                  "
+                  v-if="tableData.length > 0 && this.showPagination"
                 >
                   <el-pagination
                     small
                     class="pagination"
-                    layout="prev, pager, next"
+                    layout="total,prev, pager, next"
                     :current-page="this.paginationCurrentPage"
                     @current-change="this.handleCurrentChange"
                     :page-sizes="[10, 30, 50, 100]"
                     @size-change="this.handleSizeChange"
                     :total="this.paginationTotal"
                   />
-                </div> -->
-                <div class="bettwen" v-if="!showSelection">
+                </div>
+                <div v-if="!showSelection">
                   <div class="footer-btn">
                     <ElButton
                       size="mini"

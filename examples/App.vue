@@ -95,8 +95,8 @@
         :table="table"
         :tableData="tableData"
         :tabList="tabList"
-        showSelection
         show-tab
+        showPagination
         trigger="click"
         :showCancle="true"
         :showConfirm="true"
