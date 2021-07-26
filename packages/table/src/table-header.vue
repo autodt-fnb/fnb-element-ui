@@ -22,7 +22,7 @@ type TreeNode = ElTreeNode<string, FnbTableColumn>
 
 const db = new IndexedDB('remote-table-sort')
 
-@Component({ name: 'FnbTableHeader' })
+@Component({ name: 'FnbTableHeader', components: { ScrollContainer } })
 export default class TableHeader extends Vue {
   @Prop(Number) readonly total!: number
   @Prop(Array) readonly table!: FnbTableColumn[]
@@ -224,7 +224,7 @@ export default class TableHeader extends Vue {
                   全/反选
                 </el-checkbox>
               </div>
-              <ScrollContainer height={this.scrollHeight}>
+              <scroll-container height={this.scrollHeight}>
                 <el-tree
                   check-on-click-node
                   default-expand-all
@@ -242,7 +242,7 @@ export default class TableHeader extends Vue {
                   on-node-drop={this.handleTreeNodeDrop}
                   ref="dropdownTree"
                 />
-              </ScrollContainer>
+              </scroll-container>
             </el-dropdown-menu>
           </el-dropdown>
         </el-row>

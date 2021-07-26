@@ -416,6 +416,7 @@ export default class SelectGoods extends Vue {
 }
 
 .wrap-content {
+  width: 0;
   flex-direction: column;
 }
 
