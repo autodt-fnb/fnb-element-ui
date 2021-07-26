@@ -24,7 +24,8 @@ import { formatTable, sortList } from './utils'
 
 @Component({
   name: 'FnbTable',
-  inheritAttrs: false
+  inheritAttrs: false,
+  components: { TableHeader }
 })
 export default class Table extends Vue {
   /**
@@ -477,7 +478,7 @@ export default class Table extends Vue {
         {this.$scopedSlots.TABLE_CARD_HEADER?.(null) ??
           this.$slots.TABLE_CARD_HEADER}
         {this.showTableTop && (
-          <TableHeader
+          <table-header
             checkedKeys={this.state.checkedKeys}
             on={{
               'update:checkedKeys': (val: string[]) =>
