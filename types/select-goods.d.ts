@@ -81,6 +81,22 @@ export declare class FnbSelectGoods extends ElementUIComponent {
   /** 触发弹窗显示 */
   trigger: string
 
+  /** 是否显示分页 */
+  showPagination: boolean
+
+  /** 每页显示条目个数*/
+  pageSize: number
+
+  /**
+   * 当前页码
+   */
+  currentPage: number
+
+  /**
+   * 总条目数
+   */
+  total: number
+
   /**
    * 显示选择商品弹窗
    */

@@ -20,18 +20,14 @@
 
     <common-attribute
       title="Table Attributes"
-      :description="
-        `<a href='#Attributes'>Attributes</a> <code>table</code> 字段的属性， element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-column-attributes' target='_blank' rel='noopener noreferrer'>Table-column Attributes</a> 全部可用，这里列举新添加字段`
-      "
+      :description="`<a href='#Attributes'>Attributes</a> <code>table</code> 字段的属性， element-ui 的 <a href='https://element.eleme.cn/#/zh-CN/component/table#table-column-attributes' target='_blank' rel='noopener noreferrer'>Table-column Attributes</a> 全部可用，这里列举新添加字段`"
       type="attr"
       :data="tableAttrData"
     ></common-attribute>
 
     <common-attribute
       title="TreeProps Attributes"
-      :description="
-        `<a href='#Attributes'>Attributes</a> <code>tree-props</code> 字段的属性`
-      "
+      :description="`<a href='#Attributes'>Attributes</a> <code>tree-props</code> 字段的属性`"
       type="attr"
       :data="treePropsData"
     ></common-attribute>
@@ -179,6 +175,29 @@ const attrData = [
     type: 'string',
     optional: 'click/focus/hover/manual',
     default: 'focus'
+  },
+  {
+    name: 'show-pagination',
+    desc: '是否显示分页',
+    type: 'boolean',
+    default: 'true'
+  },
+  {
+    name: 'page-size',
+    desc: '每页显示条目个数，支持 <code>.sync</code> 修饰符',
+    type: 'number',
+    default: '10'
+  },
+  {
+    name: 'total',
+    desc: '总条目数',
+    type: 'number'
+  },
+  {
+    name: 'current-page',
+    desc: '当前页数，支持 .sync 修饰符',
+    type: 'number',
+    default: '1'
   }
 ]
 
@@ -225,6 +244,16 @@ const eventsDate = [
     name: 'delete-selection',
     desc: '点击已选择项 删除 触发该事件',
     params: '(index: number, row: object)'
+  },
+  {
+    name: 'size-change',
+    desc: 'pageSize 改变时会触发',
+    params: '每页条数'
+  },
+  {
+    name: 'current-change',
+    desc: 'currentPage 改变时会触发',
+    params: '当前页'
   }
 ]
 

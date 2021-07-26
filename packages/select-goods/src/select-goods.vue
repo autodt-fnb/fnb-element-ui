@@ -69,23 +69,48 @@
                 </template>
                 <slot slot="append" name="append" />
               </ElTable>
-            </div>
-            <div class="footer-btn" v-if="!showSelection">
-              <ElButton size="mini" v-if="showCancle" @click="handleCancle"
-                >取 消</ElButton
-              >
-              <ElButton
-                type="primary"
-                v-if="showConfirm"
-                size="mini"
-                @click="handleConfirm"
-              >
-                确 认
-              </ElButton>
+              <div>
+                <!-- <div
+                  class="pagination-wrapper"
+                  v-if="
+                    tableData.length > 0 && this.showPagination
+                  "
+                >
+                  <el-pagination
+                    small
+                    class="pagination"
+                    layout="prev, pager, next"
+                    :current-page="this.paginationCurrentPage"
+                    @current-change="this.handleCurrentChange"
+                    :page-sizes="[10, 30, 50, 100]"
+                    @size-change="this.handleSizeChange"
+                    :total="this.paginationTotal"
+                  />
+                </div> -->
+                <div class="bettwen" v-if="!showSelection">
+                  <div class="footer-btn">
+                    <ElButton
+                      size="mini"
+                      v-if="showCancle"
+                      @click="handleCancle"
+                      >取 消</ElButton
+                    >
+                    <ElButton
+                      type="primary"
+                      v-if="showConfirm"
+                      size="mini"
+                      @click="handleConfirm"
+                    >
+                      确 认
+                    </ElButton>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
       <template v-if="showSelection">
         <div class="line" />
         <div
@@ -127,6 +152,7 @@
         </div>
       </template>
     </div>
+
     <slot slot="reference" name="reference">
       <ElInput
         :disabled="disabled"
@@ -179,6 +205,27 @@ export default class SelectGoods extends Vue {
    * 表格数据
    */
   @Prop({ default: () => [], required: true }) readonly tableData!: object[]
+
+  /**
+   * 是都显示分页组件
+   */
+  @Prop({ default: false, type: Boolean }) readonly showPagination!: boolean
+
+  /**
+   * 每页显示数
+   */
+  @PropSync('pageSize', { default: 10, type: Number }) pageSizeProp!: number
+
+  /**
+   * 当前页码
+   */
+  @PropSync('currentPage', { default: 1, type: Number })
+  currentPageProp!: number
+
+  /**
+   * 数据总数
+   */
+  @Prop(Number) readonly total!: number
 
   /**
    * 行数据的 `Key`，用来优化 `Table` 的渲染；在使用 `reserve-selection` 功能与显示树形数据时，该属性是必填的。类型为 `String` 时，支持多层访问：`user.info.id`，但不支持 `user.info[0].id`，此种情况请使用 `Function`
@@ -269,6 +316,13 @@ export default class SelectGoods extends Vue {
 
   @Ref('table') readonly tableRef!: ElTable
 
+  /** 当前组件状态参数 */
+  state = {
+    pageSize: 10,
+    pageNum: 1,
+    total: 0
+  }
+
   /** 表格最大高度 */
   get tableMaxHeight() {
     let height = parseFloat(`${this.popoverHeight}`)
@@ -278,6 +332,12 @@ export default class SelectGoods extends Vue {
       }
     }
     if (this.showTab) {
+      height -= 40
+    }
+    if (this.showPagination) {
+      height -= 10
+    }
+    if (this.showPagination && this.showSelection) {
       height -= 40
     }
     return height
@@ -295,6 +355,8 @@ export default class SelectGoods extends Vue {
   get treeScrollHeight() {
     if (this.showTab) {
       return this.popoverHeight - 40 + 'px'
+    } else if (this.showPagination) {
+      return this.popoverHeight - 50 + 'px'
     }
     return this.popoverHeight + 'px'
   }
@@ -321,9 +383,41 @@ export default class SelectGoods extends Vue {
     )
   }
 
+  /** 分页 total */
+  get paginationTotal() {
+    return this.total
+  }
+
+  /** 分页 current-page */
+  get paginationCurrentPage() {
+    return this.currentPageProp
+  }
+
+  /** 分页 page-size */
+  get paginationPageSize() {
+    return this.pageSizeProp
+  }
+
   /** 删除已经选择的商品 */
   handleDeleteSelection(index: number, row: object) {
     this.$emit('delete-selection', index, row)
+  }
+
+  @Emit('size-change')
+  handleSizeChange(size: number) {
+    this.state.pageSize = size
+    this.pageSizeProp = size
+    this.currentPageProp = 1
+    // this.getList()
+    return size
+  }
+
+  @Emit('current-change')
+  handleCurrentChange(page: number) {
+    this.state.pageNum = page
+    this.currentPageProp = page
+    // this.getList()
+    return page
   }
 
   @Emit('tab-click')
@@ -435,6 +529,11 @@ export default class SelectGoods extends Vue {
   box-sizing: border-box;
 }
 
+.bettwen {
+  display: flex;
+  justify-content: space-between;
+}
+
 .footer-btn {
   display: flex;
   justify-content: flex-end;
@@ -523,6 +622,27 @@ export default class SelectGoods extends Vue {
       margin-left: 5px;
       line-height: 40px;
       cursor: pointer;
+    }
+  }
+}
+
+.pagination-wrapper {
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  height: 48px;
+
+  ::v-deep {
+    .el-input--mini .el-input__inner {
+      font-size: 12px;
+      height: 22px;
+      line-height: 22px;
     }
   }
 }

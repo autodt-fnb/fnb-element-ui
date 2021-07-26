@@ -102,6 +102,11 @@
         :showConfirm="true"
         :tab-active.sync="tabActive"
         :selection.sync="sectionList"
+        :total="50"
+        :page-size="10"
+        :current-page="1"
+        @current-change="this.handleCurrentChange"
+        @size-change="this.handleSizeChange"
       >
         <template v-slot:reference>
           <el-button>点击</el-button>
