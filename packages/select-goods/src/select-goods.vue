@@ -332,11 +332,16 @@ export default class SelectGoods extends Vue {
     if (this.showTab) {
       height -= 40
     }
+
     if (this.showPagination) {
-      height -= 10
-    }
-    if (this.showPagination && this.showSelection) {
-      height -= 40
+      if (this.showCancle || this.showConfirm) {
+        height -= 10
+      } else {
+        height -= 50
+      }
+      if (this.showSelection) {
+        height -= 40
+      }
     }
     return height
   }
@@ -406,7 +411,6 @@ export default class SelectGoods extends Vue {
     this.state.pageSize = size
     this.pageSizeProp = size
     this.currentPageProp = 1
-    // this.getList()
     return size
   }
 
@@ -414,7 +418,6 @@ export default class SelectGoods extends Vue {
   handleCurrentChange(page: number) {
     this.state.pageNum = page
     this.currentPageProp = page
-    // this.getList()
     return page
   }
 
