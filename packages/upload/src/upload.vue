@@ -228,7 +228,10 @@ export default class Upload extends Vue {
     if (type) {
       return type?.split('/')?.[0]
     }
-    const url = file?.response?.data?.url ?? file.url
+    const url = ((file?.response?.data?.url ?? file.url) as string).split(
+      '?'
+    )[0]
+
     if (this.testImage(url)) {
       return 'image'
     } else if (this.testVideo(url)) {
