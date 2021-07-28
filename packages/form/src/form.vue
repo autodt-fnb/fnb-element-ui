@@ -126,6 +126,7 @@ export default class Form extends Vue {
       <el-form
         class="fnb-form"
         ref="form"
+        rules={this.rules}
         validateOnRuleChange={this.validateOnRuleChange}
         {...wrapProps}
       >

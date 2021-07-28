@@ -69,16 +69,7 @@ export default class FormItem extends Vue {
         props.colOffset ??= this.fnbFormOffset
 
         if (Reflect.has(this.formRules ?? {}, props.prop!)) {
-          const propRules = this.formRules[props.prop!]
-          // 如果rules 是对象的话，变成数组
-          if (isPlainObject(rules)) {
-            rules = [rules as FormRuleItem]
-          }
-          if (isArray(propRules)) {
-            ;((rules ??= []) as FormRuleItem[]).push(...propRules)
-          } else {
-            ;((rules ??= []) as FormRuleItem[]).push(propRules)
-          }
+          return props
         }
 
         // 如果rules 中已经定义的 required 属性，则不添加自定义 required rule
