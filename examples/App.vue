@@ -67,9 +67,19 @@
         >增加</el-button
       >
       <FnbSearchContainer>
-        <el-form label-width="auto">
-          <el-form-item label="6894">
-            <el-input v-model="abc" />
+        <el-form label-width="auto" ref="formUpload" :model="form">
+          <el-form-item
+            label="6894"
+            :rules="{ required: true, message: '4545', trigger: 'change' }"
+            prop="abc1"
+          >
+            <FnbUpload
+              accept="image/png,image/jpeg"
+              :limit="1"
+              v-model="form.abc1"
+              :beforeUpload="handleUploadBefore"
+              action="http://qw-admin.yunchefu.cn/oss/image/toOss"
+            />
           </el-form-item>
           <el-form-item label="6894222">
             <el-input v-model="abc1" />
@@ -77,6 +87,7 @@
           <el-form-item label="689411">
             <el-input v-model="abc2" />
           </el-form-item>
+          <el-button @click="validate">验证</el-button>
         </el-form>
       </FnbSearchContainer>
       <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
@@ -88,7 +99,7 @@
         size="50"
         @click="disabled = !disabled"
       />
-      <fnb-select-goods
+      <!-- <fnb-select-goods
         v-model="name"
         row-key="id"
         :input-disabled="disabled"
@@ -111,7 +122,7 @@
         <template v-slot:reference>
           <el-button>点击</el-button>
         </template>
-      </fnb-select-goods>
+      </fnb-select-goods> -->
 
       <!-- <el-button @click="clearSelection">clearSelection</el-button> -->
     </FnbAppContainer>
@@ -120,6 +131,7 @@
 
 <script lang="tsx">
 import { FormItemProps } from '@autodt/fnb-element-ui/types/form-item'
+import { ElForm } from 'element-ui/types/form'
 import { Component, Vue, Ref } from 'vue-property-decorator'
 import { FormItemType } from '../src/enum/form-item'
 
@@ -165,6 +177,13 @@ export default class App extends Vue {
 
   get formItems() {
     return this.formItems1()
+  }
+
+  @Ref('formUpload') readonly formUploadRef!: ElForm
+
+  validate() {
+    console.log(this)
+    ;(this.$refs.formUpload as ElForm).validate()
   }
 
   formItems1(): FormItemProps[] {

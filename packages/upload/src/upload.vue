@@ -82,6 +82,7 @@
  */
 import { Vue, Component, Prop, Ref, Watch, Emit } from 'vue-property-decorator'
 import { ElUpload, ElUploadInternalFileDetail } from 'element-ui/types/upload'
+import emitter from 'element-ui/src/mixins/emitter'
 import {
   FileDetail,
   Remove,
@@ -90,7 +91,12 @@ import {
 } from '@autodt/fnb-element-ui/types/upload'
 import { difference, isEqual } from 'lodash'
 
-@Component({ name: 'FnbUpload', components: {}, inheritAttrs: false })
+@Component({
+  name: 'FnbUpload',
+  components: {},
+  inheritAttrs: false,
+  mixins: [emitter]
+})
 export default class Upload extends Vue {
   /** url 集合 */
   @Prop({ type: [Array, String], default: '' }) readonly value!:
@@ -198,6 +204,8 @@ export default class Upload extends Vue {
         })
       }
     }
+    // form 表单校验
+    ;(this as any).dispatch('ElFormItem', 'el.form.change', [val])
   }
 
   @Emit('input')
