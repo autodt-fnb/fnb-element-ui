@@ -18,7 +18,7 @@ import {
 import { FnbTable, FnbTableColumn } from '../../../types/table'
 import { ElTooltip } from 'element-ui/types/tooltip'
 import { VNode } from 'vue'
-import { camelCase, debounce, isArray, kebabCase } from 'lodash'
+import { camelCase, debounce, isArray, isFunction, kebabCase } from 'lodash'
 import TableHeader from './table-header.vue'
 import { formatTable, sortList } from './utils'
 
@@ -70,6 +70,9 @@ export default class Table extends Vue {
     string,
     any
   >
+
+  /** 返回的列表结果格式化（处理返回结果） */
+  @Prop({ type: Function }) readonly fetchDataFormatter!: (list: any[]) => any[]
 
   /** 后端需要的分页参数名称 */
   @Prop({
@@ -266,10 +269,15 @@ export default class Table extends Vue {
         const { data, total } = (await this.fetchApi?.(params)) ?? {}
 
         if (isArray(data)) {
-          this.state.list = data
+          this.state.list = isFunction(this.fetchDataFormatter)
+            ? this.fetchDataFormatter(data) ?? []
+            : data
           this.state.total = total ?? data.length
         } else if (Reflect.has(data ?? {}, this.dataProp.records)) {
-          this.state.list = data[this.dataProp.records] ?? []
+          const list = data[this.dataProp.records] ?? []
+          this.state.list = isFunction(this.fetchDataFormatter)
+            ? this.fetchDataFormatter(list) ?? []
+            : list
           this.state.total = data[this.dataProp.total] ?? total ?? 0
         }
       } catch (error) {

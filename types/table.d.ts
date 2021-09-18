@@ -155,6 +155,9 @@ export declare class FnbTable extends ElTable {
   /** 数据请求的参数 */
   fetchParams: Record<string, any>
 
+  /** 返回的列表结果格式化（处理返回结果） */
+  fetchDataFormatter<T = any>(list: T[]): T[]
+
   /** 自定义 后端需要的 分页参数名称 */
   pageProp: { pageSize: string; pageNum: string }
 
