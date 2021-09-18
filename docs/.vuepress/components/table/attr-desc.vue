@@ -80,6 +80,12 @@ const attrData = [
     type: 'object'
   },
   {
+    name: 'fetch-data-formatter',
+    desc:
+      '返回的列表结果格式化（处理返回结果），该属性是一个方法，后端返回的列表数据为参数，必须返回一个处理后的数组，例如：<code> const formatter = (list) => list.map(v => ({...v, a: 1}))</code>',
+    type: 'function'
+  },
+  {
     name: 'page-prop',
     desc: `自定义fetch-api需要的分页参数名称，如api参数是<code>size</code>表示每页多少条数据，<code表示每页多少条数据，>num</code表示每页多少条数据，>表示页码，则可这么写 <code>{ pageSize: 'size', pageNum: 'num' }</code>`,
     type: 'object',
