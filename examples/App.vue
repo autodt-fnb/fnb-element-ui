@@ -2,7 +2,7 @@
   <div id="app">
     <FnbAppContainer>
       <!-- <FormDemo /> -->
-      <!-- <FnbSearchForm :listItems="formItems" /> -->
+      <FnbSearchForm :listItems="formItems" :init-form="initform" />
       <FnbForm v-model="form" :cols="3">
         <FnbFormItem :listItems="formItems" />
       </FnbForm>
@@ -142,6 +142,9 @@ import { FnbTable, FnbTableColumn } from '../types/table'
 })
 export default class App extends Vue {
   form: any = {}
+  initform: any = {
+    checkbox: false
+  }
   disabled = false
   date = []
   pageNum = 1

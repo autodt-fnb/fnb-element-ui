@@ -21,7 +21,7 @@ import Form from '~/form'
 import FormItem from '~/form-item'
 import { FormItemType } from '@autodt/fnb-element-ui/src/enum/form-item'
 import SearchContainer from '~/search-container'
-import { isArray } from 'lodash'
+import { cloneDeep, isArray } from 'lodash'
 
 @Component({
   name: 'FnbSearchForm',
@@ -91,13 +91,14 @@ export default class SearchForm extends Vue {
 
   created() {
     this.visible = this.defaultExpand
-    this.form = { ...this.form, ...this.initForm }
+    this.form = cloneDeep({ ...this.form, ...this.initForm })
   }
 
   resetFields() {
     this.formRef.resetFields()
     Object.keys(this.form).forEach(key => {
-      this.form[key] = isArray(this.form[key]) ? [] : undefined
+      this.form[key] =
+        this.initForm[key] ?? (isArray(this.form[key]) ? [] : undefined)
     })
     this.$emit('reset', this.form)
     return this.form
